@@ -1,8 +1,8 @@
 from django.contrib import admin
-from . import models
+from .models import Medewerkers, Contracten, Opmerkingen, Leaseautos, Certificaten
 
-admin.site.register(models.Medewerkers)
-admin.site.register(models.Contracten)
-admin.site.register(models.Opmerkingen)
-admin.site.register(models.Leaseautos)
-admin.site.register(models.Certificaten)
+admin.site.register(Medewerkers)
+admin.site.register(Contracten)
+admin.site.register(Opmerkingen)
+admin.site.register(Leaseautos)
+admin.site.register(Certificaten)

@@ -7,9 +7,13 @@ from .models import Medewerkers
 def index(reqeust):
     return HttpResponse("<h1>dit home pagina</h1>")
 
+
 def a(reqeust):
     alle_medewerkers = Medewerkers.objects.all()
     return render(reqeust, 'project1/index.html', {'alle_medewerkers': alle_medewerkers})
+
+
+
 
 
 
