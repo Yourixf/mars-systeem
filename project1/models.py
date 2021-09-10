@@ -5,6 +5,7 @@ class Medewerkers(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     voornaam = models.CharField(max_length=100)
     tussenvoegsel = models.CharField(max_length=6)
+    achternaam = models.CharField(max_length=100)
     bnsnummer = models.IntegerField(null=True)
     huisnummer = models.CharField(max_length=20)
     straat = models.CharField(max_length=150)
@@ -19,6 +20,9 @@ class Medewerkers(models.Model):
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
+
+    def __str__(self):
+        return self.voornaam + self.tussenvoegsel + self.achternaam
 
 class Leaseautos(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default="")
