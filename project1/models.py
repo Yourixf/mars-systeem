@@ -1,8 +1,7 @@
 from django.db import models
-import uuid
+
 
 class Medewerkers(models.Model):
-    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     voornaam = models.CharField(max_length=100)
     tussenvoegsel = models.CharField(max_length=6)
     achternaam = models.CharField(max_length=100)
@@ -22,10 +21,10 @@ class Medewerkers(models.Model):
     geboorte_datum = models.DateField(null=True)
 
     def __str__(self):
-        return self.voornaam + self.tussenvoegsel + self.achternaam
+        return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
 
 class Leaseautos(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default="")
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     kenteken = models.CharField(max_length=10)
     start_datum_lease_auto = models.DateField(null=True)
     eind_datum_lease_auto = models.DateField(null=True)
@@ -35,13 +34,16 @@ class Leaseautos(models.Model):
     kilometer_per_jaar = models.IntegerField(null=True)
     lease_bedrag = models.FloatField(max_length=20)
 
+    def __str__(self):
+        return self.merk_auto + " " + self.kenteken
+
 class Opmerkingen(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default="")
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     datum_opmerkingen = models.DateField(null=True)
     opmerkingveld = models.CharField(max_length=1000)
 
 class Contracten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default="")
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     contract_uren = models.IntegerField(null=True)
     Startdatum = models.DateField(null=True)
     Einddatum = models.DateField(null=True)
@@ -51,7 +53,7 @@ class Contracten(models.Model):
     Onkostenvergoeding = models.FloatField(max_length=20)
 
 class Certificaten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default="")
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     naam_certificaat = models.CharField(max_length=100)
     datum_afronding =  models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)

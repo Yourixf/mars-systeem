@@ -3,9 +3,12 @@ from . import views
 
 urlpatterns = [
     # home page
-    path('views', views.index, name='index'),
+#    path('views', views.index, name='index'),
 
-    # /admin/project1/medewerkers/
-    path('view', views.a, name='a'),
+    # /medewerkers/id/
+ #   path(r'^(?P<medewerkers_id>[0-9]+)/$', views.detail_medewerkers, name='details'),
+
+    # /login/
+ #   path ('views', views.login, name='login')
 
 ]
