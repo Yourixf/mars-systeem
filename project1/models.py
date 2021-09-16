@@ -3,7 +3,7 @@ from django.db import models
 
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100)
-    tussenvoegsel = models.CharField(max_length=6)
+    tussenvoegsel = models.CharField(max_length=6, blank= True)
     achternaam = models.CharField(max_length=100)
     bnsnummer = models.IntegerField(null=True)
     huisnummer = models.CharField(max_length=20)
