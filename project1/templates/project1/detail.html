@@ -1,0 +1,12 @@
+{% extends 'project1/base.html' %}
+{% block title %}Medewerkers/datails{% endblock %}
+
+{% block body %}
+
+{{ medewerkers }}<br>
+{{ medewerkers.bnsnummer}}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+{% endblock %}

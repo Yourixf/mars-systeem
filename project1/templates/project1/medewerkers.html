@@ -1,0 +1,17 @@
+<!-- laad het pad naar de static file -->
+{% extends 'project1/base.html' %}
+{% block title %}4-Rest/Medewerkers{% endblock %}
+
+{% block body %}
+{% if alle_medewerkers %}
+<h1>dit is de medewerkers pagina</h1>
+<h3>hier onder komen de links naar de medewerkers</h3>
+    <ul>
+        {% for medewerkers in alle_medewerkers %}
+            <li><a href="{% url 'details' medewerkers.id %}">{{ medewerkers.voornaam }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>je hebt geen medewerkers</h3>
+{% endif %}
+{% endblock %}
