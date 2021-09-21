@@ -30,7 +30,7 @@ class MedewerkersCreate(CreateView):
 
 class UserFormView(View):
     form_class = UserForm
-    template_name = 'project1/login.html'
+    template_name = 'project1/register.html'
 
     #displays blank form
     def get(self, request):

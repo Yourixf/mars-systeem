@@ -16,7 +16,7 @@ urlpatterns = [
     # Dit is de URL naar medewerker details
     path(r'medewerkers/<pk>/', views.DetailView.as_view(), name='details'),
 
-    path(r'login/', views.UserFormView.as_view(), name='login'),
+    path(r'register/', views.UserFormView.as_view(), name='register'),
 
     path(r'medewerkers/add/', views.MedewerkersCreate.as_view(), name= 'medewerker/add'),
 
