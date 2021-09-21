@@ -1,21 +1,70 @@
-from django.shortcuts import render, get_object_or_404
+from django.views import generic
 from .models import Medewerkers
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.views.generic import View
+from .forms import UserForm
 
 
 
-def index(reqeust):
-    return render(reqeust, 'project1/index.html', )
+class MedewerkersView(generic.ListView):
+    template_name = 'project1/medewerkers.html'
+    context_object_name = 'alle_medewerkers'
 
-def medewerkers(reqeust):
-    alle_medewerkers = Medewerkers.objects.all()
-    return render(reqeust, 'project1/medewerkers.html',{'alle_medewerkers': alle_medewerkers,})
+    def get_queryset(self):
+        return Medewerkers.objects.all()
 
-def detail_medewerkers(reqeust, medewerkers_id):
-    medewerkers = get_object_or_404(Medewerkers, pk=medewerkers_id)
-    return render(reqeust, 'project1/detail.html', {'medewerkers': medewerkers,})
+class DetailView(generic.DetailView):
+    model = Medewerkers
+    template_name = 'project1/detail.html'
 
-def login(reqeust):
-    return render(reqeust, 'project1/login.html', )
+class IndexView(generic.ListView):
+    model = Medewerkers
+    template_name = 'project1/index.html'
+
+
+class MedewerkersCreate(CreateView):
+    model = Medewerkers
+    fields = ['voornaam', 'tussenvoegsel', 'achternaam', 'bnsnummer', 'huisnummer', 'straat', 'woonplaats', 'postcode']
+
+class UserFormView(View):
+    form_class = UserForm
+    template_name = 'project1/login.html'
+
+    #displays blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    #process form data
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            user = form.save(commit=False)
+
+            # cleaned (normalized) data
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+
+            gebruiker = authenticate(username=username, password=password)
+
+            if user is not None:
+
+                if user.is_active:
+                    login(request, user)
+                    return redirect('project1:index')
+
+        return render(request, self.template_name, {'form': form})
+
+
+
+
+
+
 
 
 

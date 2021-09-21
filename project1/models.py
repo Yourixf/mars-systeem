@@ -1,9 +1,10 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100)
-    tussenvoegsel = models.CharField(max_length=6, blank= True)
+    tussenvoegsel = models.CharField(max_length=6, blank=True)
     achternaam = models.CharField(max_length=100)
     bnsnummer = models.IntegerField(null=True)
     huisnummer = models.CharField(max_length=20)
@@ -19,6 +20,9 @@ class Medewerkers(models.Model):
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
+    
+    def get_absolut_url(self):
+        return reverse('project1:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
