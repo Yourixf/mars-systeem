@@ -4,14 +4,17 @@
 
 {% block body %}
 {% if alle_medewerkers %}
+
 <h1>dit is de medewerkers pagina</h1>
 <h3>hier onder komen de links naar de medewerkers</h3>
     <ul>
         {% for medewerkers in alle_medewerkers %}
-            <li><a href="{% url 'details' medewerkers.id %}">{{ medewerkers.voornaam }}</a></li>
+            <li><a href="{% url 'details' medewerkers.id %}">{{ medewerkers.voornaam }} {{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</a></li>
         {% endfor %}
     </ul>
 {% else %}
     <h3>je hebt geen medewerkers</h3>
 {% endif %}
 {% endblock %}
+
+

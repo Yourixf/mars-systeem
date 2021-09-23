@@ -1,12 +1,13 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from project1 import views
+
 
 app_name = 'project1'
 
 urlpatterns = [
 
-    path(r'', views.IndexView.as_view(), name='home'),
+    path(r'', views.IndexView.as_view(), name='index'),
 
     path(r'admin/', admin.site.urls),
 
@@ -18,6 +19,12 @@ urlpatterns = [
 
     path(r'register/', views.UserFormView.as_view(), name='register'),
 
-    path(r'medewerkers/add/', views.MedewerkersCreate.as_view(), name= 'medewerker/add'),
+    path(r'medewerkers/add/', views.MedewerkersCreate.as_view(), name='medewerker/add'),
+
+    path('login/', views.login, name="login"),
+
+    path('home/', views.home, name="home"),
+
+    path(r'lease.autos.detail/<pk>/', views.LeaseautosdetailView.as_view(), name='lease.autos.detail'),
 
 ]

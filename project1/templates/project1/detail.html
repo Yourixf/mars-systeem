@@ -2,11 +2,82 @@
 {% block title %}Medewerkers/datails{% endblock %}
 
 {% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
 
-{{ medewerkers }}<br>
-{{ medewerkers.bnsnummer}}
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
 
-{% if error_message %}
-    <p><strong>{{ error_message }}</strong></p>
+
+{{ medewerkers }}<a> - </a>{{ medewerkers.pk}}
+<br>
+
+<table>
+    <tr>
+        <th>Naam</th>
+        <th>Bsn nummer</th>
+        <th>Woonplaats</th>
+        <th>Straat en Huisnummer</th>
+        <th>Postcode</th>
+        <th>Mobiel nummer</th>
+        <th>ICE nummer</th>
+        <th>Email</th>
+        <th>Terief indicatie</th>
+        <th>Opleiding niveau</th>
+        <th>Godsdienst</th>
+        <th>Burgerlijke staat</th>
+        <th>Geboortedatum</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>{{ medewerkers }}</td>
+        <td>{{ medewerkers.bnsnummer }}</td>
+        <td>{{ medewerkers.woonplaats }}</td>
+        <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
+        <td>{{ medewerkers.postcode }}</td>
+        <td>{{ medewerkers.mobielnummer }}</td>
+        <td>{{ medewerkers.icenummer }}</td>
+        <td>{{ medewerkers.email }}</td>
+        <td>{{ medewerkers.teriefindicatie }}</td>
+        <td>{{ medewerkers.opleidings_niveau }}</td>
+        <td>{{ medewerkers.godsdienst }}</td>
+        <td>{{ medewerkers.burgerlijkse_staat }}</td>
+        <td>{{ medewerkers.geboorte_datum }}</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+<br>
+<br>
+<p>Lease auto</p>
+
+</html>
+
+
+{% if alle_leaseautos %}
+
+<h1>dit is de medewerkers lease auto's pagina</h1>
+<h3>hier onder komen de links naar de lease auto's van de medewerkers</h3>
+    <ul>
+        {% for leaseautos in alle_leaseautos %}
+            <li><a href="{% url 'lease.autos.detail' medewerkers.id%}">{{ leaseautos }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>deze medewerker heeft geen lease auto</h3>
+
 {% endif %}
 {% endblock %}

@@ -1,11 +1,13 @@
 from django.views import generic
-from .models import Medewerkers
+from .models import Medewerkers, Leaseautos
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from .forms import UserForm
-
+from django.contrib.auth.decorators import login_required
+# @login_required(login_url='/login/')
+# def my_view(request):
 
 
 class MedewerkersView(generic.ListView):
@@ -18,6 +20,10 @@ class MedewerkersView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Medewerkers
     template_name = 'project1/detail.html'
+
+class LeaseautosdetailView(generic.DetailView):
+    context_object_name = 'alle_leaseautos'
+    template_name = 'project1/lease.autos.detail.html'
 
 class IndexView(generic.ListView):
     model = Medewerkers
@@ -61,7 +67,13 @@ class UserFormView(View):
         return render(request, self.template_name, {'form': form})
 
 
+def home(request):
+    return render(request, "project1/home.html")
 
+
+
+def login(request):
+    return render(request, "project1/login.html")
 
 
 

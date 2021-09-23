@@ -22,7 +22,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-             <a class="navbar-brand" href="{% url 'home' %}">4-rest</a>
+             <a class="navbar-brand" href="{% url 'index' %}">4-rest</a>
         </div>
 
         <div class="collapse navbar-collapse" id="topnavbar">
@@ -57,5 +57,34 @@
 {% block body %}
 {% endblock %}
 
+
+
+
+
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <title>title</title>
+</head>
+<body>
+    <main>
+        <!-- message will be shown -->
+        <div class="messages" id="alert-message">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show" role="alert">
+                <strong>Message :</strong>{{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% block content %}
+        {% endblock %}
+    </main>
 </body>
 </html>
