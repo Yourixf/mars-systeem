@@ -38,6 +38,8 @@ class Leaseautos(models.Model):
     kilometer_per_jaar = models.IntegerField(null=True)
     lease_bedrag = models.FloatField(max_length=20)
 
+
+
     def __str__(self):
         return self.merk_auto + " " + self.kenteken
 

@@ -1,1 +1,48 @@
-<h1>pppppppdoiaivuguiibeurvulycgcuvuylveucvuc vyuvucvcukgukvjvceevjcbugucbibuugcubulrgrblgub</h1>
+{% extends 'project1/base.html' %}
+{% block title %}Lease auto/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+{{ medewerkers }}<a></a>{{ medewerkers.pk}}
+<br>
+
+<table>
+    <tr>
+        <th>Leasemaatschappij</th>
+        <th>Merk</th>
+        <th>Type auto</th>
+        <th>Kenteken</th>
+        <th>Kilometer per jaar</th>
+        <th>Lease bedrag</th>
+        <th>Start datum</th>
+        <th>Eind datum</th>
+    </tr>
+    <tr>
+        <td>{{ leaseautos.leasemaatschappij }}</td>
+        <td>{{ leaseautos.merk_auto }}</td>
+        <td>{{ leaseautos.type_auto }}</td>
+        <td>{{ leaseautos.kenteken }}</td>
+        <td>{{ leaseautos.kilometer_per_jaar }}</td>
+        <td>{{ leaseautos.lease_bedrag }}</td>
+        <td>{{ leaseautos.start_datum_lease_auto }}</td>
+        <td>{{ leaseautos.eind_datum_lease_auto }}</td>
+    </tr>
+</table>
+</html>
+{% endblock %}

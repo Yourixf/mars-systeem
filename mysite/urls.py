@@ -25,6 +25,6 @@ urlpatterns = [
 
     path('home/', views.home, name="home"),
 
-    path(r'lease.autos.detail/<pk>/', views.LeaseautosdetailView.as_view(), name='lease.autos.detail'),
+    path('lease.autos.detail/<pk>/', views.LeaseautosdetailView.as_view(), name='lease.autos.detail'),
 
 ]

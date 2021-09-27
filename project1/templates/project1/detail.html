@@ -1,6 +1,9 @@
 {% extends 'project1/base.html' %}
 {% block title %}Medewerkers/datails{% endblock %}
 
+
+
+
 {% block body %}
 <html lang="">
 <head>
@@ -18,7 +21,6 @@ td, th {
 }
 </style>
 </head>
-
 
 {{ medewerkers }}<a> - </a>{{ medewerkers.pk}}
 <br>
@@ -38,8 +40,6 @@ td, th {
         <th>Godsdienst</th>
         <th>Burgerlijke staat</th>
         <th>Geboortedatum</th>
-        <th></th>
-        <th></th>
     </tr>
     <tr>
         <td>{{ medewerkers }}</td>
@@ -55,29 +55,9 @@ td, th {
         <td>{{ medewerkers.godsdienst }}</td>
         <td>{{ medewerkers.burgerlijkse_staat }}</td>
         <td>{{ medewerkers.geboorte_datum }}</td>
-        <td></td>
-        <td></td>
     </tr>
 </table>
 
-<br>
-<br>
-<p>Lease auto</p>
-
 </html>
 
-
-{% if alle_leaseautos %}
-
-<h1>dit is de medewerkers lease auto's pagina</h1>
-<h3>hier onder komen de links naar de lease auto's van de medewerkers</h3>
-    <ul>
-        {% for leaseautos in alle_leaseautos %}
-            <li><a href="{% url 'lease.autos.detail' medewerkers.id%}">{{ leaseautos }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <h3>deze medewerker heeft geen lease auto</h3>
-
-{% endif %}
 {% endblock %}
