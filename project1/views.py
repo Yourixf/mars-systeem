@@ -1,13 +1,13 @@
-from django.views import generic
-from .models import Medewerkers,Leaseautos, Opmerkingen, Contracten, Certificaten
-
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.views import generic
 from django.views.generic import View
-from .forms import UserForm
+from django.views.generic.edit import CreateView
 
- 
+from .forms import UserForm
+from .models import Medewerkers, Leaseautos
+
+
 # @login_required(login_url='/login/')
 # def my_view(request):
 
@@ -72,7 +72,6 @@ class UserFormView(View):
 
 def home(request):
     return render(request, "project1/home.html")
-
 
 def login(request):
     return render(request, "project1/login.html")
