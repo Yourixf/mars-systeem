@@ -1,0 +1,51 @@
+{% extends 'project1/base.html' %}
+{% block title %}Contracten/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+{{ medewerkers }}<a></a>{{ medewerkers.pk}}
+
+<br>
+ <h3> {{ contracten.medewerkers }} </h3>
+<br>
+<br>
+<table>
+    <tr>
+        <th>functie contract</th>
+        <th>contract uren</th>
+        <th>Start datum</th>
+        <th>Eind datum</th>
+        <th>Maand salaris</th>
+        <th>vakantie dagen</th>
+        <th>Onkostenvergoeding</th>
+    </tr>
+    <tr>
+        <td>{{ contracten.functie_contract }}</td>
+        <td>{{ contracten.contract_uren }}</td>
+        <td>{{ contracten.Startdatum }}</td>
+        <td>{{ contracten.Einddatum }}</td>
+        <td>{{ contracten.salaris }}</td>
+        <td>{{ contracten.vakantie_dagen }}</td>
+        <td>{{ contracten.Onkostenvergoeding }}</td>
+    </tr>
+</table>
+<br>
+<br>
+</html>
+{% endblock %}

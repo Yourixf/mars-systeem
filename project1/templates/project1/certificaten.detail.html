@@ -1,0 +1,58 @@
+{% extends 'project1/base.html' %}
+{% block title %}Certificaten/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+{{ medewerkers }}<a></a>{{ medewerkers.pk}}
+
+<br>
+<h4> Hier onder staan de behaalde certificaten.</h4>
+<br>
+<br>
+<table>
+    <tr>
+        <th>Naam certificaat</th>
+        <th>Datum afronding</th>
+        <th>Accreditatie nummer</th>
+        <th>naam_instituut</th>
+    </tr>
+    <tr>
+        <td>{{ certificaten.naam_certificaat }}</td>
+        <td>{{ certificaten.datum_afronding }}</td>
+        <td>{{ certificaten.accreditatie_nummer }}</td>
+        <td>{{ certificaten.naam_instituut }}</td>
+</table>
+<br> <br><br>
+<!--- ermoet wat komen je meerdere behaalde certitificaten kan laten zien. misschien iets verzinnen met pk --->
+<table>
+    <tr>
+        <th>Naam certificaat</th>
+        <th>Datum afronding</th>
+        <th>Accreditatie nummer</th>
+        <th>naam_instituut</th>
+    </tr>
+    <tr>
+        <td>{{ certificaten.naam_certificaat }}</td>
+        <td>{{ certificaten.datum_afronding }}</td>
+        <td>{{ certificaten.accreditatie_nummer }}</td>
+        <td>{{ certificaten.naam_instituut }}</td>
+</table>
+</html>
+</html>
+{% endblock %}
