@@ -3,9 +3,10 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import View
 from django.views.generic.edit import CreateView
+from django.contrib.auth.decorators import login_required
 
 from .forms import UserForm
-from .models import Medewerkers, Leaseautos
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen
 
 
 # @login_required(login_url='/login/')
@@ -19,14 +20,33 @@ class MedewerkersView(generic.ListView):
     def get_queryset(self):
         return Medewerkers.objects.all()
 
+
 class DetailView(generic.DetailView):
     model = Medewerkers
     template_name = 'project1/detail.html'
 
+    class DetailView(generic.DetailView):
+        model = Opmerkingen
+        template_name = 'project1/detail.html'
 
 class LeaseautosdetailView(generic.DetailView):
     model = Leaseautos
     template_name = 'project1/lease.autos.detail.html'
+
+class ContractenCertificatendetailView(generic.DetailView):
+    model = Contracten
+    template_name = 'project1/contracten.detail.html'
+
+    class ContractenCertificatendetailView(generic.DetailView):
+        model = Certificaten
+        template_name = 'project1/contracten.detail.html'
+
+class CertificatendetailView(generic.DetailView):
+     model = Certificaten
+     template_name = 'project1/certificaten.detail.html'
+
+
+
 
 class IndexView(generic.ListView):
     model = Medewerkers
@@ -69,13 +89,15 @@ class UserFormView(View):
 
         return render(request, self.template_name, {'form': form})
 
-
+@login_required
 def home(request):
     return render(request, "project1/home.html")
 
 def login(request):
     return render(request, "project1/login.html")
 
+def logout(request):
+    return render(request, "project1/logout.html")
 
 
 

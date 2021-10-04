@@ -23,8 +23,13 @@ urlpatterns = [
 
     path('login/', views.login, name="login"),
 
+    path('logout/', views.logout, name="logout"),
+
     path('home/', views.home, name="home"),
 
     path('lease.autos.detail/<pk>/', views.LeaseautosdetailView.as_view(), name='lease.autos.detail'),
 
+    path('contracten.detail/<pk>/', views.ContractenCertificatendetailView.as_view(), name='contracten.detail'),
+
+    path('certificaten.detail/<pk>/', views.CertificatendetailView.as_view(), name='certificaten.detail'),
 ]

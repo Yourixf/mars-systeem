@@ -5,12 +5,17 @@
 {% block body %}
 {% if alle_medewerkers %}
 
-<h1>dit is de medewerkers pagina</h1>
-<h3>hier onder komen de links naar de medewerkers</h3>
+<h1>Dit is de medewerkers pagina</h1>
+<h3>Hier onder komen de links naar de medewerkers</h3>
     <ul>
         {% for medewerkers in alle_medewerkers %}
             <li><a href="{% url 'details' medewerkers.id %}">{{ medewerkers.voornaam }} {{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</a></li>
             <a href="{% url 'lease.autos.detail' medewerkers.id %}">Lease auto</a>
+            <br>
+            <a href="{% url 'contracten.detail' medewerkers.id %}">Contracten - Certificaten</a>
+            <br>
+            <a href="{% url 'certificaten.detail' medewerkers.id %}">Certificaten</a>
+            <br><br>
         {% endfor %}
     </ul>
 {% else %}
