@@ -19,7 +19,10 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+
+
 </style>
+
 </head>
 
 <h3>{{ medewerkers }}<a> - </a>{{ medewerkers.pk}}</h3>
@@ -69,16 +72,60 @@ td, th {
 <body>
 
 <h3>Opmerkingveld</h3>
-<br>
+<div>
+    <div class="col-md-2">
+        <form action="" method="post">
+             {% csrf_token %}
+                <div class="form-group">
+                    <label for="date" >Datum:</label>
+                    <label>
+                        <input type="date" class="form-control" name="Datum" value="{{Opmerkingen.datum_opmerkingen}}">
+                    </label>
+                </div>
+              <div class="form-group">
+                    <input type="hidden" class="form-control" name="Naam" value="{{user}}">
+              </div>
+            <div class="form-group">
+                <label>Opmerking:</label>
+                <label>
+                    <textarea class="form-control" rows="5" name="Opmerking" value="{{Opmerkingen.opmerkingveld}}"></textarea>
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="plaats opmerking">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Eerdere opmerkingen</h2>
+            <h4 class="text-center"><em>Total: {{opmerkingen|length}}</em></h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Naam</th>
+                        <th>Opmerking</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for opm in Opmerkingen %}
+                        <tr>
+                            <td>{{opm.naam_user}}</td>
+                            <td>{{opm.opmerkingveld}}</td>
+                            <td>{{opm.datum_opmerkingen}}</td>
+                        </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<form action="/action_page" id="usrform">
-   <label for="Datum opmerking">{{ opmerkingen.datum_opmerkingen }}Datum opmerking:</label>
-  <input type="date" id="id_username" name="Medewerkers">
-<!-- de variable datum opmerking en opmerking veld doet op het moment nog niks -->
-</form>
+<br><br><br><br><br><br><br><br>
+<a href="{% url 'lease.autos.detail' medewerkers.id %}" class="btn bth-succes"  role="button"> <h4>Lease auto</h4></a>
+ <a href="{% url 'contracten.detail' medewerkers.id %}" class="btn bth-succes" role="button"><h4>Contracten en certificaten</h4></a>
 <br>
-<textarea rows="4" cols="50" name="comment" form="usrform"  {{ opmerkingen.opmerkingveld }} >
-Enter text here...</textarea>
 
 
 </body>

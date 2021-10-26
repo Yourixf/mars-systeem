@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Medewerkers(models.Model):
@@ -20,12 +21,13 @@ class Medewerkers(models.Model):
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
-    
+
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
+
 
 class Leaseautos(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
@@ -38,15 +40,15 @@ class Leaseautos(models.Model):
     kilometer_per_jaar = models.IntegerField(null=True)
     lease_bedrag = models.FloatField(max_length=20)
 
-
-
     def __str__(self):
         return self.merk_auto + " " + self.kenteken
+
 
 class Opmerkingen(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     datum_opmerkingen = models.DateField(null=True)
     opmerkingveld = models.CharField(max_length=1000)
+    naam_user = models.CharField(max_length=30, null=True)
 
 class Contracten(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
@@ -58,10 +60,10 @@ class Contracten(models.Model):
     vakantie_dagen = models.IntegerField(null=True)
     Onkostenvergoeding = models.FloatField(max_length=20)
 
+
 class Certificaten(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     naam_certificaat = models.CharField(max_length=100)
-    datum_afronding =  models.DateField(null=True)
+    datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
     naam_instituut = models.CharField(max_length=100)
-

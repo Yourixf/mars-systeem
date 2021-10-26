@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>{% block title %}4-Rest{% endblock %}</title>
-    {% load static %}
+    <title>{% block title %}4-Rest{% endblock %}</title>
+        {% load static %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -11,25 +11,29 @@
 
 <style>
      #hello-msg{
-        font-size: 18px;
-        color: #fff;
-        margin-right: 20px;
+         font-size: 22px;
+         margin-right: 20px;
+         margin-top: 0;
+         margin-bottom: 0;
     }
+
 </style>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-default">
+    <img src="static/project1/images/logo_4-rest.png" alt="4-rest-logo" class="navbar-left" style="width:70px">
     <div class="container-fluid">
-        <!-- logo -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topnavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-             <a class="navbar-brand" href="{% url 'index' %}">4-rest</a>
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <span class="glyphicon"></span> Home
+                </a>
         </div>
 
         <div class="collapse navbar-collapse" id="topnavbar">
@@ -37,13 +41,11 @@
                 <li class="">
                     <a href="{% url 'medewerkers' %}">
                         <span class="glyphicon"></span>
-                        <i style='font-size:24px' class='far'>&#xf2bd;</i>
                         Medewerkers
                     </a>
                 </li>
                </ul>
-            </ul>
-              <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right">
                 <li class="">
                       <a href="{% url 'logout' %}">
                          <span class="glyphicon"></span>

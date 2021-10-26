@@ -1,24 +1,18 @@
-from django.shortcuts import render, redirect
-from django.views import generic
-# from django.views.generic import View
-from django.views.generic.edit import CreateView
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages
-# from django.forms import inlineformset_factory
-# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-
+from . import forms
+from django.views.generic import TemplateView
 # Create your views here.
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen
-from .forms import CreateUserForm
 
 
 def registerPage(request):
-    form = CreateUserForm()
+    form = forms.CreateUserForm()
 
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
+        form = forms.CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
@@ -32,8 +26,8 @@ def registerPage(request):
 
 def loginPage(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username', )
+        password = request.POST.get('password', )
 
         user = authenticate(request, username=username, password=password)
 
@@ -51,81 +45,49 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
 @login_required(login_url='login')
 def Index(request):
-    return render(request,'project1/index.html',)
+    return render(request, 'project1/index.html', )
 
-
-#class IndexView(generic.ListView):
-#    model = Medewerkers
-#    template_name = 'project1/index.html'
 
 @login_required(login_url='login')
 def MedewerkersPage(request):
     medewerkers = Medewerkers.objects.all()
     return render(request, 'project1/medewerkers.html', {'medewerkers': medewerkers})
 
-#class MedewerkersView(generic.ListView):
-#    template_name = 'project1/medewerkers.html'
-#    context_object_name = 'alle_medewerkers'
-#
-#    def get_queryset(self):
-#        return Medewerkers.objects.all()
+
 
 @login_required(login_url='login')
-def Detail(request,pk):
+def Detail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
-    context = {'medewerkers': medewerkers}
-    return render(request, 'project1/detail.html', context,)
+    opmerkingen = Opmerkingen.objects.filter(medewerkers_id=pk)
+    context = {'medewerkers': medewerkers, 'Opmerkingen': opmerkingen}
+    all_data = Opmerkingen.objects.all().order_by("-id")
+    if request.method == "POST":
+        datum = request.POST["Datum"]
+        medewerkers = Medewerkers.objects.get(id=pk)
+        name_user = request.POST["Naam"]
+        opmerking = request.POST["Opmerking"]
+        data = Opmerkingen(datum_opmerkingen=datum, medewerkers=medewerkers, opmerkingveld=opmerking, naam_user=name_user)
+        data.save()
+        context = {'medewerkers': medewerkers, 'Opmerkingen': all_data}
+        return render(request, 'project1/detail.html', context)
 
+    return render(request, 'project1/detail.html', context)
 
-
-#class DetailView(generic.DetailView):
-#    model = Medewerkers
-#    template_name = 'project1/detail.html'
-
-#    class DetailView(generic.DetailView):
-#        model = Opmerkingen
-#        template_name = 'project1/detail.html'
 
 @login_required(login_url='login')
-def Leaseautosdetail(request,pk):
+def Leaseautosdetail(request, pk):
     leaseautos = Leaseautos.objects.get(id=pk)
-    context = {'leaseautos':leaseautos,}
-    return render(request, 'project1/lease.autos.detail.html', context,)
+    context = {'leaseautos': leaseautos, }
+    return render(request, 'project1/lease.autos.detail.html', context, )
 
-
-#class LeaseautosdetailView(generic.DetailView):
-#    model = Leaseautos
-#    template_name = 'project1/lease.autos.detail.html'
 
 @login_required(login_url='login')
-def Contractendetail(request,pk):
+def Contractendetail(request, pk):
     contracten = Contracten.objects.get(id=pk)
-    context = {'contracten':contracten,}
-    return render(request, 'project1/contracten.detail.html', context,)
-
-
-#class ContractenCertificatendetailView(generic.DetailView):
-#    model = Contracten
-#    template_name = 'project1/contracten.detail.html'
-
-@login_required(login_url='login')
-def Certificatendetail(request,pk):
     certificaten = Certificaten.objects.get(id=pk)
-    context = {'certificaten':certificaten,}
-    return render(request, 'project1/certificaten.detail.html', context,)
+    context = {'contracten': contracten, 'certificaten': certificaten, }
+    return render(request, 'project1/contracten.detail.html', context, )
 
-#class CertificatendetailView(generic.DetailView):
-#    model = Certificaten
-#    template_name = 'project1/certificaten.detail.html'
-
-
-# class MedewerkersCreate(CreateView):
-#     model = Medewerkers
-#     fields = ['voornaam', 'tussenvoegsel', 'achternaam', 'bnsnummer', 'huisnummer', 'straat', 'woonplaats', 'postcode']
-#
-#     # displays blank form
-#     def get(self, request, **kwargs):
-#         form = self.form_class(None)
-#         return render(request, self.template_name, {'form': form})

@@ -21,9 +21,8 @@ td, th {
 
 {{ medewerkers }}<a></a>{{ medewerkers.pk}}
 
-<br>
+
  <h3> {{ contracten.medewerkers }} </h3>
-<br>
 <br>
 <table>
     <tr>
@@ -45,6 +44,21 @@ td, th {
         <td>{{ contracten.Onkostenvergoeding }}</td>
     </tr>
 </table>
+<br><br><br><br><br>
+<table>
+    <tr>
+        <th>Naam certificaat</th>
+        <th>Datum afronding</th>
+        <th>Accreditatie nummer</th>
+        <th>naam_instituut</th>
+    </tr>
+    <tr>
+        <td>{{ certificaten.naam_certificaat }}</td>
+        <td>{{ certificaten.datum_afronding }}</td>
+        <td>{{ certificaten.accreditatie_nummer }}</td>
+        <td>{{ certificaten.naam_instituut }}</td>
+</table>
+
 <br>
 <br>
 </html>

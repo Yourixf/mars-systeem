@@ -5,17 +5,11 @@
 {% block body %}
 {% if medewerkers %}
 
-<h1>Dit is de medewerkers pagina</h1>
-<h3>Hier onder komen de links naar de medewerkers</h3>
+<h1><center>Medewerkers 4-Rest</center></h1><br><br>
+
     <ul>
         {% for medewerkers in medewerkers %}
-            <li><a href="{% url 'details' medewerkers.id %}">{{ medewerkers.voornaam }} {{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</a></li>
-            <a href="{% url 'lease.autos.detail' medewerkers.id %}">Lease auto</a>
-            <br>
-            <a href="{% url 'contracten.detail' medewerkers.id %}">Contracten</a>
-            <br>
-            <a href="{% url 'certificaten.detail' medewerkers.id %}">Certificaten</a>
-            <br><br>
+            <li><a href="{% url 'details' medewerkers.id %}"><strong><h4>{{ medewerkers.voornaam }} {{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</h4></strong></a></li>
         {% endfor %}
     </ul>
 {% else %}

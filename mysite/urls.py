@@ -19,10 +19,11 @@ urlpatterns = [
     # Dit is de URL naar medewerker details
     path(r'medewerkers/<str:pk>/', views.Detail, name='details'),
 
- #path(r'medewerkers/add/', views.MedewerkersCreate.as_view(), name='medewerker/add'),
+    #path(r'medewerkers/add/', views.MedewerkersCreate.as_view(), name='medewerker/add'),
     path('lease.autos.detail/<str:pk>/', views.Leaseautosdetail, name='lease.autos.detail'),
     path('contracten.detail/<str:pk>/', views.Contractendetail, name='contracten.detail'),
-    path('certificaten.detail/<str:pk>/', views.Certificatendetail, name='certificaten.detail'),
-
+    # path('certificaten.detail/<str:pk>/', views.Certificatendetail, name='certificaten.detail'),
+    #path('opmerking/<str:pk>/', views.opmerking, name='opmerking'),
     path(r'admin/', admin.site.urls),
+
 ]
