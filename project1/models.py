@@ -21,6 +21,7 @@ class Medewerkers(models.Model):
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
+    foto_medewerker = models.FileField()
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk})
@@ -50,6 +51,7 @@ class Opmerkingen(models.Model):
     opmerkingveld = models.CharField(max_length=1000)
     naam_user = models.CharField(max_length=30, null=True)
 
+
 class Contracten(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
     contract_uren = models.IntegerField(null=True)
@@ -67,3 +69,6 @@ class Certificaten(models.Model):
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
     naam_instituut = models.CharField(max_length=100)
+
+
+

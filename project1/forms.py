@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea
-from .models import Opmerkingen
+from .models import Opmerkingen, Medewerkers
+from django import forms
 
 
 class CreateUserForm(UserCreationForm):
@@ -9,11 +10,8 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-
-class OpmerkingenForm(ModelForm):
+class FotoForm(forms.ModelForm):
     class Meta:
-        model = Opmerkingen
-        fields = ['opmerkingveld', 'datum_opmerkingen']
-        widgets = {
-            'opmerkingveld': Textarea(attrs={'cols': 40, 'rows': 20}),
-        }
+        model = Medewerkers
+        fields = ['foto_medewerker']
+

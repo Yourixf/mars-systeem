@@ -1,14 +1,8 @@
-from django.urls import path
-from . import views
-
+from django.conf.urls.static import static
 urlpatterns = [
-    # home page
-#    path('views', views.index, name='index'),
-
-    # /medewerkers/id/
- #   path(r'^(?P<medewerkers_id>[0-9]+)/$', views.detail_medewerkers, name='details'),
-
-    # /login/
- #   path ('views', views.login, name='login')
 
 ]
+#
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL, documentroute=settings.STATIC_URL)
+#     urlpatterns += static(settings.MEDIA_URL, documentroute=settings.STATIC_URL)

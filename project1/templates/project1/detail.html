@@ -27,50 +27,29 @@ td, th {
 
 <h3>{{ medewerkers }}<a> - </a>{{ medewerkers.pk}}</h3>
 <br>
-
+{#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
 <table>
     <tr>
-        <th>Naam</th>
-        <th>Woonplaats</th>
-        <th>Straat en Huisnummer</th>
-        <th>Postcode</th>
-        <th>Mobiel nummer</th>
-        <th>ICE nummer</th>
-        <th>Email</th>
-    </tr>
-    <tr>
-        <td>{{ medewerkers }}</td>
-        <td>{{ medewerkers.woonplaats }}</td>
-        <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-        <td>{{ medewerkers.postcode }}</td>
-        <td>{{ medewerkers.mobielnummer }}</td>
-        <td>{{ medewerkers.icenummer }}</td>
-        <td>{{ medewerkers.email }}</td>
-    </tr>
-</table>
-<br><br><br>
-<table>
-    <tr>
-        <th>Bsn nummer</th>
-        <th>Terief indicatie</th>
-        <th>Opleiding niveau</th>
-        <th>Godsdienst</th>
-        <th>Burgerlijke staat</th>
-        <th>Geboortedatum</th>
-    </tr>
-    <tr>
-        <td>{{ medewerkers.bnsnummer }}</td>
-        <td>{{ medewerkers.teriefindicatie }}</td>
-        <td>{{ medewerkers.opleidings_niveau }}</td>
-        <td>{{ medewerkers.godsdienst }}</td>
-        <td>{{ medewerkers.burgerlijkse_staat }}</td>
-        <td>{{ medewerkers.geboorte_datum }}</td>
-    </tr>
+        <th>Naam</th><td>{{ medewerkers }}</td><th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td>
+        </tr>
+        <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td><th>Terief indicatie</th><td>{{ medewerkers.teriefindicatie }}</td>
+        <tr>
+        <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td> <th>Opleiding niveau</th><td>{{ medewerkers.opleidings_niveau }}</td>
+        </tr>
+        <th>Postcode</th><td>{{ medewerkers.postcode }}</td><th>Godsdienst</th><td>{{ medewerkers.godsdienst }}</td>
+        <tr>
+        <th>Mobiel nummer</th><td>{{ medewerkers.mobielnummer }}</td><th>Burgerlijke staat</th> <td>{{ medewerkers.burgerlijkse_staat }}</td>
+        </tr>
+        <th>ICE nummer</th> <td>{{ medewerkers.icenummer }}</td><th>Geboortedatum</th><td>{{ medewerkers.geboorte_datum }}</td>
+        <tr>
+        <th>Email</th><td>{{ medewerkers.email }}</td>
+        </tr>
+        <tr>
+</tr>
 </table>
 <br>
-
 <body>
-
+{#Hier kan je een opmerking schrijven die die laat zien in een tabel eronder#}
 <h3>Opmerkingveld</h3>
 <div>
     <div class="col-md-2">
@@ -79,15 +58,18 @@ td, th {
                 <div class="form-group">
                     <label for="date" >Datum:</label>
                     <label>
+{#Hier kan je de datum van de opmerking invullen uit de Models#}
                         <input type="date" class="form-control" name="Datum" value="{{Opmerkingen.datum_opmerkingen}}">
                     </label>
                 </div>
               <div class="form-group">
+{# haalt automatisch de persoon op die is ingelogd en laat dit zien wie de opmerking heeft geschreven#}
                     <input type="hidden" class="form-control" name="Naam" value="{{user}}">
               </div>
             <div class="form-group">
                 <label>Opmerking:</label>
                 <label>
+{#Dit is het opmerkingveld hier kan de gebruiker de opmerking voor de medewerker invullen uit de Models#}
                     <textarea class="form-control" rows="5" name="Opmerking" value="{{Opmerkingen.opmerkingveld}}"></textarea>
                 </label>
             </div>
@@ -100,7 +82,7 @@ td, th {
 <div class="row">
         <div class="col-md-12">
             <h2 class="text-center">Eerdere opmerkingen</h2>
-            <h4 class="text-center"><em>Total: {{opmerkingen|length}}</em></h4>
+            <h4 class="text-center"><em>Total: {{ opmerkingen.id|length }}</em></h4>
             <table class="table table-bordered table-striped table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -109,24 +91,29 @@ td, th {
                         <th>Datum</th>
                     </tr>
                 </thead>
-                <tbody>
+                <body>
                     {% for opm in Opmerkingen %}
+{#Hier laat die de uitkomst van de geschreven opmerking uit #}
                         <tr>
                             <td>{{opm.naam_user}}</td>
                             <td>{{opm.opmerkingveld}}</td>
                             <td>{{opm.datum_opmerkingen}}</td>
+                            </td>
                         </tr>
                     {% endfor%}
-                </tbody>
+                </body>
             </table>
         </div>
     </div>
+    </div>
+</div>
 
-<br><br><br><br><br><br><br><br>
-<a href="{% url 'lease.autos.detail' medewerkers.id %}" class="btn bth-succes"  role="button"> <h4>Lease auto</h4></a>
- <a href="{% url 'contracten.detail' medewerkers.id %}" class="btn bth-succes" role="button"><h4>Contracten en certificaten</h4></a>
+<br><br><br><br><br>
+{#dit zijn de links naar de lease auto.autos.detail en de contracten.detail (en de certificaten staan ook onder contracten.datail) page#}
+<a href="{% url 'lease.autos.detail' medewerkers.id %}" class="btn btn-success"  role="button"><h5>Lease auto</h5></a>
+<a href="{% url 'contracten.detail' medewerkers.id %}" class="btn btn-success" role="button"><h5>Contracten en certificaten</h5></a>
+<a href="{% url 'medewerker-foto' medewerkers.id %}" class="btn btn-success"  role="button"><h5>foto toevoegen</h5></a>
 <br>
-
 
 </body>
 

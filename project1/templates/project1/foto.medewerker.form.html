@@ -1,0 +1,20 @@
+{% extends 'project1/base.html' %}
+{% block title %}Voeg een foto toe aan de medewerker{% endblock %}
+
+{% block body %}
+<div class="col-md-12 col-md-7">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>voeg een foto toe</h3>
+            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'project1/form_tamplate.html' %}
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-sm-10">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

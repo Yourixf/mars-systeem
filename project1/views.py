@@ -1,11 +1,15 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import FotoForm
 from . import forms
-from django.views.generic import TemplateView
+from django.views.generic.edit import CreateView
 # Create your views here.
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen
+from django.core.files.storage import FileSystemStorage
+
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 
 def registerPage(request):
@@ -57,7 +61,6 @@ def MedewerkersPage(request):
     return render(request, 'project1/medewerkers.html', {'medewerkers': medewerkers})
 
 
-
 @login_required(login_url='login')
 def Detail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
@@ -69,7 +72,8 @@ def Detail(request, pk):
         medewerkers = Medewerkers.objects.get(id=pk)
         name_user = request.POST["Naam"]
         opmerking = request.POST["Opmerking"]
-        data = Opmerkingen(datum_opmerkingen=datum, medewerkers=medewerkers, opmerkingveld=opmerking, naam_user=name_user)
+        data = Opmerkingen(datum_opmerkingen=datum, medewerkers=medewerkers, opmerkingveld=opmerking,
+                           naam_user=name_user, )
         data.save()
         context = {'medewerkers': medewerkers, 'Opmerkingen': all_data}
         return render(request, 'project1/detail.html', context)
@@ -90,4 +94,46 @@ def Contractendetail(request, pk):
     certificaten = Certificaten.objects.get(id=pk)
     context = {'contracten': contracten, 'certificaten': certificaten, }
     return render(request, 'project1/contracten.detail.html', context, )
+
+# def Foto_medewerker(request):
+#     form = FotoForm(request.POST or None, request.FILES or None)
+#     if form.is_valid():
+#         foto = form.save(commit=False)
+#         foto.user = request.user
+#         medewerkers.foto_medewerker = request.FILES['foto_medewerker']
+#         file_type = Medewerkers.foto_medewerker.url.split('.')[-1]
+#         file_type = file_type.lower()
+#         if file_type not in IMAGE_FILE_TYPES:
+#             context = {
+#                 'foto': foto,
+#                 'form': form,
+#                 'error_message': 'Image file must be PNG, JPG, or JPEG',
+#             }
+#             return render(request, 'project1/detail.html', context)
+#         foto.save()
+#         return render(request, 'project1/detail.html', {'foto': foto})
+
+class Medewerker_foto(CreateView):
+    model = Medewerkers
+    fields = ['foto_medewerker']
+    template_name = 'project1/foto.medewerker.form.html'
+# def Foto_medewerker(request):
+#     form = FotoForm(request.POST or None, request.FILES or None)
+#     if form.is_valid():
+#         foto = form.save(commit=False)
+#         foto.user = request.user
+#         medewerkers.foto_medewerker = request.FILES['foto_medewerker']
+#         file_type = Medewerkers.foto_medewerker.url.split('.')[-1]
+#         file_type = file_type.lower()
+#         if file_type not in IMAGE_FILE_TYPES:
+#             context = {
+#                 'foto': foto,
+#                 'form': form,
+#                 'error_message': 'Image file must be PNG, JPG, or JPEG',
+#             }
+#             return render(request, 'project1/detail.html', context)
+#         foto.save()
+#         return render(request, 'project1/detail.html', {'foto': foto})
+
+
 
