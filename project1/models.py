@@ -21,13 +21,23 @@ class Medewerkers(models.Model):
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
-    foto_medewerker = models.FileField()
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
+
+
+class Foto(models.Model):
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
+    foto_medewerker = models.ImageField(upload_to='media')
+
+    class Meta:
+        pass
+
+def get_absolute_url():
+    return '/medewerkers/'
 
 
 class Leaseautos(models.Model):
@@ -69,6 +79,3 @@ class Certificaten(models.Model):
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
     naam_instituut = models.CharField(max_length=100)
-
-
-

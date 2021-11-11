@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea
-from .models import Opmerkingen, Medewerkers
+from .models import Foto
 from django import forms
 
 
@@ -12,6 +12,6 @@ class CreateUserForm(UserCreationForm):
 
 class FotoForm(forms.ModelForm):
     class Meta:
-        model = Medewerkers
-        fields = ['foto_medewerker']
+        model = Foto
+        fields = ['foto_medewerker', 'medewerkers']
 

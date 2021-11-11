@@ -27,8 +27,7 @@ urlpatterns = [
 #zoekt naar de admin page
     path(r'admin/', admin.site.urls),
 
-    path('foto/toevoegen/<str:pk>', views.Medewerker_foto.as_view(), name='medewerker-foto'),
-
+    path('foto/toevoegen/<str:pk>', views.Medewerker_foto, name='medewerker-foto'),
 
 
 ]

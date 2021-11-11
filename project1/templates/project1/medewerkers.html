@@ -32,11 +32,7 @@
                 <div class="col-sm-4 col-lg-2">
                     <div class="thumbnail">
                             <a href="{% url 'details' medewerkers.id %}">
-                                {% if medewerkers.foto_medewerker %}
-                            <img src="{{ medewerkers.foto_medewerker.url }}" class="img-responsive">
-                                {% else %}
-                            <h3>No image to display</h3>
-                        {% endif %}
+                            <img src="{{ mysite.media.media.img_obj.foto_medewerker.url}}" />
                             </a>
                             <div class="caption">
                             <h2>{{ medewerkers.voornaam}}</h2>

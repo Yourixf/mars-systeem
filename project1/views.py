@@ -6,7 +6,7 @@ from .forms import FotoForm
 from . import forms
 from django.views.generic.edit import CreateView
 # Create your views here.
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Foto
 from django.core.files.storage import FileSystemStorage
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -61,6 +61,7 @@ def MedewerkersPage(request):
     return render(request, 'project1/medewerkers.html', {'medewerkers': medewerkers})
 
 
+
 @login_required(login_url='login')
 def Detail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
@@ -95,45 +96,27 @@ def Contractendetail(request, pk):
     context = {'contracten': contracten, 'certificaten': certificaten, }
     return render(request, 'project1/contracten.detail.html', context, )
 
-# def Foto_medewerker(request):
-#     form = FotoForm(request.POST or None, request.FILES or None)
-#     if form.is_valid():
-#         foto = form.save(commit=False)
-#         foto.user = request.user
-#         medewerkers.foto_medewerker = request.FILES['foto_medewerker']
-#         file_type = Medewerkers.foto_medewerker.url.split('.')[-1]
-#         file_type = file_type.lower()
-#         if file_type not in IMAGE_FILE_TYPES:
-#             context = {
-#                 'foto': foto,
-#                 'form': form,
-#                 'error_message': 'Image file must be PNG, JPG, or JPEG',
-#             }
-#             return render(request, 'project1/detail.html', context)
-#         foto.save()
-#         return render(request, 'project1/detail.html', {'foto': foto})
 
-class Medewerker_foto(CreateView):
-    model = Medewerkers
-    fields = ['foto_medewerker']
-    template_name = 'project1/foto.medewerker.form.html'
-# def Foto_medewerker(request):
-#     form = FotoForm(request.POST or None, request.FILES or None)
-#     if form.is_valid():
-#         foto = form.save(commit=False)
-#         foto.user = request.user
-#         medewerkers.foto_medewerker = request.FILES['foto_medewerker']
-#         file_type = Medewerkers.foto_medewerker.url.split('.')[-1]
-#         file_type = file_type.lower()
-#         if file_type not in IMAGE_FILE_TYPES:
-#             context = {
-#                 'foto': foto,
-#                 'form': form,
-#                 'error_message': 'Image file must be PNG, JPG, or JPEG',
-#             }
-#             return render(request, 'project1/detail.html', context)
-#         foto.save()
-#         return render(request, 'project1/detail.html', {'foto': foto})
+# class Medewerker_foto(CreateView):
+#     model = Medewerkers
+#     fields = ['foto_medewerker']
+#     template_name = 'project1/foto.medewerker.form.html'
+
+
+def Medewerker_foto(request, pk):
+    """Process images uploaded by users"""
+    medewerker = Medewerkers.objects.get(id=pk)
+    medewerker.save()
+    if request.method == 'POST':
+        form = FotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # Get the current instance object to display in the template
+            img_obj = form.instance
+            return render(request, 'project1/foto.medewerker.form.html', {'form': form, 'img_obj': img_obj})
+    else:
+        form = FotoForm()
+    return render(request, 'project1/foto.medewerker.form.html', {'form': form})
 
 
 
