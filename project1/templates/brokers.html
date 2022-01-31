@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}4-Rest/Medewerkers{% endblock %}
+{% block body %}
+<div style="text-align: center;"><h3>Brokers 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn btn-success"  role="button"><h5>Broker Toevoegen</h5></a></div>
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<br><br>
+<strong></strong>
+        <strong></strong>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Broker naam:</th>
+            <th>Accountmanager:</th>
+            <th>Straat broker:</th>
+            <th>Huisnummer broker:</th>
+            <th>Postcode broker:</th>
+            <th>Vestigingplaats broker:</th>
+            <th>Telefoonnummer broker:</th>
+            <th>Portaal broker:</th>
+        </tr>
+        <tr>{% for Brokers in brokers_list %}
+            <td>{{ Brokers.broker_naam }}</td>
+            <td>{{ Brokers.get_accountmanager_display }}</td>
+            <td>{{ Brokers.straat_broker }}</td>
+            <td>{{ Brokers.huisnummer_broker }}</td>
+            <td>{{ Brokers.postcode_broker }}</td>
+            <td>{{ Brokers.vestigingplaats_broker }}</td>
+            <td>{{ Brokers.telefoonnummer_broker }}</td>
+            <td>{{ Brokers.portaal_broker }}</td>
+            <form action="{% url 'broker_delete' Brokers.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <td><button type="submit" class="btn btn-danger btn-xs">
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button></td></form>
+        </tr>{% endfor %}
+        <tr>
+        </thead>
+</table>
+
+<br> <br><br>
+
+
+
+{% endblock %}
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+

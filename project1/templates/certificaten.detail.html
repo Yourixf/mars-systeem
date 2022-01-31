@@ -1,4 +1,4 @@
-{% extends 'project1/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Certificaten/datails{% endblock %}
 
 {% block body %}
@@ -53,6 +53,7 @@ td, th {
         <td>{{ certificaten.accreditatie_nummer }}</td>
         <td>{{ certificaten.naam_instituut }}</td>
 </table>
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 </html>
 </html>
 {% endblock %}

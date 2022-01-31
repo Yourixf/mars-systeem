@@ -1,9 +1,5 @@
-{% extends 'project1/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Medewerkers/datails{% endblock %}
-
-
-
-
 {% block body %}
 <html lang="">
 <head>
@@ -30,19 +26,32 @@ td, th {
 {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
 <table>
     <tr>
-        <th>Naam</th><td>{{ medewerkers }}</td><th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td>
-        </tr>
-        <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td><th>Terief indicatie</th><td>{{ medewerkers.teriefindicatie }}</td>
-        <tr>
-        <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td> <th>Opleiding niveau</th><td>{{ medewerkers.opleidings_niveau }}</td>
-        </tr>
-        <th>Postcode</th><td>{{ medewerkers.postcode }}</td><th>Godsdienst</th><td>{{ medewerkers.godsdienst }}</td>
-        <tr>
-        <th>Mobiel nummer</th><td>{{ medewerkers.mobielnummer }}</td><th>Burgerlijke staat</th> <td>{{ medewerkers.burgerlijkse_staat }}</td>
-        </tr>
-        <th>ICE nummer</th> <td>{{ medewerkers.icenummer }}</td><th>Geboortedatum</th><td>{{ medewerkers.geboorte_datum }}</td>
-        <tr>
-        <th>Email</th><td>{{ medewerkers.email }}</td>
+        <th>Naam</th>
+            <td>{{ medewerkers }}</td>
+                <th>Bsn nummer</th>
+                    <td>{{ medewerkers.bnsnummer }}</td></tr>
+                        <th>Woonplaats</th>
+                             <td>{{ medewerkers.woonplaats }}</td>
+                                <th>Terief indicatie</th>
+                            <td>{{ medewerkers.teriefindicatie }}</td><tr>
+                        <th>Straat en Huisnummer</th>
+                    <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
+                <th>Opleiding niveau</th>
+            <td>{{ medewerkers.opleidings_niveau }}</td></tr>
+        <th>Postcode</th>
+            <td>{{ medewerkers.postcode }}</td>
+                <th>Godsdienst</th>
+                    <td>{{ medewerkers.godsdienst }}</td><tr>
+                        <th>Mobiel nummer</th>
+                            <td>{{ medewerkers.mobielnummer }}</td>
+                                <th>Burgerlijke staat</th>
+                            <td>{{ medewerkers.burgerlijkse_staat }}</td></tr>
+                        <th>ICE nummer</th>
+                    <td>{{ medewerkers.icenummer }}</td>
+                <th>Geboortedatum</th>
+            <td>{{ medewerkers.geboorte_datum }}</td><tr>
+        <th>Email</th>
+        <td>{{ medewerkers.email }}</td>
         </tr>
         <tr>
 </tr>
@@ -112,7 +121,8 @@ td, th {
 {#dit zijn de links naar de lease auto.autos.detail en de contracten.detail (en de certificaten staan ook onder contracten.datail) page#}
 <a href="{% url 'lease.autos.detail' medewerkers.id %}" class="btn btn-success"  role="button"><h5>Lease auto</h5></a>
 <a href="{% url 'contracten.detail' medewerkers.id %}" class="btn btn-success" role="button"><h5>Contracten en certificaten</h5></a>
-<a href="{% url 'medewerker-foto' medewerkers.id %}" class="btn btn-success"  role="button"><h5>foto toevoegen</h5></a>
+<a href="{% url 'foto_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Profiel foto toevoegen</h5></a>
+<a href="{% url 'contracten_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Contract toevoegen</h5></a>
 <br>
 
 </body>

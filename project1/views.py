@@ -2,14 +2,16 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import FotoForm
-from . import forms
-from django.views.generic.edit import CreateView
-# Create your views here.
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Foto
-from django.core.files.storage import FileSystemStorage
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
 
-IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
+from project1 import forms
+from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
+    BrokersToevoegenForm
+# Create your views here.
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Eindklanten, Brokers
+
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
 
 def registerPage(request):
@@ -25,7 +27,7 @@ def registerPage(request):
             return redirect('login')
 
     context = {'form': form}
-    return render(request, 'project1/register.html', context)
+    return render(request, 'register.html', context)
 
 
 def loginPage(request):
@@ -42,7 +44,7 @@ def loginPage(request):
             messages.info(request, 'Gebruikersnaam of wachtwoord klopt niet')
 
     context = {}
-    return render(request, "project1/login.html", context)
+    return render(request, "login.html", context)
 
 
 def logoutUser(request):
@@ -52,14 +54,13 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def Index(request):
-    return render(request, 'project1/index.html', )
+    return render(request, 'index.html', )
 
 
 @login_required(login_url='login')
 def MedewerkersPage(request):
     medewerkers = Medewerkers.objects.all()
-    return render(request, 'project1/medewerkers.html', {'medewerkers': medewerkers})
-
+    return render(request, 'medewerkers.html', {'medewerkers': medewerkers})
 
 
 @login_required(login_url='login')
@@ -77,16 +78,16 @@ def Detail(request, pk):
                            naam_user=name_user, )
         data.save()
         context = {'medewerkers': medewerkers, 'Opmerkingen': all_data}
-        return render(request, 'project1/detail.html', context)
+        return render(request, 'detail.html', context)
 
-    return render(request, 'project1/detail.html', context)
+    return render(request, 'detail.html', context)
 
 
 @login_required(login_url='login')
 def Leaseautosdetail(request, pk):
     leaseautos = Leaseautos.objects.get(id=pk)
     context = {'leaseautos': leaseautos, }
-    return render(request, 'project1/lease.autos.detail.html', context, )
+    return render(request, 'lease.autos.detail.html', context, )
 
 
 @login_required(login_url='login')
@@ -94,29 +95,130 @@ def Contractendetail(request, pk):
     contracten = Contracten.objects.get(id=pk)
     certificaten = Certificaten.objects.get(id=pk)
     context = {'contracten': contracten, 'certificaten': certificaten, }
-    return render(request, 'project1/contracten.detail.html', context, )
+    return render(request, 'contracten.detail.html', context, )
 
 
-# class Medewerker_foto(CreateView):
-#     model = Medewerkers
-#     fields = ['foto_medewerker']
-#     template_name = 'project1/foto.medewerker.form.html'
+@login_required(login_url='login')
+def Foto_Toevoegen(request, pk):
+    medewerker_pk = Medewerkers.objects.get(id=pk)
+    form = FotoForm(instance=medewerker_pk)
+    context = {'form': form,
+               'medewerker_pk': medewerker_pk}
 
-
-def Medewerker_foto(request, pk):
-    """Process images uploaded by users"""
-    medewerker = Medewerkers.objects.get(id=pk)
-    medewerker.save()
     if request.method == 'POST':
-        form = FotoForm(request.POST, request.FILES)
+        form = FotoForm(request.POST, request.FILES, instance=medewerker_pk)
         if form.is_valid():
             form.save()
-            # Get the current instance object to display in the template
-            img_obj = form.instance
-            return render(request, 'project1/foto.medewerker.form.html', {'form': form, 'img_obj': img_obj})
+            return redirect('medewerkers')
     else:
-        form = FotoForm()
-    return render(request, 'project1/foto.medewerker.form.html', {'form': form})
+        return render(request, 'foto.medewerker.form.html', context)
 
 
+@login_required(login_url='login')
+def MedewerkersToevoegen(request):
+    form = MedewerkersToevoegenForm(request.POST or None)
 
+    context = {
+        'form': form
+    }
+    if request.method == 'POST':
+        form = MedewerkersToevoegenForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'medewerker.toevoegen.html', context)
+
+
+@login_required(login_url='login')
+def ContractenToevoegen(request, pk):
+    medewerker_pk = Medewerkers.objects.get(id=pk)
+    contract = Contracten.objects.filter(medewerkers_id=pk)
+    form = ContractenToevoegenForm(instance=medewerker_pk)
+    context = {
+        'form': form,
+        'contract': contract,
+    }
+    if request.method == 'POST':
+        form = ContractenToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'contracten.toevoegen.html', context)
+
+
+@login_required(login_url='login')
+class MedewerkerUpdate(UpdateView):
+    model = Medewerkers
+    fields = '__all__'
+    template_name = 'update.medewerker.html'
+    success_url = reverse_lazy('medewerkers')
+
+
+@login_required(login_url='login')
+def MedewerkerDelete(request, pk):
+    delete_med = Medewerkers.objects.get(pk=pk)
+    delete_med.delete()
+    return redirect('medewerkers')
+
+
+@login_required(login_url='login')
+def EindklantenPage(request):
+    eindkanten_list = Eindklanten.objects.all()
+    return render(request, 'eindklanten.html', {'eindkanten_list': eindkanten_list, })
+
+
+@login_required(login_url='login')
+def EindklantToevoegen(request):
+    form = EindklantenToevoegenForm()
+    context = {
+        'form': form
+    }
+    if request.method == 'get':
+        form = EindklantenToevoegenForm(request)
+        if form.is_valid():
+            form.save()
+            return redirect('eindklanten')
+    else:
+        return render(request, 'eindklant.toevoegen.html', context)
+
+
+def EindklantDelete(request, id):
+    delete_eindklant = Eindklanten.objects.get(id=id)
+    delete_eindklant.delete()
+    return redirect('eindklanten')
+
+
+@login_required(login_url='login')
+class EindklantUpdate(UpdateView):
+    model = Eindklanten
+    fields = '__all__'
+    template_name = 'update.medewerker.html'
+    success_url = reverse_lazy('medewerkers')
+
+
+@login_required(login_url='login')
+def BrokersPage(request):
+    brokers_list = Brokers.objects.all()
+    return render(request, 'brokers.html', {'brokers_list': brokers_list, })
+
+
+@login_required(login_url='login')
+def BrokersToevoegen(request):
+    form = BrokersToevoegenForm(request.POST or None)
+    context = {
+        'form': form
+    }
+    if request.method == 'POST':
+        form = BrokersToevoegenForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('brokers')
+    else:
+        return render(request, 'brokers.toevoegen.html', context)
+
+def BrokerDelete(request, id):
+    delete_broker = Brokers.objects.get(id=id)
+    delete_broker.delete()
+    return redirect('brokers')

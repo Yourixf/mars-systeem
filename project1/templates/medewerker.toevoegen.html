@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Medewerkers toevoegen {% endblock %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="row">
+    <div class="form-group">
+        <div class="card card-body">
+            <hr>
+             <div style="text-align: center;" ><h3> Medewerker toevoegen </h3></div>
+            <hr>
+        </div>
+    </div>
+</div>
+    <div class="form-group">
+        <div class="card-body">
+            <div style="width: 25%" class="center-block">
+            <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+            <input class="btn btn-primary" type="submit" name="medewerker toevoegen">
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{##}
+{#    <div style="text-align: center;"><h1>Medewerker Toevoegen</h1><a href="{% url 'medewerkers' %}" class="btn btn-success"  role="button"><h5>Terug naar medewerkers</h5></a></div>#}
+{#    <br>#}
+{#    <style type="text/css">#}
+{#        body{ font: 14px sans-serif; text-align: center; }#}
+{#        .input { width: 350px; padding: 20px; }#}
+{#    </style>#}
+{##}
+{##}
+{#    <form enctype="multipart/form-data" method="post" action="">#}
+{##}
+{#     {% csrf_token %}#}
+{#  <fieldset class="module aligned ">#}
+{#        <label class="form-row field-voornaam"></label>#}
+{#            <label class="required" for="id_voornaam">Voornaam:</label><br>#}
+{#                <input type="text" name="voornaam" class="vTextField" maxlength="100" required="" id="id_voornaam">#}
+{#                <br>#}
+{#        <label class="form-row field-tussenvoegsel"></label>#}
+{#            <label for="id_tussenvoegsel">Tussenvoegsel:</label><br>#}
+{#                <input type="text" name="tussenvoegsel" class="vTextField" maxlength="6" id="id_tussenvoegsel">#}
+{#                <br>#}
+{#        <label class="form-row field-achternaam"></label>#}
+{#            <label class="required" for="id_achternaam">Achternaam:</label><br>#}
+{#                <input type="text" name="achternaam" class="vTextField" maxlength="100" required="" id="id_achternaam">#}
+{#                <br>#}
+{#        <label class="form-row field-bnsnummer"></label>#}
+{#            <label class="required" for="id_bnsnummer">Bnsnummer:</label><br>#}
+{#                <input type="number" name="bnsnummer" class="vIntegerField" required="" id="id_bnsnummer">#}
+{#                <br>#}
+{#        <label class="form-row field-huisnummer"></label>#}
+{#            <label class="required" for="id_huisnummer">Huisnummer:</label><br>#}
+{#                <input type="text" name="huisnummer" class="vTextField" maxlength="20" required="" id="id_huisnummer">#}
+{#                <br>#}
+{#        <label class="form-row field-straat"></label>#}
+{#            <label class="required" for="id_straat">Straat:</label><br>#}
+{#                <input type="text" name="straat" class="vTextField" maxlength="150" required="" id="id_straat">#}
+{#                <br>#}
+{#        <label class="form-row field-woonplaats"></label>#}
+{#            <label class="required" for="id_woonplaats">Woonplaats:</label><br>#}
+{#                <input type="text" name="woonplaats" class="vTextField" maxlength="150" required="" id="id_woonplaats">#}
+{#                <br>#}
+{#        <label class="form-row field-postcode"></label>#}
+{#            <label class="required" for="id_postcode">Postcode:</label><br>#}
+{#                <input type="text" name="postcode" class="vTextField" maxlength="10" required="" id="id_postcode">#}
+{#                <br>#}
+{#        <label class="form-row field-mobielnummer"></label>#}
+{#            <label class="required" for="id_mobielnummer">Mobielnummer:</label><br>#}
+{#                <input type="text" name="mobielnummer" class="vTextField" maxlength="20" required="" id="id_mobielnummer">#}
+{#                <br>#}
+{#        <label class="form-row field-icenummer"></label>#}
+{#            <label class="required" for="id_icenummer">Icenummer:</label><br>#}
+{#                <input type="text" name="icenummer" class="vTextField" maxlength="20" required="" id="id_icenummer">#}
+{#                <br>#}
+{#        <label class="form-row field-email"></label>#}
+{#            <label class="required" for="id_email">Email:</label><br>#}
+{#                <input type="text" name="email" class="vTextField" maxlength="150" required="" id="id_email">#}
+{#                <br>#}
+{#        <label class="form-row field-teriefindicatie"></label>#}
+{#            <label class="required" for="id_teriefindicatie">Teriefindicatie:</label><br>#}
+{#                <input type="number" name="teriefindicatie" step="any" required="" id="id_teriefindicatie">#}
+{#                <br>#}
+{#        <label class="form-row field-zzper_eigenwerknemer"></label>#}
+{#            <label class="required" for="id_zzper_eigenwerknemer">Zzper eigenwerknemer:</label><br>#}
+{#                <input type="text" name="zzper_eigenwerknemer" class="vTextField" maxlength="50" required="" id="id_zzper_eigenwerknemer">#}
+{#                <br>#}
+{#        <label class="form-row field-opleidings_niveau"></label>#}
+{#            <label class="required" for="id_opleidings_niveau">Opleidings niveau:</label><br>#}
+{#                <input type="text" name="opleidings_niveau" class="vTextField" maxlength="50" required="" id="id_opleidings_niveau">#}
+{#                <br>#}
+{#        <label class="form-row field-godsdienst"></label>#}
+{#            <label class="required" for="id_godsdienst">Godsdienst:</label><br>#}
+{#                <input type="text" name="godsdienst" class="vTextField" maxlength="50" required="" id="id_godsdienst">#}
+{#                <br>#}
+{#        <label class="form-row field-burgerlijkse_staat"></label>#}
+{#            <label class="required" for="id_burgerlijkse_staat">Burgerlijkse staat:</label><br>#}
+{#                <input type="text" name="burgerlijkse_staat" class="vTextField" maxlength="100" required="" id="id_burgerlijkse_staat">#}
+{#                <br>#}
+{#        <label class="form-row field-geboorte_datum"></label>#}
+{#            <label class="required" for="id_geboorte_datum">Geboorte datum:</label><br>#}
+{#                <input type="text" name="geboorte_datum" class="vDateField" size="10" required="" id="id_geboorte_datum">#}
+{#                <br><br>#}
+{#        <label class="form-row field-foto_medewerker"></label>#}
+{#            <label class="required" for="id_foto_medewerker">Foto medewerker:</label><br>#}
+{#                <input type="file" name="foto_medewerker" accept="image/*" style="text-align: center;" id="id_foto_medewerker">#}
+{#                <br>#}
+{#</fieldset>#}
+{#<div class="submit-row">#}
+{##}
+{#<input type="submit" value="Save" class="default" name="_save">#}
+{##}
+{#<input type="submit" value="Save and add another" name="_addanother">#}
+{#<input type="submit" value="Save and continue editing" name="_continue">#}
+{#<br><br>#}
+{##}
+{##}
+{##}
+{#</div>#}
+{##}
+{#</form>#}
+{#{% endblock %}#}

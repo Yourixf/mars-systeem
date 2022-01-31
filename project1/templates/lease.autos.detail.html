@@ -1,4 +1,4 @@
-{% extends 'project1/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Lease auto/datails{% endblock %}
 
 {% block body %}
@@ -47,5 +47,7 @@ td, th {
         <td>{{ leaseautos.eind_datum_lease_auto }}</td>
     </tr>
 </table>
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 </html>
+
 {% endblock %}

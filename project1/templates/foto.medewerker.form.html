@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Profiel foto medewerker toevoegen{% endblock %}
+{% block content %}
+
+<style>
+    .foto-medewerker{
+        max-width: 200px;
+        max-height: 200px;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+    #mybutton {
+  position: fixed;
+  bottom: -4px;
+  left: 10px;
+}
+
+</style>
+
+<body>
+<br>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-body">
+            <hr>
+            <div style="text-align: center;"><h3> Profiel foto toevoegen </h3></div>
+            <hr>
+            <img class="foto-medewerker" src="{{ request.Medewerkers.foto_medewerker.url }}">
+        </div>
+    </div>
+</div>
+    <div class="col-md-9">
+        <div class="card-body">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+            <input class="btn btn-primary" type="submit" name="update foto">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="mybutton">
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+</div>
+</body>
+{% endblock %}

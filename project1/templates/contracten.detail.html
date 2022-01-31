@@ -1,4 +1,4 @@
-{% extends 'project1/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Contracten/datails{% endblock %}
 
 {% block body %}
@@ -22,8 +22,9 @@ td, th {
 {{ medewerkers }}<a></a>{{ medewerkers.pk}}
 
 
- <h3> {{ contracten.medewerkers }} </h3>
+<h3> {{ contracten.medewerkers }} </h3>
 <br>
+<h4>contracten</h4>
 <table>
     <tr>
         <th>functie contract</th>
@@ -45,6 +46,7 @@ td, th {
     </tr>
 </table>
 <br><br><br><br><br>
+<h4>Certificaten</h4>
 <table>
     <tr>
         <th>Naam certificaat</th>
@@ -58,7 +60,7 @@ td, th {
         <td>{{ certificaten.accreditatie_nummer }}</td>
         <td>{{ certificaten.naam_instituut }}</td>
 </table>
-
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 <br>
 <br>
 </html>

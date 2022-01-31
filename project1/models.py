@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
 
 
 class Medewerkers(models.Model):
@@ -12,32 +12,23 @@ class Medewerkers(models.Model):
     straat = models.CharField(max_length=150)
     woonplaats = models.CharField(max_length=150)
     postcode = models.CharField(max_length=10)
-    mobielnummer = models.CharField(max_length=20)
-    icenummer = models.CharField(max_length=20)
-    email = models.CharField(max_length=150)
+    mobielnummer = models.IntegerField(null=True)
+    icenummer = models.IntegerField(null=True)
+    email = models.EmailField(max_length=150)
     teriefindicatie = models.FloatField(max_length=20)
     zzper_eigenwerknemer = models.CharField(max_length=50)
     opleidings_niveau = models.CharField(max_length=50)
     godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
+    foto_medewerker = models.ImageField(upload_to='',
+                                        default='userimg.png')
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
-
-
-class Foto(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
-    foto_medewerker = models.ImageField(upload_to='media')
-
-    class Meta:
-        pass
-
-def get_absolute_url():
-    return '/medewerkers/'
 
 
 class Leaseautos(models.Model):
@@ -79,3 +70,37 @@ class Certificaten(models.Model):
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
     naam_instituut = models.CharField(max_length=100)
+
+
+class Eindklanten(models.Model):
+    ACCOUNTMANAGER_CHOICES = (
+        ('1', 'Yoeri Tromp'),
+        ('2', 'Nicky Slothouwer'),
+        ('3', 'Coen Berkhout jr'),
+        ('4', 'Jessica Berkhout'),
+    )
+    accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES)
+    klantnaam = models.CharField(max_length=50)
+    straat_klant = models.CharField(max_length=150)
+    huisnummer_klant = models.CharField(max_length=20)
+    postcode_klant = models.CharField(max_length=10)
+    vestigingplaats_klant = models.CharField(max_length=150)
+    telefoonnummer_klant = models.CharField(max_length=17)
+    portaal_klant = models.URLField(max_length=300)
+
+
+class Brokers(models.Model):
+    ACCOUNTMANAGER_CHOICES = (
+        ('1', 'Yoeri Tromp'),
+        ('2', 'Nicky Slothouwer'),
+        ('3', 'Coen Berkhout jr'),
+        ('4', 'Jessica Berkhout'),
+    )
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
+    broker_naam = models.CharField(max_length=50)
+    straat_broker = models.CharField(max_length=150)
+    huisnummer_broker = models.CharField(max_length=20)
+    postcode_broker = models.CharField(max_length=10)
+    vestigingplaats_broker = models.CharField(max_length=150)
+    telefoonnummer_broker = models.IntegerField(null=True)
+    portaal_broker = models.URLField(max_length=300)
