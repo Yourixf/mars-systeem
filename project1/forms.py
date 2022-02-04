@@ -86,6 +86,43 @@ class EindklantenToevoegenForm(forms.ModelForm):
         fields = '__all__'
 
 
+class EindklantenUpdateForm(forms.ModelForm):
+    ACCOUNTMANAGER_CHOICES = (
+        ('1', 'Yoeri Tromp'),
+        ('2', 'Nicky Slothouwer'),
+        ('3', 'Coen Berkhout jr'),
+        ('4', 'Jessica Berkhout'),
+    )
+    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES)
+    klantnaam = forms.CharField(max_length=50)
+    straat_klant = forms.CharField(max_length=150)
+    huisnummer_klant = forms.CharField(max_length=20)
+    postcode_klant = forms.CharField(max_length=10)
+    vestigingplaats_klant = forms.CharField(max_length=150)
+    telefoonnummer_klant = forms.CharField(max_length=17)
+    portaal_klant = forms.URLField(max_length=300)
+
+    class BrokersUpdateForm(forms.ModelForm):
+        ACCOUNTMANAGER_CHOICES = (
+            ('1', 'Yoeri Tromp'),
+            ('2', 'Nicky Slothouwer'),
+            ('3', 'Coen Berkhout jr'),
+            ('4', 'Jessica Berkhout'),
+        )
+        accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES)
+        klantnaam = forms.CharField(max_length=50)
+        straat_klant = forms.CharField(max_length=150)
+        huisnummer_klant = forms.CharField(max_length=20)
+        postcode_klant = forms.CharField(max_length=10)
+        vestigingplaats_klant = forms.CharField(max_length=150)
+        telefoonnummer_klant = forms.CharField(max_length=17)
+        portaal_klant = forms.URLField(max_length=300)
+
+    class Meta:
+        model = Eindklanten
+        fields = '__all__'
+
+
 class BrokersToevoegenForm(forms.ModelForm):
     class Meta:
         model = Brokers

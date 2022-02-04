@@ -32,6 +32,7 @@ td, th {
             <th>Vestigingplaats klant:</th>
             <th>Telefoonnummer klant:</th>
             <th>Portaal klant:</th>
+            <th>Update / Delete</th>
         </tr>
         {% for Eindklanten in eindkanten_list %}
             <td>{{ Eindklanten.klantnaam }}</td>
@@ -42,10 +43,13 @@ td, th {
             <td>{{ Eindklanten.vestigingplaats_klant }}</td>
             <td>{{ Eindklanten.telefoonnummer_klant }}</td>
             <td>{{ Eindklanten.portaal_klant }}</td>
+
             <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
             {% csrf_token %}
             <td><button type="submit" class="btn btn-danger btn-xs">
-                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button></td></form>
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+            <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form>
         </tr>{% endfor %}
         <tr>
 

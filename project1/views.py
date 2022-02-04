@@ -6,8 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from project1 import forms
-from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
-    BrokersToevoegenForm
+from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, BrokersToevoegenForm
 # Create your views here.
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Eindklanten, Brokers
 
@@ -148,13 +147,25 @@ def ContractenToevoegen(request, pk):
         return render(request, 'contracten.toevoegen.html', context)
 
 
-@login_required(login_url='login')
+
 class MedewerkerUpdate(UpdateView):
     model = Medewerkers
     fields = '__all__'
     template_name = 'update.medewerker.html'
     success_url = reverse_lazy('medewerkers')
 
+
+class EindklantUpdate(UpdateView):
+    model = Eindklanten
+    fields = '__all__'
+    template_name = 'update.eindklant.html'
+    success_url = reverse_lazy('eindklanten')
+
+class BrokerUpdate(UpdateView):
+    model = Brokers
+    fields = '__all__'
+    template_name = 'update.broker.html'
+    success_url = reverse_lazy('brokers')
 
 @login_required(login_url='login')
 def MedewerkerDelete(request, pk):
@@ -190,12 +201,7 @@ def EindklantDelete(request, id):
     return redirect('eindklanten')
 
 
-@login_required(login_url='login')
-class EindklantUpdate(UpdateView):
-    model = Eindklanten
-    fields = '__all__'
-    template_name = 'update.medewerker.html'
-    success_url = reverse_lazy('medewerkers')
+
 
 
 @login_required(login_url='login')

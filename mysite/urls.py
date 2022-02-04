@@ -33,7 +33,7 @@ urlpatterns = [
 
     path(r'medewerker/delete/<str:pk>/', views.MedewerkerDelete, name='medewerker_delete'),
 
-    path(r'medewerker/update/<str:pk>/', views.MedewerkerUpdate, name='medewerker_update'),
+    path(r'medewerker/update/<str:pk>/', views.MedewerkerUpdate.as_view(), name='medewerker_update'),
 
     path(r'contracten.toevoegen/<str:pk>/', views.ContractenToevoegen, name='contracten_toevoegen'),
 
@@ -43,11 +43,15 @@ urlpatterns = [
 
     path(r'eindklant/delete/<str:id>/', views.EindklantDelete, name='eindklant_delete'),
 
+    path(r'eindklant/update/<str:pk>/', views.EindklantUpdate.as_view(), name='eindklant_update'),
+
     path(r'brokers_page/', views.BrokersPage, name='brokers'),
 
     path(r'brokers.toevoegen', views.BrokersToevoegen, name='brokers_toevoegen'),
 
     path(r'broker/delete/<str:id>/', views.BrokerDelete, name='broker_delete'),
+
+    path(r'broker/update/<str:pk>/', views.BrokerUpdate.as_view(), name='broker_update'),
 
 ]
 if settings.DEBUG:

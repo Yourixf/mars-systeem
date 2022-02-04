@@ -33,6 +33,7 @@ td, th {
             <th>Vestigingplaats broker:</th>
             <th>Telefoonnummer broker:</th>
             <th>Portaal broker:</th>
+            <th>Update / Delete</th>
         </tr>
         <tr>{% for Brokers in brokers_list %}
             <td>{{ Brokers.broker_naam }}</td>
@@ -46,7 +47,9 @@ td, th {
             <form action="{% url 'broker_delete' Brokers.id %}" method="post" style="display: inline;">
             {% csrf_token %}
             <td><button type="submit" class="btn btn-danger btn-xs">
-                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button></td></form>
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+            <a href="{% url 'broker_update' Brokers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" ></td></form>
         </tr>{% endfor %}
         <tr>
         </thead>
