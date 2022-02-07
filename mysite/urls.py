@@ -53,6 +53,16 @@ urlpatterns = [
 
     path(r'broker/update/<str:pk>/', views.BrokerUpdate.as_view(), name='broker_update'),
 
+    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view(), name='contract_update'),
+
+    path(r'certificaten.toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
+
+    path(r'lease-auto.toevoegen/<str:pk>/', views.LeaseautosToevoegen, name='lease-auto_toevoegen'),
+
+    path(r'lease-auto/delete/<str:id>/', views.LeaseautoDelete, name='lease-auto_delete'),
+
+    path(r'contract/delete/<str:id>/', views.ContractenDelete, name='contract_delete'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.fields import DateField
 
-from .models import Medewerkers, Contracten, Eindklanten, Brokers
+from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos
 
 
 class CreateUserForm(UserCreationForm):
@@ -127,3 +127,40 @@ class BrokersToevoegenForm(forms.ModelForm):
     class Meta:
         model = Brokers
         fields = '__all__'
+
+class ContractenUpdateForm(ModelForm):
+    contract_uren = forms.IntegerField()
+    salaris = forms.IntegerField()
+    vakantie_dagen = forms.IntegerField()
+    Onkostenvergoeding = forms.IntegerField()
+    Startdatum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+    Einddatum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+
+    class Meta:
+        model = Contracten
+        fields = ['contract_uren', 'Startdatum', 'Einddatum', 'functie_contract', 'salaris', 'vakantie_dagen',
+                  'Onkostenvergoeding']
+
+class CertificatenToevoegenForm(ModelForm):
+    naam_certificaat = forms.CharField()
+    datum_afronding = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+    accreditatie_nummer = forms.IntegerField()
+    naam_instituut = forms.CharField()
+
+    class Meta:
+        model = Certificaten
+        fields = "__all__"
+
+class LeaseautosToevoegenForm(ModelForm):
+    kenteken = forms.CharField()
+    start_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+    eind_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+    merk_auto = forms.CharField()
+    type_auto = forms.CharField()
+    leasemaatschappij = forms.CharField()
+    kilometer_per_jaar = forms.IntegerField()
+    lease_bedrag = forms.FloatField()
+
+class Meta:
+    model = Leaseautos
+    fields = "__all__"

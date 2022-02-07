@@ -34,6 +34,7 @@ td, th {
         <th>Maand salaris</th>
         <th>vakantie dagen</th>
         <th>Onkostenvergoeding</th>
+        <th>Delete/ Update</Th>
     </tr>
     <tr>
         <td>{{ contracten.functie_contract }}</td>
@@ -43,6 +44,12 @@ td, th {
         <td>{{ contracten.salaris }}</td>
         <td>{{ contracten.vakantie_dagen }}</td>
         <td>{{ contracten.Onkostenvergoeding }}</td>
+ <form action="{% url 'contract_delete' contracten.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <td><button type="submit" class="btn btn-danger btn-xs">
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+            <a href="{% url 'contract_update' contracten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <input type="hidden" name="medewerker_id" value="{{ contracten.id }}" /></td></form>
     </tr>
 </table>
 <br><br><br><br><br>
@@ -53,12 +60,17 @@ td, th {
         <th>Datum afronding</th>
         <th>Accreditatie nummer</th>
         <th>naam_instituut</th>
+        <th>Delete</th>
     </tr>
     <tr>
         <td>{{ certificaten.naam_certificaat }}</td>
         <td>{{ certificaten.datum_afronding }}</td>
         <td>{{ certificaten.accreditatie_nummer }}</td>
         <td>{{ certificaten.naam_instituut }}</td>
+     <form action="{% url 'contract_delete' contracten.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <td><button type="submit" class="btn btn-danger btn-xs">
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button></td></form>
 </table>
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 <br>

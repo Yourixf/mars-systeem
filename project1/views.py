@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from project1 import forms
-from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, BrokersToevoegenForm
+from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm
+
 # Create your views here.
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Eindklanten, Brokers
 
@@ -228,3 +229,54 @@ def BrokerDelete(request, id):
     delete_broker = Brokers.objects.get(id=id)
     delete_broker.delete()
     return redirect('brokers')
+
+class ContractenUpdate(UpdateView):
+    model = Contracten
+    fields = '__all__'
+    template_name = 'update.contracten.html'
+    success_url = reverse_lazy('contracten.detail')
+
+@login_required(login_url='login')
+def CertificatenToevoegen(request, pk):
+    medewerker_pk = Medewerkers.objects.get(id=pk)
+    certificaat = Certificaten.objects.filter(medewerkers_id=pk)
+    form = CertificatenToevoegenForm(instance=medewerker_pk)
+    context = {
+        'form': form,
+        'certificaat': certificaat,
+    }
+    if request.method == 'POST':
+        form = CertificatenToevoegen(request.POST, request.FILES, instance=medewerker_pk)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'certificaten.toevoegen.html', context)
+
+@login_required(login_url='login')
+def LeaseautosToevoegen(request, pk):
+    medewerker_pk = Medewerkers.objects.get(id=pk)
+    leaseauto = Leaseautos.objects.filter(medewerkers_id=pk)
+    form = CertificatenToevoegenForm(instance=medewerker_pk)
+    context = {
+        'form': form,
+        'leaseauto': leaseauto,
+    }
+    if request.method == 'POST':
+        form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'lease.autos.toevoegen.html', context)
+
+def LeaseautoDelete(request, id):
+    delete_lease_auto = Leaseautos.objects.get(id=id)
+    delete_lease_auto.delete()
+    return redirect('lease.autos.detail')
+
+def ContractenDelete(request, id):
+    delete_contract = Contracten.objects.get(id=id)
+    delete_contract.delete()
+    return redirect('contracten.detail')
+

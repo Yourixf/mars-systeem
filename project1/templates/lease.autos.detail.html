@@ -35,6 +35,7 @@ td, th {
         <th>Lease bedrag</th>
         <th>Start datum</th>
         <th>Eind datum</th>
+        <th>Delete</th>
     </tr>
     <tr>
         <td>{{ leaseautos.leasemaatschappij }}</td>
@@ -45,6 +46,10 @@ td, th {
         <td>{{ leaseautos.lease_bedrag }}</td>
         <td>{{ leaseautos.start_datum_lease_auto }}</td>
         <td>{{ leaseautos.eind_datum_lease_auto }}</td>
+    <form><td><a action="{% url 'lease-auto_delete' leaseautos.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button></a><td></form>
     </tr>
 </table>
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

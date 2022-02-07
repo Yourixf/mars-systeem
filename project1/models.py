@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from djmoney.models.fields import MoneyField
 
 
 class Medewerkers(models.Model):
@@ -104,3 +105,26 @@ class Brokers(models.Model):
     vestigingplaats_broker = models.CharField(max_length=150)
     telefoonnummer_broker = models.IntegerField(null=True)
     portaal_broker = models.URLField(max_length=300)
+
+
+class Aanbiedingen(models.Model):
+    ACCOUNTMANAGER_CHOICES = (
+        ('1', 'Yoeri Tromp'),
+        ('2', 'Nicky Slothouwer'),
+        ('3', 'Coen Berkhout jr'),
+        ('4', 'Jessica Berkhout'),
+    )
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
+    aangemaakt_door = models.CharField(max_length=50)
+    registratie = models.DateField(null=True)
+    laatste_update = models.DateField(null=True)
+    functie = models.CharField(max_length= 50)
+    functie_aanbieding = models.CharField(max_length=50)
+    klant_naam = models.CharField(max_length=50)
+    broker = models.CharField(max_length=50)
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
+    status = models.CharField(max_length=50)
+    terief = MoneyField(max_digits=14, decimal_places=2, default_currency='EUR')
+    betaalkorting = MoneyField(max_digits=14, decimal_places=2, default_currency='EUR')
+    medewerker = models.CharField(max_length=100)
+
