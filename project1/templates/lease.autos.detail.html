@@ -48,7 +48,7 @@ td, th {
         <td>{{ leaseautos.eind_datum_lease_auto }}</td>
     <form><td><a action="{% url 'lease-auto_delete' leaseautos.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-xs">
+            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de lease auto van {{ leaseautos.medewerkers }} wilt verijderen?')">
                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button></a><td></form>
     </tr>
 </table>

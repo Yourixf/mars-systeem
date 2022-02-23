@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'project1',
     'crispy_forms',
     'phonenumber_field',
-    'djmoney',
+    'django_filters',
+    'admin_adv_search_builder'
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from project1 import forms
-from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm
-
+from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
+    BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenToevoegenForm
 # Create your views here.
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Eindklanten, Brokers
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerkingen, Eindklanten, Brokers, Aanbiedingen
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
@@ -54,13 +54,58 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def Index(request):
-    return render(request, 'index.html', )
+    all_aanbieding = Aanbiedingen.objects.all()
+    open_aanbied_count = Aanbiedingen.get_status_count(Aanbiedingen.status)
+    all_medewerkers = Medewerkers.objects.all()
+    medewerkers_count = all_medewerkers.count()
+    context = {
+        'all_medewerkers': all_medewerkers,
+        'medewerkers_count': medewerkers_count,
+        'all_aanbieding': all_aanbieding,
+        'open_aanbied_count': open_aanbied_count,
+    }
+    return render(request, 'index.html', context)
 
 
 @login_required(login_url='login')
 def MedewerkersPage(request):
     medewerkers = Medewerkers.objects.all()
     return render(request, 'medewerkers.html', {'medewerkers': medewerkers})
+
+
+@login_required(login_url='login')
+def MedewerkersToevoegen(request):
+    form = MedewerkersToevoegenForm(request.POST or None)
+
+    context = {
+        'form': form
+    }
+    if request.method == 'POST':
+        form = MedewerkersToevoegenForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'medewerker.toevoegen.html', context)
+
+
+class MedewerkerUpdate(UpdateView):
+    model = Medewerkers
+    fields = '__all__'
+    template_name = 'update.medewerker.html'
+    success_url = reverse_lazy('medewerkers')
+
+
+@login_required(login_url='login')
+def MedewerkerDelete(request, pk):
+    med = Medewerkers.objects.filter(pk=pk)
+    delete_med = Medewerkers.objects.get(pk=pk)
+    if request.method == "POST":
+        delete_med.delete()
+        messages.success(request, "Deze medewerker is verwijderd.")
+        return redirect("medewerkers")
+    context = {"delete_med": delete_med, "med": med}
+    return render(request, "confirm.delete.html", context)
 
 
 @login_required(login_url='login')
@@ -89,14 +134,28 @@ def Leaseautosdetail(request, pk):
     context = {'leaseautos': leaseautos, }
     return render(request, 'lease.autos.detail.html', context, )
 
+@login_required(login_url='login')
+def LeaseautosToevoegen(request, pk):
+    medewerker_pk = Medewerkers.objects.get(id=pk)
+    leaseauto = Leaseautos.objects.filter(medewerkers_id=pk)
+    form = CertificatenToevoegenForm(instance=medewerker_pk)
+    context = {
+        'form': form,
+        'leaseauto': leaseauto,
+    }
+    if request.method == 'POST':
+        form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        if form.is_valid():
+            form.save()
+            return redirect('medewerkers')
+    else:
+        return render(request, 'lease.autos.toevoegen.html', context)
 
 @login_required(login_url='login')
-def Contractendetail(request, pk):
-    contracten = Contracten.objects.get(id=pk)
-    certificaten = Certificaten.objects.get(id=pk)
-    context = {'contracten': contracten, 'certificaten': certificaten, }
-    return render(request, 'contracten.detail.html', context, )
-
+def LeaseautoDelete(request, id):
+    delete_lease_auto = Leaseautos.objects.get(id=id)
+    delete_lease_auto.delete()
+    return redirect('lease.autos.detail')
 
 @login_required(login_url='login')
 def Foto_Toevoegen(request, pk):
@@ -113,22 +172,12 @@ def Foto_Toevoegen(request, pk):
     else:
         return render(request, 'foto.medewerker.form.html', context)
 
-
 @login_required(login_url='login')
-def MedewerkersToevoegen(request):
-    form = MedewerkersToevoegenForm(request.POST or None)
-
-    context = {
-        'form': form
-    }
-    if request.method == 'POST':
-        form = MedewerkersToevoegenForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('medewerkers')
-    else:
-        return render(request, 'medewerker.toevoegen.html', context)
-
+def Contractendetail(request, pk):
+    contracten = Contracten.objects.get(id=pk)
+    certificaten = Certificaten.objects.get(id=pk)
+    context = {'contracten': contracten, 'certificaten': certificaten, }
+    return render(request, 'contracten.detail.html', context, )
 
 @login_required(login_url='login')
 def ContractenToevoegen(request, pk):
@@ -147,33 +196,17 @@ def ContractenToevoegen(request, pk):
     else:
         return render(request, 'contracten.toevoegen.html', context)
 
-
-
-class MedewerkerUpdate(UpdateView):
-    model = Medewerkers
-    fields = '__all__'
-    template_name = 'update.medewerker.html'
-    success_url = reverse_lazy('medewerkers')
-
-
-class EindklantUpdate(UpdateView):
-    model = Eindklanten
-    fields = '__all__'
-    template_name = 'update.eindklant.html'
-    success_url = reverse_lazy('eindklanten')
-
-class BrokerUpdate(UpdateView):
-    model = Brokers
-    fields = '__all__'
-    template_name = 'update.broker.html'
-    success_url = reverse_lazy('brokers')
-
 @login_required(login_url='login')
-def MedewerkerDelete(request, pk):
-    delete_med = Medewerkers.objects.get(pk=pk)
-    delete_med.delete()
-    return redirect('medewerkers')
+def ContractenDelete(request, id):
+    delete_contract = Contracten.objects.get(id=id)
+    delete_contract.delete()
+    return redirect('contracten.detail')
 
+class ContractenUpdate(UpdateView):
+    model = Contracten
+    fields = '__all__'
+    template_name = 'update.contracten.html'
+    success_url = reverse_lazy('contracten.detail')
 
 @login_required(login_url='login')
 def EindklantenPage(request):
@@ -183,27 +216,29 @@ def EindklantenPage(request):
 
 @login_required(login_url='login')
 def EindklantToevoegen(request):
-    form = EindklantenToevoegenForm()
+    form = EindklantenToevoegenForm(request.POST or None)
     context = {
         'form': form
     }
-    if request.method == 'get':
-        form = EindklantenToevoegenForm(request)
+    if request.method == 'POST':
+        form = EindklantenToevoegenForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('eindklanten')
     else:
         return render(request, 'eindklant.toevoegen.html', context)
 
+class EindklantUpdate(UpdateView):
+    model = Eindklanten
+    fields = '__all__'
+    template_name = 'update.eindklant.html'
+    success_url = reverse_lazy('eindklanten')
 
+@login_required(login_url='login')
 def EindklantDelete(request, id):
     delete_eindklant = Eindklanten.objects.get(id=id)
     delete_eindklant.delete()
     return redirect('eindklanten')
-
-
-
-
 
 @login_required(login_url='login')
 def BrokersPage(request):
@@ -230,11 +265,12 @@ def BrokerDelete(request, id):
     delete_broker.delete()
     return redirect('brokers')
 
-class ContractenUpdate(UpdateView):
-    model = Contracten
+class BrokerUpdate(UpdateView):
+    model = Brokers
     fields = '__all__'
-    template_name = 'update.contracten.html'
-    success_url = reverse_lazy('contracten.detail')
+    template_name = 'update.broker.html'
+    success_url = reverse_lazy('brokers')
+
 
 @login_required(login_url='login')
 def CertificatenToevoegen(request, pk):
@@ -246,7 +282,7 @@ def CertificatenToevoegen(request, pk):
         'certificaat': certificaat,
     }
     if request.method == 'POST':
-        form = CertificatenToevoegen(request.POST, request.FILES, instance=medewerker_pk)
+        form = CertificatenToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
         if form.is_valid():
             form.save()
             return redirect('medewerkers')
@@ -254,29 +290,42 @@ def CertificatenToevoegen(request, pk):
         return render(request, 'certificaten.toevoegen.html', context)
 
 @login_required(login_url='login')
-def LeaseautosToevoegen(request, pk):
-    medewerker_pk = Medewerkers.objects.get(id=pk)
-    leaseauto = Leaseautos.objects.filter(medewerkers_id=pk)
-    form = CertificatenToevoegenForm(instance=medewerker_pk)
+def AanbiedingenPage(request):
+    aanbieding_list = Aanbiedingen.objects.all()
+    return render(request, 'aanbiedingen.html', {'aanbieding_list': aanbieding_list, })
+
+@login_required(login_url='login')
+def AanbiedingToevoegen(request):
+    form = AanbiedingenToevoegenForm(request.POST or None)
     context = {
         'form': form,
-        'leaseauto': leaseauto,
     }
     if request.method == 'POST':
-        form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        form = AanbiedingenToevoegenForm(request.POST, request.FILES)
         if form.is_valid():
+
             form.save()
-            return redirect('medewerkers')
+            return redirect('aanbiedingen')
     else:
-        return render(request, 'lease.autos.toevoegen.html', context)
+            return render(request, 'aanbiedingen.toevoegen.html', context)
 
-def LeaseautoDelete(request, id):
-    delete_lease_auto = Leaseautos.objects.get(id=id)
-    delete_lease_auto.delete()
-    return redirect('lease.autos.detail')
+@login_required(login_url='login')
+def AanbiedingDelete(request, id):
+    delete_aanbieding = Aanbiedingen.objects.get(id=id)
+    delete_aanbieding.delete()
+    return redirect('aanbiedingen')
 
-def ContractenDelete(request, id):
-    delete_contract = Contracten.objects.get(id=id)
-    delete_contract.delete()
-    return redirect('contracten.detail')
+class AanbiedingUpdate(UpdateView):
+    model = Aanbiedingen
+    fields = '__all__'
+    template_name = 'aanbieding.update.html'
+    success_url = reverse_lazy('aanbiedingen')
 
+@login_required(login_url='login')
+def ArchiefAanbiedingenPage(request):
+    aanbieding_list = Aanbiedingen.objects.all()
+    # status = Aanbiedingen.status
+    # for status in aanbieding_list == 1:
+    #     return render(request, 'aanbiedingen.html', {'aanbieding_list': aanbieding_list, "status": status, })
+    # else:
+    return render(request, 'aanbiedingen.archief.html', {'aanbieding_list': aanbieding_list, })

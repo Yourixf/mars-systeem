@@ -21,19 +21,15 @@
                             <h2>{{ medewerkers.voornaam}}</h2>
                             <h4>{{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</h4>
                             <!-- View Details -->
-                            <form action="{% url 'medewerker_delete' medewerkers.pk %}" method="post" style="display: inline;">
+                                <a href="{% url 'details' medewerkers.id %}"  class="btn btn-primary btn-sm" role="button">View Details</a>
+                                <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
                                 {% csrf_token %}
-                            <a href="{% url 'details' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
-                                 <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
-
-                            <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                 <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
 
-                            <button type="submit" class="btn btn-danger btn-xs">
-                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-
-
-                            </form>
+                                <a href="{% url 'medewerker_delete' medewerkers.pk %}" class="btn btn-danger btn-xs" role="button" style="display: inline;">delete</a>
+                                <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
+                                {% csrf_token %}
                         </div>
                     </div>
                 </div>
@@ -41,7 +37,8 @@
         </div>
 {% endfor %}
 {% else %}
-    <h3>je hebt geen medewerkers</h3>
+    {% comment %}<h3>Deze medewerker is verwijderd.</h3>
+    <div style="text-align: center;"><a href="{% url 'medewerkers' %}" class="btn btn-success"  role="button"><h5>Terug naar medewerkers</h5></a></div>{% endcomment %}
 {% endif %}
 {% endblock %}
 

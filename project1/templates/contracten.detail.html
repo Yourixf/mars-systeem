@@ -46,7 +46,7 @@ td, th {
         <td>{{ contracten.Onkostenvergoeding }}</td>
  <form action="{% url 'contract_delete' contracten.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs">
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je het contract van {{ contracten.medewerkers }} wilt verijderen?')">
                                   <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
             <a href="{% url 'contract_update' contracten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                 <input type="hidden" name="medewerker_id" value="{{ contracten.id }}" /></td></form>
@@ -69,7 +69,7 @@ td, th {
         <td>{{ certificaten.naam_instituut }}</td>
      <form action="{% url 'contract_delete' contracten.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs">
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je het certificaat van {{ certificaten.medewerkers  }} wilt verijderen?')">
                                   <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button></td></form>
 </table>
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

@@ -70,6 +70,15 @@ body {
                     </a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" >Aanbiedingen <span class="glyphicon"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{% url 'aanbiedingen' %}">Open aanbiedingen</a></li>
+                <li><a href="{% url 'archief_aanbiedingen' %}">Archief aanbiedingen</a></li>
+            </ul>
+            </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                       <a href="{% url 'logout' %}">

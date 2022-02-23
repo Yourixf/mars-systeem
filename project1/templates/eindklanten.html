@@ -1,10 +1,11 @@
+
 {% extends 'base.html' %}
-{% block title %} 4-Rest/Eindklanten {% endblock %}
+{% block title %} Eindklanten {% endblock %}
 {% block body %}
-<div style="text-align: center;"><h3>Eindklanten 4-Rest</h3><a href="{% url 'eindklanten_toevoegen' %}" class="btn btn-success"  role="button"><h5>Eindklant Toevoegen</h5></a></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Eindklanten 4-Rest</h3><a href="{% url 'eindklanten_toevoegen' %}" class="btn btn-success" role="button"><h5>Eindklant Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
-    <style>
+<style>
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -19,9 +20,48 @@ td, th {
 </style>
 {% endblock %}
 {% block content %}
-<br><br>
-<strong></strong>
-        <table class="table">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- scripts voor sortable table -->
+
+    <!-- scripts voor pagination -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+     <!-- scripts voor export -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    $('#editableTable').DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 4, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            title: 'Eindklanten' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 's', '2' );
+            }
+        } ]
+    }
+    );
+} );
+</script>
+
+<table id="editableTable" class="table" style="width:100%">
         <thead>
         <tr>
             <th>Klantnaam:</th>
@@ -35,6 +75,7 @@ td, th {
             <th>Update / Delete</th>
         </tr>
         {% for Eindklanten in eindkanten_list %}
+        <tbody id="myTable">
             <td>{{ Eindklanten.klantnaam }}</td>
             <td>{{ Eindklanten.get_accountmanager_display }}</td>
             <td>{{ Eindklanten.straat_klant }}</td>
@@ -46,19 +87,27 @@ td, th {
 
             <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs">
-                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
+                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
             <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form>
-        </tr>{% endfor %}
-        <tr>
+                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form></tr>
+            </tbody>
+            </thead>
 
-        </thead>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+{% endfor %}
 </table>
-
-
-
-        <br> <br><br>
+<br><br><br>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 

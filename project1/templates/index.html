@@ -2,10 +2,108 @@
 {% block body %}
 <h1>Home pagina 4-Rest</h1>
 <h2>CRM/-HRM- Systeem</h2>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: right;
+  width: 25%;
+  padding: 0 20px;
+}
+
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #8ba011;
+  color: white;
+}
+
+
+</style>
+</head>
 <body>
 
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <p><i class="bi bi-person-circle"></i></p>
+      <h3>{{ medewerkers_count }}</h3>
+      <p>Aantal medewerkers</p>
+    </div>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <p><i class="bi bi-envelope-open"></i></p>
+      <h3>{{ open_aanbied_count }}</h3>
+      <p>Aantal open aanbiedingen</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>{% endcomment %}
 {% comment %}
 
 <script>
@@ -36,6 +134,6 @@ new Chart("myChart", {
 </script>
 {% endcomment %}
 
-</body>
+
 
 {% endblock %}

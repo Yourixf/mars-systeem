@@ -63,6 +63,17 @@ urlpatterns = [
 
     path(r'contract/delete/<str:id>/', views.ContractenDelete, name='contract_delete'),
 
+    path(r'aanbiedingen_page/', views.AanbiedingenPage, name='aanbiedingen'),
+
+    path(r'aanbiedingen.toevoegen/', views.AanbiedingToevoegen, name='aanbieding_toevoegen'),
+
+    path(r'aanbieding/update/<str:pk>/', views.AanbiedingUpdate.as_view(), name='aanbieding_update'),
+
+    path(r'aanbieding/delete/<str:id>/', views.ContractenDelete, name='aanbieding_delete'),
+
+    path(r'archief/aanbiedingen_page/', views.ArchiefAanbiedingenPage, name='archief_aanbiedingen'),
+
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
