@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Aanbiedingen/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+<table>
+    <tr>
+        <th>Eindklant naam:</th><td>{{ eindklant.klantnaam }}</td>
+        <th>Accountmanager:</th><td>{{ eindklant.get_accountmanager_display }}</td></tr>
+        <th>Straat en Huisnummer</th><td>{{ eindklant.straat_klant }} {{ eindklant.huisnummer_klant }}</td>
+        <th>Postcode eindklant:</th><td>{{ eindklant.postcode_klant }}</td></tr>
+        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant.vestigingplaats_klant }}</td>
+        <th>Telefoonnummer eindklant:</th><td>{{ eindklant.telefoonnummer_klant }}</td></tr>
+        <th>Portaal eindklant:</th><td><a href="{{ eindklant.portaal_klant }}" target="_blank">{{eindklant.portaal_klant}}</a></td>
+        </tr>
+</table>
+
+</html>
+
+{% endblock %}

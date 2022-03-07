@@ -73,6 +73,7 @@ $(document).ready(function() {
             <th>Telefoonnummer klant:</th>
             <th>Portaal klant:</th>
             <th>Update / Delete</th>
+            <th>    Detail </th>
         </tr>
         {% for Eindklanten in eindkanten_list %}
         <tbody id="myTable">
@@ -83,16 +84,18 @@ $(document).ready(function() {
             <td>{{ Eindklanten.postcode_klant }}</td>
             <td>{{ Eindklanten.vestigingplaats_klant }}</td>
             <td>{{ Eindklanten.telefoonnummer_klant }}</td>
-            <td>{{ Eindklanten.portaal_klant }}</td>
+            <td><a href="{{ Eindklanten.portaal_klant }}" target="_blank">{{Eindklanten.portaal_klant}}</a></td>
 
             <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
             {% csrf_token %}
             <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
             <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form></tr>
+                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form>
+            <td><a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td>
             </tbody>
-            </thead>
+
 
 <script>
 $(document).ready(function(){

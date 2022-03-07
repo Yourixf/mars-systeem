@@ -73,6 +73,9 @@ urlpatterns = [
 
     path(r'archief/aanbiedingen_page/', views.ArchiefAanbiedingenPage, name='archief_aanbiedingen'),
 
+    path(r'broker/<str:pk>/', views.BrokerDetail, name='broker_detail'),
+
+    path(r'eindklant/<str:pk>/', views.EindklantDetail, name='eindklant_detail'),
 
 ]
 if settings.DEBUG:

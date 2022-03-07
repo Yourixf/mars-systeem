@@ -125,6 +125,7 @@ class EindklantenUpdateForm(forms.ModelForm):
 
 class BrokersToevoegenForm(forms.ModelForm):
     class Meta:
+        portaal_broker = forms.URLField(max_length=300)
         model = Brokers
         fields = '__all__'
 
@@ -216,7 +217,11 @@ class AanbiedingenToevoegenForm(ModelForm):
     functie = forms.ChoiceField(choices=FUNCTIE_CHOICES)
     status = forms.ChoiceField(choices=STATUS_CHOICES)
     klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all())
-    broker = forms.ModelChoiceField(queryset=Eindklanten.objects.all())
+    broker = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), blank=True)
+
+    def __init__(self, *args, **kwargs):
+        super(AanbiedingenToevoegenForm, self).__init__(*args, **kwargs)
+        self.fields['broker'].required = False
 
 
     class Meta:

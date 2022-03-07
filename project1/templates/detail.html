@@ -26,32 +26,18 @@ td, th {
 {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
 <table>
     <tr>
-        <th>Naam</th>
-            <td>{{ medewerkers }}</td>
-                <th>Bsn nummer</th>
-                    <td>{{ medewerkers.bnsnummer }}</td></tr>
-                        <th>Woonplaats</th>
-                             <td>{{ medewerkers.woonplaats }}</td>
-                                <th>Terief indicatie</th>
-                            <td>{{ medewerkers.teriefindicatie }}</td><tr>
-                        <th>Straat en Huisnummer</th>
-                    <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-                <th>Opleiding niveau</th>
-            <td>{{ medewerkers.opleidings_niveau }}</td></tr>
-        <th>Postcode</th>
-            <td>{{ medewerkers.postcode }}</td>
-                <th>Godsdienst</th>
-                    <td>{{ medewerkers.godsdienst }}</td><tr>
-                        <th>Mobiel nummer</th>
-                            <td>{{ medewerkers.mobielnummer }}</td>
-                                <th>Burgerlijke staat</th>
-                            <td>{{ medewerkers.burgerlijkse_staat }}</td></tr>
-                        <th>ICE nummer</th>
-                    <td>{{ medewerkers.icenummer }}</td>
-                <th>Geboortedatum</th>
-            <td>{{ medewerkers.geboorte_datum }}</td><tr>
-        <th>Email</th>
-        <td>{{ medewerkers.email }}</td>
+        <th>Naam</th><td>{{ medewerkers }}</td>
+        <th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td></tr>
+        <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
+        <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
+        <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
+        <th>Opleiding niveau</th><td>{{ medewerkers.opleidings_niveau }}</td></tr>
+        <th>Postcode</th> <td>{{ medewerkers.postcode }}</td>
+        <th>Mobiel nummer</th><td>{{ medewerkers.mobielnummer }}</td></tr>
+        <th>Burgerlijke staat</th><td>{{ medewerkers.burgerlijkse_staat }}</td>
+        <th>ICE nummer</th><td>{{ medewerkers.icenummer }}</td><tr>
+        <th>Geboortedatum</th><td>{{ medewerkers.geboorte_datum }}</td>
+        <th>Email</th><td>{{ medewerkers.email }}</td><tr>
         </tr>
         <tr>
 </tr>
@@ -114,8 +100,7 @@ td, th {
             </table>
         </div>
     </div>
-    </div>
-</div>
+
 
 <br><br><br><br><br>
 {#dit zijn de links naar de lease auto.autos.detail en de contracten.detail (en de certificaten staan ook onder contracten.datail) page#}

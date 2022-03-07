@@ -73,6 +73,7 @@ $(document).ready(function() {
             <th>Telefoonnummer broker:</th>
             <th>Portaal broker:</th>
             <th>Update / Delete</th>
+            <th>Detail</th>
         </tr>
         {% for Brokers in brokers_list %}
         <tbody id="myTable">
@@ -83,18 +84,19 @@ $(document).ready(function() {
             <td>{{ Brokers.postcode_broker }}</td>
             <td>{{ Brokers.vestigingplaats_broker }}</td>
             <td>{{ Brokers.telefoonnummer_broker }}</td>
-            <td>{{ Brokers.portaal_broker }}</td>
+            <td><a href="{{ Brokers.portaal_broker }}" target="_blank">{{Brokers.portaal_broker}}</a></td>
             <form action="{% url 'broker_delete' Brokers.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de broker {{ Brokers.broker_naam}} wilt verijderen?')">
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Brokers.broker_naam }} wilt verijderen?')">
                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
             <a href="{% url 'broker_update' Brokers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" ></td></form></tr>
-
-        </tbody>
-        </thead>
+                <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
+            <td><a href="{% url 'broker_detail' Brokers.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <input type="hidden" name="medewerker_id" value="{{ brokers_list.id }}" /></td></form>
+            </tbody>
 
 <script>
+
 $(document).ready(function(){
   $("#myInput").on("keyup", function() {
     var value = $(this).val().toLowerCase();

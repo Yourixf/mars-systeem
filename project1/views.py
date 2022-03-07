@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
@@ -289,10 +290,6 @@ def CertificatenToevoegen(request, pk):
     else:
         return render(request, 'certificaten.toevoegen.html', context)
 
-@login_required(login_url='login')
-def AanbiedingenPage(request):
-    aanbieding_list = Aanbiedingen.objects.all()
-    return render(request, 'aanbiedingen.html', {'aanbieding_list': aanbieding_list, })
 
 @login_required(login_url='login')
 def AanbiedingToevoegen(request):
@@ -322,10 +319,41 @@ class AanbiedingUpdate(UpdateView):
     success_url = reverse_lazy('aanbiedingen')
 
 @login_required(login_url='login')
+def AanbiedingenPage(request):
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2)| Q(status=3))
+    context = {
+        'aanbieding_list':aanbieding_list,
+
+        }
+    return render(request, 'aanbiedingen.html', context)
+
+
+@login_required(login_url='login')
 def ArchiefAanbiedingenPage(request):
-    aanbieding_list = Aanbiedingen.objects.all()
-    # status = Aanbiedingen.status
-    # for status in aanbieding_list == 1:
-    #     return render(request, 'aanbiedingen.html', {'aanbieding_list': aanbieding_list, "status": status, })
-    # else:
-    return render(request, 'aanbiedingen.archief.html', {'aanbieding_list': aanbieding_list, })
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=5))
+    context = {
+        'aanbieding_list': aanbieding_list,
+        
+    }
+    return render(request, 'aanbiedingen.archief.html', context)
+
+def BrokerDetail(request, pk):
+    broker = Brokers.objects.get(id=pk)
+    broker_list = Brokers.objects.all()
+    context = {
+        'broker_list': broker_list,
+        'broker': broker
+
+    }
+    return render (request, 'broker.detail.html', context)
+
+
+def EindklantDetail(request, pk):
+    eindklant = Eindklanten.objects.get(id=pk)
+    eindklant_list = Eindklanten.objects.all()
+    context = {
+        'eindklant_list': eindklant_list,
+        'eindklant' : eindklant
+
+    }
+    return render (request, 'eindklanten.detail.html', context)

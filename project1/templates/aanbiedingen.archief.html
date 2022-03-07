@@ -66,40 +66,38 @@ $(document).ready(function() {
         <thead>
         <tr>
             <th>Klantnaam</th>
-            <th>Functie</th>
-            <th>Fuctie aanbieding</th>
             <th>Medewerker</th>
-            <th>Accountmanager</th>
             <th>Tarief</th>
             <th>Registratiedatum</th>
-            <th>Laatste Update</th>
             <th>Broker</th>
+            <th>Functie</th>
+            <th>Fuctie aanbieding</th>
+            <th>Accountmanager</th>
+            <th>Laatste Update</th>
             <th>Betaalkorting</th>
             <th>Status</th>
-            <th>Delete / Update</th>
+            <th>Update</th>
         </tr>
         {% for aanbiedingen in aanbieding_list %}
         <tbody id="myTable">
             <td>{{ aanbiedingen.klant_naam }}</td>
-            <td>{{ aanbiedingen.get_functie_display }}</td>
-            <td>{{ aanbiedingen.functie_aanbieding }}</td>
             <td>{{ aanbiedingen.medewerker }}</td>
-            <td>{{ aanbiedingen.get_accountmanager_display }}</td>
             <td>{{ aanbiedingen.tarief }}</td>
             <td>{{ aanbiedingen.registratie }}</td>
-            <td>{{ aanbiedingen.laatste_update }}</td>
             <td>{{ aanbiedingen.broker }}</td>
+            <td>{{ aanbiedingen.get_functie_display }}</td>
+            <td>{{ aanbiedingen.functie_aanbieding }}</td>
+            <td>{{ aanbiedingen.get_accountmanager_display }}</td>
+            <td>{{ aanbiedingen.laatste_update }}</td>
             <td>{{ aanbiedingen.betaalkorting }}</td>
             <td>{{ aanbiedingen.get_status_display }}</td>
 
-            <form action="{% url 'aanbieding_delete' aanbiedingen.id %}" method="post" style="display: inline;">
+
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de aanbieding wilt verijderen?')">
-                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-            <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form></tr>
+            <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></form>
             </tbody>
-            </thead>
+
 
 <script>
 $(document).ready(function(){

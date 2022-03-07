@@ -18,7 +18,6 @@ class Medewerkers(models.Model):
     tariefindicatie = models.FloatField(max_length=20)
     zzper_eigenwerknemer = models.CharField(max_length=50)
     opleidings_niveau = models.CharField(max_length=50)
-    godsdienst = models.CharField(max_length=50)
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
     foto_medewerker = models.ImageField(upload_to='',
@@ -85,8 +84,8 @@ class Eindklanten(models.Model):
     huisnummer_klant = models.CharField(max_length=20)
     postcode_klant = models.CharField(max_length=10)
     vestigingplaats_klant = models.CharField(max_length=150)
-    telefoonnummer_klant = models.CharField(max_length=17)
-    portaal_klant = models.URLField(max_length=300)
+    telefoonnummer_klant = models.CharField(max_length=17, null=True)
+    portaal_klant = models.URLField(max_length=300, null=True)
 
     def __str__(self):
         return self.klantnaam
@@ -105,7 +104,7 @@ class Brokers(models.Model):
     postcode_broker = models.CharField(max_length=10)
     vestigingplaats_broker = models.CharField(max_length=150)
     telefoonnummer_broker = models.IntegerField(null=True)
-    portaal_broker = models.URLField(max_length=300)
+    portaal_broker = models.URLField(max_length=300, null=True)
 
     def __str__(self):
         return self.broker_naam
@@ -159,7 +158,7 @@ class Aanbiedingen(models.Model):
     functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)
     functie_aanbieding = models.CharField(max_length=50)
     klant_naam = models.CharField(max_length=50)
-    broker = models.CharField(max_length=50)
+    broker = models.CharField(max_length=50, null=True)
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=False)
