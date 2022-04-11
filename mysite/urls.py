@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
+from django.views.static import serve
 
 from project1 import views
 
@@ -53,7 +55,7 @@ urlpatterns = [
 
     path(r'broker/update/<str:pk>/', views.BrokerUpdate.as_view(), name='broker_update'),
 
-    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view(), name='contract_update'),
+    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view, name='contract_update'),
 
     path(r'certificaten.toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
 
@@ -76,6 +78,25 @@ urlpatterns = [
     path(r'broker/<str:pk>/', views.BrokerDetail, name='broker_detail'),
 
     path(r'eindklant/<str:pk>/', views.EindklantDetail, name='eindklant_detail'),
+
+    path(r'upload/cv/<str:pk>/', views.Cv_Upload, name='cv_upload'),
+
+    path(r'upload/feedback/<str:pk>/', views.Feedback_Upload, name='feedback_upload'),
+
+    path(r'upload/documenten/<str:pk>/', views.Documenten_Upload, name='documenten_upload'),
+
+    path(r'aanbiedingen/<str:pk>/', views.AanbiedingenDetail, name='aanbieding_detail'),
+
+    path(r'opmerking/medewerker/<str:pk>/', views.OpmerkingMedewerker, name='editor'),
+
+    path('delete_opmerking/<str:pk>/<int:docid>/', views.delete_opmerking, name='delete_opmerking'),
+
+
+    # path(r'test/delete/<str:id>/', views.OpmerkingDelete, name='opmerking_delete'),
+
+    url(r'^download/<str:pk>/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
+
 
 ]
 if settings.DEBUG:

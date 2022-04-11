@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Aanbiedingen/datails{% endblock %}
-
 {% block body %}
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Details aanbiedingen 4-Rest</h3></div><br>
 <html lang="">
 <head>
 <style>
@@ -21,13 +21,18 @@ td, th {
 
 <table>
     <tr>
-        <th>Eindklant naam:</th><td>{{ eindklant.klantnaam }}</td>
-        <th>Accountmanager:</th><td>{{ eindklant.get_accountmanager_display }}</td></tr>
-        <th>Straat en Huisnummer</th><td>{{ eindklant.straat_klant }} {{ eindklant.huisnummer_klant }}</td>
-        <th>Postcode eindklant:</th><td>{{ eindklant.postcode_klant }}</td></tr>
-        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant.vestigingplaats_klant }}</td>
-        <th>Telefoonnummer eindklant:</th><td>{{ eindklant.telefoonnummer_klant }}</td></tr>
-        <th>Portaal eindklant:</th><td><a href="{{ eindklant.portaal_klant }}" target="_blank">{{eindklant.portaal_klant}}</a></td>
+        <th>Klantnaam</th><td>{{ aanbieding.klant_naam }}</td>
+        <th>Medewerker</th><td>{{ aanbieding.medewerker}}</td><tr></tr>
+        <th>Tarief</th><td>{{ aanbieding.tarief }}</td>
+        <th>Registratiedatum</th><td>{{ aanbieding.registratie }}</td><tr></tr>
+        <th>Functie</th> <td>{{ aanbieding.functie }}</td>
+        <th>Fuctie aanbieding</th><td>{{ aanbieding.functie_aanbieding }}</td><tr></tr>
+        <th>Accountmanager</th><td>{{ aanbieding.get_accountmanager_display }}</td>
+        <th>Laatste Update</th><td>{{ aanbieding.laatste_update }}</td><tr></tr>
+        <th>Betaalkorting</th><td>{{ aanbieding.betaalkorting }}</td>
+        <th>Status</th><td>{{ aanbieding.get_status_display }}</td>
+        <tr></tr><td> <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <input type="hidden" name="medewerker_id" value="{{ aanbieding.id }}" /></td>
         </tr>
 </table>
 

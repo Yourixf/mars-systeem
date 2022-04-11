@@ -69,14 +69,13 @@ $(document).ready(function() {
             <th>Medewerker</th>
             <th>Tarief</th>
             <th>Registratiedatum</th>
-            <th>Broker</th>
-            <th>Functie</th>
-            <th>Fuctie aanbieding</th>
-            <th>Accountmanager</th>
             <th>Laatste Update</th>
+            <th>Broker</th>
+            <th>Fuctie aanbieding</th>
             <th>Betaalkorting</th>
             <th>Status</th>
             <th>Update</th>
+            <th>Details</th>
         </tr>
         {% for aanbiedingen in aanbieding_list %}
         <tbody id="myTable">
@@ -84,18 +83,18 @@ $(document).ready(function() {
             <td>{{ aanbiedingen.medewerker }}</td>
             <td>{{ aanbiedingen.tarief }}</td>
             <td>{{ aanbiedingen.registratie }}</td>
-            <td>{{ aanbiedingen.broker }}</td>
-            <td>{{ aanbiedingen.get_functie_display }}</td>
-            <td>{{ aanbiedingen.functie_aanbieding }}</td>
-            <td>{{ aanbiedingen.get_accountmanager_display }}</td>
             <td>{{ aanbiedingen.laatste_update }}</td>
+            <td>{{ aanbiedingen.broker }}</td>
+            <td>{{ aanbiedingen.functie_aanbieding }}</td>
             <td>{{ aanbiedingen.betaalkorting }}</td>
             <td>{{ aanbiedingen.get_status_display }}</td>
 
 
             {% csrf_token %}
             <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></form>
+                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
+            <td><a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" /></td></form>
             </tbody>
 
 

@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Medewerkers/datails{% endblock %}
 {% block body %}
+
 <html lang="">
 <head>
+<link rel=”stylesheet” type='text/css' href=”{% static 'css/style.css' %}”>
 <style>
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -11,18 +15,72 @@ table {
 }
 
 td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
 }
 
 
-</style>
+.btnn {
+    border:none;
+    margin: 20px;
+    padding: 40px;
+    width: 27%;
+    font-family: "montserrat", sans-serif;
+    text-transform: uppercase;
+    border-radius: 10px;
+    background-size: 100%;
+    color: black;
 
+}
+.btn1{
+    padding: 41px;
+    background-color: forestgreen;
+}
+.btn2{
+    padding: 41px;
+    background-color: forestgreen;
+}
+.btn3{
+    background-color: forestgreen;
+}
+.btn4{
+    background-color: forestgreen;
+    margin: 20px;
+    width: 89%;
+}
+
+</style>
+{#        <link rel="stylesheet" href=#}
+{#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
+{#        integrity=#}
+{#"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"#}
+{#        crossorigin="anonymous">#}
+    <script src=
+"https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity=
+"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous">
+    </script>
+
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity=
+"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous">
+    </script>
+
+    <script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity=
+"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous">
+    </script>
 </head>
 
 <h3>{{ medewerkers }}<a> - </a>{{ medewerkers.pk}}</h3>
 <br>
+
+<body>
 {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
 <table>
     <tr>
@@ -43,73 +101,21 @@ td, th {
 </tr>
 </table>
 <br>
-<body>
-{#Hier kan je een opmerking schrijven die die laat zien in een tabel eronder#}
-<h3>Opmerkingveld</h3>
-<div>
-    <div class="col-md-2">
-        <form action="" method="post">
-             {% csrf_token %}
-                <div class="form-group">
-                    <label for="date" >Datum:</label>
-                    <label>
-{#Hier kan je de datum van de opmerking invullen uit de Models#}
-                        <input type="date" class="form-control" name="Datum" value="{{Opmerkingen.datum_opmerkingen}}">
-                    </label>
-                </div>
-              <div class="form-group">
-{# haalt automatisch de persoon op die is ingelogd en laat dit zien wie de opmerking heeft geschreven#}
-                    <input type="hidden" class="form-control" name="Naam" value="{{user}}">
-              </div>
-            <div class="form-group">
-                <label>Opmerking:</label>
-                <label>
-{#Dit is het opmerkingveld hier kan de gebruiker de opmerking voor de medewerker invullen uit de Models#}
-                    <textarea class="form-control" rows="5" name="Opmerking" value="{{Opmerkingen.opmerkingveld}}"></textarea>
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-success" value="plaats opmerking">
-            </div>
-        </form>
-    </div>
+
+
+<br>
+<div class="container">
+<button class="btnn btn1"><a href="{% url 'cv_upload' medewerkers.pk %}" style="color:white"> Cv Uploaden / downloadennn</a></button>
+<button class="btnn btn2"><a href="{% url 'feedback_upload' medewerkers.pk %}" style="color:white">Feedback Upload / download</a></button>
+<button class="btnn btn3"><a href="{% url 'documenten_upload' medewerkers.pk %}" style="color:white">Documenten Upload / download</a></button><br>
+<button class="btnn btn3"><a href="{% url 'lease.autos.detail' medewerkers.id %}" style="color:white">Lease auto</a></button>
+<button class="btnn btn3"><a href="{% url 'contracten.detail' medewerkers.id %}" style="color:white">Contracten</a></button>
+<button class="btnn btn3"><a href="{% url 'foto_toevoegen' medewerkers.id %}" style="color:white">Foto toevoegen</a></button><br>
+<button class="btnn btn3"><a href="{% url 'contracten_toevoegen' medewerkers.id %}" style="color:white">Contract toevoegen</a></button>
+<button class="btnn btn3"><a href="{% url 'certificaten_toevoegen' medewerkers.id %}" style="color:white">Certificaat toevoegen</a></button>
+<button class="btnn btn3"><a href="{% url 'lease-auto_toevoegen' medewerkers.id %}" style="color:white">Lease Auto toevoegen</a></button><br>
+<button class="btnn btn4"><a href="{% url 'editor' medewerkers.id %}" style="color:white">Opmerkingen medewerker : {{ medewerkers.voornaam }}</a></button>
 </div>
-<div class="row">
-        <div class="col-md-12">
-            <h2 class="text-center">Eerdere opmerkingen</h2>
-            <h4 class="text-center"><em>Total: {{ opmerkingen.id|length }}</em></h4>
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Naam</th>
-                        <th>Opmerking</th>
-                        <th>Datum</th>
-                    </tr>
-                </thead>
-                <body>
-                    {% for opm in Opmerkingen %}
-{#Hier laat die de uitkomst van de geschreven opmerking uit #}
-                        <tr>
-                            <td>{{opm.naam_user}}</td>
-                            <td>{{opm.opmerkingveld}}</td>
-                            <td>{{opm.datum_opmerkingen}}</td>
-                            </td>
-                        </tr>
-                    {% endfor%}
-                </body>
-            </table>
-        </div>
-    </div>
-
-
-<br><br><br><br><br>
-{#dit zijn de links naar de lease auto.autos.detail en de contracten.detail (en de certificaten staan ook onder contracten.datail) page#}
-<a href="{% url 'lease.autos.detail' medewerkers.id %}" class="btn btn-success"  role="button"><h5>Lease auto</h5></a>
-<a href="{% url 'contracten.detail' medewerkers.id %}" class="btn btn-success" role="button"><h5>Contracten en certificaten</h5></a>
-<a href="{% url 'foto_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Profiel foto toevoegen</h5></a>
-<a href="{% url 'contracten_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Contract toevoegen</h5></a>
-<a href="{% url 'certificaten_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Certificaten toevoegen</h5></a>
-<a href="{% url 'lease-auto_toevoegen' medewerkers.id%}" class="btn btn-success"  role="button"><h5>Lease auto toevoegen</h5></a>
 <br>
 
 </body>

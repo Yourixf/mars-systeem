@@ -67,9 +67,6 @@ $(document).ready(function() {
             <th>Broker naam:</th>
             <th>Accountmanager:</th>
             <th>Straat broker:</th>
-            <th>Huisnummer broker:</th>
-            <th>Postcode broker:</th>
-            <th>Vestigingplaats broker:</th>
             <th>Telefoonnummer broker:</th>
             <th>Portaal broker:</th>
             <th>Update / Delete</th>
@@ -79,15 +76,13 @@ $(document).ready(function() {
         <tbody id="myTable">
             <td>{{ Brokers.broker_naam }}</td>
             <td>{{ Brokers.get_accountmanager_display }}</td>
-            <td>{{ Brokers.straat_broker }}</td>
-            <td>{{ Brokers.huisnummer_broker }}</td>
-            <td>{{ Brokers.postcode_broker }}</td>
+
             <td>{{ Brokers.vestigingplaats_broker }}</td>
             <td>{{ Brokers.telefoonnummer_broker }}</td>
             <td><a href="{{ Brokers.portaal_broker }}" target="_blank">{{Brokers.portaal_broker}}</a></td>
             <form action="{% url 'broker_delete' Brokers.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Brokers.broker_naam }} wilt verijderen?')">
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de broker wilt verijderen?')">
                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
             <a href="{% url 'broker_update' Brokers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                 <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />

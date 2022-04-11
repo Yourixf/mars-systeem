@@ -1,0 +1,19 @@
+.container {
+    position: absolute;
+    left: 50%;
+    top: 90%;
+    transform: translate(-50%,-50% );
+    text-align: center;
+}
+.btnn{
+    border:none;
+    margin: 40px;
+    padding: 44px;
+    width: 220px;
+    font-family: "montserrat", sans-serif;
+    text-transform: uppercase;
+    border-radius: 10px;
+    cursor: pointer;
+    background-size: 200%;
+    color: white;
+}
