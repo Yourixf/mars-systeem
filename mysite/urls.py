@@ -89,10 +89,10 @@ urlpatterns = [
 
     path(r'opmerking/medewerker/<str:pk>/', views.OpmerkingMedewerker, name='editor'),
 
-    path('delete_opmerking/<str:pk>/<int:docid>/', views.delete_opmerking, name='delete_opmerking'),
+    path(r'opmerking/broker/<str:pk>/', views.Post_broker, name='opmerking_broker'),
 
+    # path('delete_opmerking/<str:pk>/<int:docid>/', views.delete_opmerking, name='delete_opmerking'),
 
-    # path(r'test/delete/<str:id>/', views.OpmerkingDelete, name='opmerking_delete'),
 
     url(r'^download/<str:pk>/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 

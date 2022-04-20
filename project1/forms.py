@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.fields import DateField
 
-from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos, Aanbiedingen
+from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos, Aanbiedingen, Opmerking, \
+    Postbrokers
 
 
 class CreateUserForm(UserCreationForm):
@@ -263,6 +264,19 @@ class DocumentenUploadForm(ModelForm):
         model = Medewerkers
         fields = ['title_documenten', 'documenten']
 
+class OpmerkingMedewerkerForm(ModelForm):
+    class Meta:
+        model = Opmerking
+        fields = "__all__"
+
+class PostForm(forms.ModelForm):
+    title = forms.CharField(max_length=255)
+    intro = forms.Textarea()
+    body = forms.Textarea()
+    class Meta:
+        model = Postbrokers
+        fields = '__all__'
+        exclude = ['brokers']
 
 
 

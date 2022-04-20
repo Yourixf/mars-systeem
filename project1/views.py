@@ -1,8 +1,9 @@
 import os
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -13,40 +14,91 @@ from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
     BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenToevoegenForm, \
-    CvUploadForm, DocumentenUploadForm, FeedbackUploadForm
+    CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, PostForm
 # Create your views here.
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerking, Eindklanten, Brokers, Aanbiedingen
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerking, Eindklanten, Brokers, Aanbiedingen, \
+    Postbrokers
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
+
+
+def Post_broker(request, pk):
+    broker_pk = Brokers.objects.get(id=pk)
+    broker_opm = Postbrokers.objects.all()
+    form = PostForm(request.POST, instance=broker_pk)
+    context = {'form': form,
+               'broker_pk': broker_pk,
+               'broker_opm': broker_opm,
+
+               }
+    if request.method == 'POST' and form.is_valid():
+            form.save()
+            return redirect('brokers')
+    else:
+        return render(request, 'teston.html', context)
+
+@login_required(login_url='login')
+def BrokerDetail(request, pk):
+    broker = Brokers.objects.get(id=pk)
+    broker_opm = Postbrokers.objects.all()
+    broker_list = Brokers.objects.all()
+    context = {
+
+        'broker_list': broker_list,
+        'broker': broker,
+        'broker_opm': broker_opm
+    }
+    return render(request, 'broker.detail.html', context)
+
+
+# @login_required(login_url='login')
+# def FeedbackMedewerkers(request, pk):
+#     medewerker = Medewerkers.objects.get(pk=pk)
+#     form = OpmerkingMedewerkerForm(request.POST or None, instance=medewerker)
+#     opmerking = Opmerking.objects.all()
+#     context = {
+#         'form': form,
+#         'opmerking': opmerking,
+#         'medewerker': medewerker
+#     }
+#     if request.method == 'POST':
+#         form = OpmerkingMedewerkerForm(request.POST, instance=medewerker)
+#         if form.is_valid():
+#             form.save()
+#             return render(request, 'teston.html', context)
+#
+#     else:
+#         return render(request, 'teston.html', context)
 
 
 def OpmerkingMedewerker(request, pk):
     medewerker = Medewerkers.objects.get(pk=pk)
     docid = int(request.GET.get('docid', 0))
     opmerkingen = Opmerking.objects.all()
-
     if request.method == 'POST':
         docid = int(request.POST.get('docid', 0))
         title = request.POST.get('title')
         content = request.POST.get('content', '')
 
-
         if docid > 0:
-            opmerking = Opmerking.objects.get(pk=docid)
+
+            opmerking = Opmerking.objects.get(id=docid)
             opmerking.title = title
             opmerking.content = content
             opmerking.save()
 
             return HttpResponseRedirect(request.path_info)
+
             # return redirect('/test/?docid=%i' % pk % docid)
         else:
-            opmerking = Opmerking.objects.create(title=title, content=content)
 
+            opmerking = Opmerking.objects.create(title=title, content=content)
             return HttpResponseRedirect(request.path_info, opmerking)
             # return redirect('/test/?docid=%i' % opmerking.id, medewerker)
 
     if docid > 0:
-        opmerking = Opmerking.objects.get(pk=docid)
+        opmerking = Opmerking.objects.get(id=docid)
+
     else:
         opmerking = ''
 
@@ -69,6 +121,7 @@ def delete_opmerking(request, docid, pk):
     }
 
     return render(request, 'opmerking.medewerker.html', context)
+
 
 @login_required(login_url='login')
 def Detail(request, pk):
@@ -235,8 +288,6 @@ def MedewerkersToevoegen(request):
         return render(request, 'medewerker.toevoegen.html', context)
 
 
-
-
 class MedewerkerUpdate(LoginRequiredMixin, UpdateView):
     model = Medewerkers
     fields = '__all__'
@@ -337,7 +388,6 @@ def ContractenDelete(request, id):
     return redirect('contracten.detail')
 
 
-
 class ContractenUpdate(LoginRequiredMixin, UpdateView):
     model = Contracten
     fields = '__all__'
@@ -364,7 +414,6 @@ def EindklantToevoegen(request):
             return redirect('eindklanten')
     else:
         return render(request, 'eindklant.toevoegen.html', context)
-
 
 
 class EindklantUpdate(LoginRequiredMixin, UpdateView):
@@ -456,7 +505,6 @@ def AanbiedingDelete(request, id):
     return redirect('aanbiedingen')
 
 
-
 class AanbiedingUpdate(LoginRequiredMixin, UpdateView):
     model = Aanbiedingen
     fields = '__all__'
@@ -482,18 +530,6 @@ def ArchiefAanbiedingenPage(request):
 
     }
     return render(request, 'aanbiedingen.archief.html', context)
-
-
-@login_required(login_url='login')
-def BrokerDetail(request, pk):
-    broker = Brokers.objects.get(id=pk)
-    broker_list = Brokers.objects.all()
-    context = {
-        'broker_list': broker_list,
-        'broker': broker
-
-    }
-    return render(request, 'broker.detail.html', context)
 
 
 @login_required(login_url='login')

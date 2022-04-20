@@ -50,7 +50,9 @@ class Leaseautos(models.Model):
     def __str__(self):
         return self.merk_auto + " " + self.kenteken
 
+
 class Opmerking(models.Model):
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -58,6 +60,7 @@ class Opmerking(models.Model):
 
     class Meta:
         ordering = ('title',)
+
 
 class Contracten(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
@@ -117,6 +120,16 @@ class Brokers(models.Model):
     def __str__(self):
         return self.broker_naam
 
+class Postbrokers(models.Model):
+    brokers = models.ForeignKey(Brokers, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    intro = models.TextField(blank=True)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+
+        ordering = ['-date_added']
 
 class Aanbiedingen(models.Model):
     ACCOUNTMANAGER_CHOICES = (
