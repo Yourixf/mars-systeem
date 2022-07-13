@@ -1,8 +1,21 @@
+# Bij alle tamplates die waar functies staan worden kan je dingen importen die je vervolgens kan gebruiken in je code die staan hier onder.
+# "from djano.db import blablabla" (voorbeeld van hieronder)
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
+# Dit is de Model template hier staan bepaalde classes in en daaronder staan variable onder neerzetten die je vervolgens in functies weer naar boven kan halen.
+# Meest gebruikte zijn (models.)
+# CharField = text veld.
+# InterField = nummerveld.
+# FloatField = nummerveld met comma.
+# En nog nog meer "Fields", FileField, ImageField, URLField en nog meer zoek dit als je niet weet wat het in houdt op op google.
+# verder kan je na je gekozen veld tussen de haakjes ook nog extra dingen weg schrijven, hoeveel het maximale tekens het mag bevatten. Of het veld leeg mag wezen. Waar je het naar toe wil laten uploaden. Keuzes die je de persoon wilt laten kiezen als er iets niet duidelijk is kopieer het en plak het in google.
+
+
+# (VOEG HIER EEN CHOICEFIELD TOE ONDER WERK 4-REST BV ZE VALLEN IT TRASH ENZ!!!!!!!!!!!!!!!!)
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100)
     tussenvoegsel = models.CharField(max_length=6, blank=True)
@@ -35,6 +48,25 @@ class Medewerkers(models.Model):
     def __str__(self):
         return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
 
+class Opmerkingenmedewerker(models.Model):
+    DEFAULT = 'DEFAULT'
+    MEDEWERKERS = 'MEDEWERKERS'
+    EINDKLANTEN = 'EINDKLANTEN'
+    BROKERS = 'BROKERS'
+    CATEGORIES = (
+        (DEFAULT,DEFAULT),
+        (MEDEWERKERS,MEDEWERKERS),
+        (EINDKLANTEN,EINDKLANTEN),
+        (BROKERS,BROKERS),
+    )
+    title = models.CharField(max_length=100,blank=True,null=True)
+    body = models.TextField(null=True,blank=True)
+    due_date = models.DateTimeField(default=timezone.now)
+    task_finished = models.BooleanField(default=True)
+    category = models. CharField(max_length=20, choices=CATEGORIES, default=DEFAULT)
+
+    def __str__(self):
+        return f'{self.title}'
 
 class Leaseautos(models.Model):
     medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
@@ -49,17 +81,6 @@ class Leaseautos(models.Model):
 
     def __str__(self):
         return self.merk_auto + " " + self.kenteken
-
-
-class Opmerking(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE, default=True)
-    title = models.CharField(max_length=255)
-    content = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ('title',)
 
 
 class Contracten(models.Model):
@@ -97,8 +118,16 @@ class Eindklanten(models.Model):
     telefoonnummer_klant = models.CharField(max_length=17, null=True)
     portaal_klant = models.URLField(max_length=300, null=True)
 
+
+    def get_absolut_url(self):
+        return reverse('project1:eindklanten.detail', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.klantnaam
+
+class OpmerkingEindklanten(models.Model):
+    eindklant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE)
+    content = models.TextField(default=False)
 
 
 class Brokers(models.Model):
@@ -117,19 +146,22 @@ class Brokers(models.Model):
     telefoonnummer_broker = models.IntegerField(null=True)
     portaal_broker = models.URLField(max_length=300, null=True)
 
+    def get_absolut_url(self):
+        return reverse('project1:broker.detail', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.broker_naam
+
 
 class Postbrokers(models.Model):
     brokers = models.ForeignKey(Brokers, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    intro = models.TextField(blank=True)
     body = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-
         ordering = ['-date_added']
+
 
 class Aanbiedingen(models.Model):
     ACCOUNTMANAGER_CHOICES = (

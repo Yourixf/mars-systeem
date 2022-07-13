@@ -1,13 +1,24 @@
+# dit zijn de benodigde imports geweest voor die er nodig waren om de forms te maken.
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.fields import DateField
+# Haalt de models uit models.py
+from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos, Aanbiedingen, \
+    Postbrokers, Opmerkingenmedewerker
 
-from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos, Aanbiedingen, Opmerking, \
-    Postbrokers
+
+# Dit is de forms.py template van Django hier kan je persoonlijke forms maken door middel van de in de class forms.Form te gebruiken kan je gepersonaliseerde forms maken.
+# Ook is de mogelijkheid om ModelForm te gebruiken hier kan de de model aangeven "model = ...." dan pakt Django gelijk alle gegevens uit de specifieke Model class.
+# Dan is er de mogelijkheid om aan te geven welke variable je in de forms wilt hebben "fields == ['blabla', blaadiebla]".
+# Er is de mogelijk om te exclude te gebruiken dan pakt Django alle variable behalve die je aangeeft dit doe je zo "exclude = ('geslacht', 'naam')".
+# In een ModelForm pakt maakt hij een standaard form van de Modelclass hierbij kijkt hij hoe je de variable hebt weggeschreven bijvoorbeeld een text veld, nummerveld enzv.
+# Dit kan je aanpassen hier paar voorbeelden   bnsnummer = forms.IntegerField(),  zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES) Kijk maar even beneden voor nog meer voorbeelden.
 
 
+# dit is de form om een nieuwe gebruiker aan te maken
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
@@ -39,7 +50,6 @@ class MedewerkersToevoegenForm(forms.ModelForm):
     email = forms.EmailField(max_length=254)
     mobielnummer = forms.IntegerField()
     icenummer = forms.IntegerField()
-    teriefindicatie = forms.FloatField()
     zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES)
     opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES)
     foto_medewerker = forms.ImageField(required=False)
@@ -87,6 +97,7 @@ class EindklantenToevoegenForm(forms.ModelForm):
     class Meta:
         model = Eindklanten
         fields = '__all__'
+        exclude = ['opmerking_title', 'opmerking_intro', 'opmerking_body', 'opmerking_date_added']
 
 
 class EindklantenUpdateForm(forms.ModelForm):
@@ -124,6 +135,7 @@ class EindklantenUpdateForm(forms.ModelForm):
     class Meta:
         model = Brokers
         fields = '__all__'
+        exclude = ['opm_title', 'opm_intro', 'opm_body', 'opm_date_added']
 
 
 class BrokersToevoegenForm(forms.ModelForm):
@@ -248,6 +260,7 @@ class AanbiedingenToevoegenForm(ModelForm):
         model = Aanbiedingen
         fields = '__all__'
 
+
 class CvUploadForm(ModelForm):
     class Meta:
         model = Medewerkers
@@ -259,27 +272,42 @@ class FeedbackUploadForm(ModelForm):
         model = Medewerkers
         fields = ['title_feedback', 'feedback']
 
+
 class DocumentenUploadForm(ModelForm):
     class Meta:
         model = Medewerkers
         fields = ['title_documenten', 'documenten']
 
-class OpmerkingMedewerkerForm(ModelForm):
-    class Meta:
-        model = Opmerking
-        fields = "__all__"
 
-class PostForm(forms.ModelForm):
+# class OpmerkingMedewerkerForm(ModelForm):
+#     class Meta:
+#         model = Opmerking
+#         fields = "__all__"
+
+class OpmerkingBrokerForm(forms.ModelForm):
     title = forms.CharField(max_length=255)
-    intro = forms.Textarea()
     body = forms.Textarea()
     class Meta:
         model = Postbrokers
         fields = '__all__'
-        exclude = ['brokers']
 
 
 
+# class OpmerkingEindklantForm(ModelForm):
+#     title = forms.CharField(max_length=255)
+#     intro = forms.Textarea()
+#     body = forms.Textarea()
+#     class Meta:
+#         model = PostEindklanten
+#         fields = '__all__'
+#         exclude = ['eindklanten']
 
+class TaskItemCreateForm(forms.ModelForm):
+    class Meta:
+        model = Opmerkingenmedewerker
+        fields =('title', 'body','due_date','category')
 
-
+class TaskItemUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Opmerkingenmedewerker
+        fields =('body','due_date','task_finished','category')

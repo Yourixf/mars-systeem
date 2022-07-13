@@ -3,10 +3,14 @@
 {% block title %}4-Rest/Medewerkers{% endblock %}
 {% block body %}
 {% if medewerkers %}
+<style>
 
+
+</style>
 <div class="albums-container container-fluid">
-    <!-- Albums -->
+
     <div class="row">
+
         <div class="col-sm-12">
            <div style="text-align: center;"><h3>Medewerkers 4-rest</h3><a href="{% url 'medewerker_toevoegen' %}" class="btn btn-success"  role="button"><h5>Medewerker Toevoegen</h5></a></div>
         </div>
@@ -20,15 +24,13 @@
                             <h2>{{ medewerkers.voornaam}}</h2>
                             <h4>{{ medewerkers.tussenvoegsel }} {{ medewerkers.achternaam }}</h4>
                             <!-- View Details -->
-                                <a href="{% url 'details' medewerkers.id %}"  class="btn btn-primary btn-sm" role="button">View Details</a>
-                                <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
-                                {% csrf_token %}
-                                <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                                <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
 
-                                <a href="{% url 'medewerker_delete' medewerkers.pk %}" class="btn btn-danger btn-xs" role="button" style="display: inline;">delete</a>
-                                <input type="hidden" name="medewerker_id" value="{{ medewerkers.id }}" />
+
                                 {% csrf_token %}
+                                <div class="left"><a href="{% url 'medewerker_update' medewerkers.id %}" id="1" class="btn btn-success btn-sm"  role="button">Update</a></div>
+
+                                <div class="right"><a href="{% url 'details' medewerkers.pk %}"  class="btn btn-success btn-sm" role="button">Details</a></div>
+                                <div class="btn1"><a href="{% url 'medewerker_delete' medewerkers.pk %}" class="btn btn-danger btn-xs"  role="button" style="display: inline;">Delete</a></div><br>
                         </div>
                     </div>
                 </div>

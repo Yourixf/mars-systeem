@@ -1,3 +1,4 @@
+# De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 import os
 
 from django.contrib import messages
@@ -5,122 +6,182 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 
 from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
     BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenToevoegenForm, \
-    CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, PostForm
-# Create your views here.
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Opmerking, Eindklanten, Brokers, Aanbiedingen, \
-    Postbrokers
+    CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, OpmerkingBrokerForm, TaskItemCreateForm,\
+    TaskItemUpdateForm
+from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
+    Postbrokers, Opmerkingenmedewerker
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
+class TodoItemListView(ListView):
+    model = Opmerkingenmedewerker
+    template_name = 'opmerking.medewerker.html'
+
+class TodoItemCreateView(CreateView):
+    model = Opmerkingenmedewerker
+    template_name ='opmerkingen.form.html'
+    form_class = TaskItemCreateForm
+    success_url = '/opmerkingen/'
+
+class TodoItemUpdateView(UpdateView):
+    model = Opmerkingenmedewerker
+    template_name ='update.opmerking.form.html'
+    form_class = TaskItemUpdateForm
+    success_url = '/opmerkingen/'
+
+class TodoItemDeleteView(DeleteView):
+    model = Opmerkingenmedewerker
+    template_name = 'delete.opmerking.form.html'
+    success_url = "/opmerkingen/"
+
+# def PostEindklanten(request, pk):
+#     eindklant_pk = Eindklanten.objects.get(pk=pk)
+#     eindklant = Eindklanten.objects.filter(id=pk)
+#     form = OpmerkingEindklantForm(instance=eindklant_pk)
+#     context = {'form': form,
+#                'eindklant_pk': eindklant_pk,
+#                'eindklant': eindklant
+#                }
+#
+#
+#
+#     if request.method == 'POST':
+#         form = OpmerkingEindklantForm(request.POST,  instance=eindklant_pk)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('eindklanten')
+#     else:
+#         return render(request, 'opmerking.eindklanten.html', context)
+
+
+@login_required(login_url='login')
+def EindklantDetail(request, pk):
+    eindklant_pk = Eindklanten.objects.get(id=pk)
+    eindklant = Eindklanten.objects.all()
+    # eindklant_opm = PostEindklanten.objects.all()
+    context = {
+        'eindklant': eindklant,
+        'eindklant_pk': eindklant_pk,
+        # 'eindklant_opm': eindklant_opm,
+
+    }
+    return render(request, 'eindklanten.detail.html', context)
+
+
+
+# def Post_eindklant(request, pk):
+#     eindklant_pk = Eindklanten.objects.get(pk=pk)
+#     opmerking = PostEindklanten.objects.all()
+#     form = OpmerkingEindklantForm(instance=eindklant_pk)
+#     context = {
+#         'form': form,
+#         'eindklant_pk': eindklant_pk,
+#         'opmerking': opmerking,
+#     }
+#     if request.method == 'POST':
+#         form = OpmerkingEindklantForm(request.POST)
+#         if form.is_valid():
+#             form.save(commit=False)
+#             return redirect('eindklanten')
+#     else:
+#         return render(request, 'opmerking.eindklanten.html', context)
+
 
 def Post_broker(request, pk):
-    broker_pk = Brokers.objects.get(id=pk)
-    broker_opm = Postbrokers.objects.all()
-    form = PostForm(request.POST, instance=broker_pk)
-    context = {'form': form,
-               'broker_pk': broker_pk,
-               'broker_opm': broker_opm,
+    broker_pk = Brokers.objects.get(pk=pk)
+    opmerking = Postbrokers.objects.all()
+    form = OpmerkingBrokerForm(instance=broker_pk)
+    context = {
+        'form': form,
+        'broker_pk': broker_pk,
+        'opmerking': opmerking,
 
-               }
-    if request.method == 'POST' and form.is_valid():
-            form.save()
-            return redirect('brokers')
+    }
+    if request.method == 'POST':
+        form = OpmerkingBrokerForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+
+            return redirect('broker_detail', pk)
     else:
-        return render(request, 'teston.html', context)
+
+        return render(request, 'opmerking.broker.html', context)
+
+
 
 @login_required(login_url='login')
 def BrokerDetail(request, pk):
     broker = Brokers.objects.get(id=pk)
-    broker_opm = Postbrokers.objects.all()
+    posts = Postbrokers.objects.all().order_by('-id')
     broker_list = Brokers.objects.all()
     context = {
 
         'broker_list': broker_list,
         'broker': broker,
-        'broker_opm': broker_opm
+        'posts': posts,
     }
     return render(request, 'broker.detail.html', context)
 
 
-# @login_required(login_url='login')
-# def FeedbackMedewerkers(request, pk):
+# def OpmerkingMedewerker(request, pk):
 #     medewerker = Medewerkers.objects.get(pk=pk)
-#     form = OpmerkingMedewerkerForm(request.POST or None, instance=medewerker)
-#     opmerking = Opmerking.objects.all()
-#     context = {
-#         'form': form,
-#         'opmerking': opmerking,
-#         'medewerker': medewerker
-#     }
+#     docid = int(request.GET.get('docid', 0))
+#     opmerkingen = Opmerking.objects.all()
 #     if request.method == 'POST':
-#         form = OpmerkingMedewerkerForm(request.POST, instance=medewerker)
-#         if form.is_valid():
-#             form.save()
-#             return render(request, 'teston.html', context)
+#         docid = int(request.POST.get('docid', 0))
+#         title = request.POST.get('title')
+#         content = request.POST.get('content', '')
+#
+#         if docid > 0:
+#
+#             opmerking = Opmerking.objects.get(id=docid)
+#             opmerking.title = title
+#             opmerking.content = content
+#             opmerking.save()
+#
+#             return HttpResponseRedirect(request.path_info)
+#
+#             # return redirect('/test/?docid=%i' % pk % docid)
+#         else:
+#
+#             opmerking = Opmerking.objects.create(title=title, content=content)
+#             return HttpResponseRedirect(request.path_info, opmerking)
+#             # return redirect('/test/?docid=%i' % opmerking.id, medewerker)
+#
+#     if docid > 0:
+#         opmerking = Opmerking.objects.get(id=docid)
 #
 #     else:
-#         return render(request, 'teston.html', context)
+#         opmerking = ''
+#
+#     context = {
+#         'docid': docid,
+#         'opmerkingen': opmerkingen,
+#         'opmerking': opmerking,
+#         'medewerker': medewerker,
+#     }
+#
+#     return render(request, 'opmerking.medewerker.html', context)
 
 
-def OpmerkingMedewerker(request, pk):
-    medewerker = Medewerkers.objects.get(pk=pk)
-    docid = int(request.GET.get('docid', 0))
-    opmerkingen = Opmerking.objects.all()
-    if request.method == 'POST':
-        docid = int(request.POST.get('docid', 0))
-        title = request.POST.get('title')
-        content = request.POST.get('content', '')
-
-        if docid > 0:
-
-            opmerking = Opmerking.objects.get(id=docid)
-            opmerking.title = title
-            opmerking.content = content
-            opmerking.save()
-
-            return HttpResponseRedirect(request.path_info)
-
-            # return redirect('/test/?docid=%i' % pk % docid)
-        else:
-
-            opmerking = Opmerking.objects.create(title=title, content=content)
-            return HttpResponseRedirect(request.path_info, opmerking)
-            # return redirect('/test/?docid=%i' % opmerking.id, medewerker)
-
-    if docid > 0:
-        opmerking = Opmerking.objects.get(id=docid)
-
-    else:
-        opmerking = ''
-
-    context = {
-        'docid': docid,
-        'opmerkingen': opmerkingen,
-        'opmerking': opmerking,
-        'medewerker': medewerker,
-    }
-
-    return render(request, 'opmerking.medewerker.html', context)
-
-
-def delete_opmerking(request, docid, pk):
-    medewerker = Medewerkers.objects.get(pk=pk)
-    opmerking = Opmerking.objects.get(pk=docid)
-    opmerking.delete()
-    context = {
-        'medewerker': medewerker
-    }
-
-    return render(request, 'opmerking.medewerker.html', context)
+# def delete_opmerking(request, docid, pk):
+#     medewerker = Medewerkers.objects.get(pk=pk)
+#     opmerking = Opmerking.objects.get(pk=docid)
+#     opmerking.delete()
+#     context = {
+#         'medewerker': medewerker
+#     }
+#
+#     return render(request, 'opmerking.medewerker.html', context)
 
 
 @login_required(login_url='login')
@@ -312,6 +373,7 @@ def Leaseautosdetail(request, pk):
     leaseautos = Leaseautos.objects.get(id=pk)
     context = {'leaseautos': leaseautos, }
     return render(request, 'lease.autos.detail.html', context, )
+
 
 
 @login_required(login_url='login')
@@ -532,13 +594,4 @@ def ArchiefAanbiedingenPage(request):
     return render(request, 'aanbiedingen.archief.html', context)
 
 
-@login_required(login_url='login')
-def EindklantDetail(request, pk):
-    eindklant = Eindklanten.objects.get(id=pk)
-    eindklant_list = Eindklanten.objects.all()
-    context = {
-        'eindklant_list': eindklant_list,
-        'eindklant': eindklant
 
-    }
-    return render(request, 'eindklanten.detail.html', context)
