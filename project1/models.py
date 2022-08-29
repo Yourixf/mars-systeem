@@ -15,12 +15,13 @@ from django.utils import timezone
 # verder kan je na je gekozen veld tussen de haakjes ook nog extra dingen weg schrijven, hoeveel het maximale tekens het mag bevatten. Of het veld leeg mag wezen. Waar je het naar toe wil laten uploaden. Keuzes die je de persoon wilt laten kiezen als er iets niet duidelijk is kopieer het en plak het in google.
 
 
-# (VOEG HIER EEN CHOICEFIELD TOE ONDER WERK 4-REST BV ZE VALLEN IT TRASH ENZ!!!!!!!!!!!!!!!!)
+# Dit is de Model van de medewerkers hier staan alle gegevens van de medewerkers.
+# Weet je niet wat de models.Charfield betekend kopieer dit en zet er Django krijg je de omschrijving van waar dit voor bedoeld is.
 class Medewerkers(models.Model):
-    voornaam = models.CharField(max_length=100)
-    tussenvoegsel = models.CharField(max_length=6, blank=True)
+    voornaam = models.CharField(max_length=100)#max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
+    tussenvoegsel = models.CharField(max_length=6, blank=True) #blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     achternaam = models.CharField(max_length=100)
-    bnsnummer = models.IntegerField(null=True)
+    bnsnummer = models.IntegerField(null=True)# null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     huisnummer = models.CharField(max_length=20)
     straat = models.CharField(max_length=150)
     woonplaats = models.CharField(max_length=150)
@@ -34,8 +35,8 @@ class Medewerkers(models.Model):
     burgerlijkse_staat = models.CharField(max_length=100)
     geboorte_datum = models.DateField(null=True)
     foto_medewerker = models.ImageField(upload_to='',
-                                        default='userimg.png')
-    cv = models.FileField(upload_to='static/', null=True)
+                                        default='userimg.png') # de default foto voor de medewerkers.
+    cv = models.FileField(upload_to='static/', null=True) #upload to upload het naar de static files
     title_cv = models.CharField(max_length=50, null=True)
     feedback = models.FileField(upload_to='static/', null=True)
     title_feedback = models.CharField(max_length=50, null=True)
@@ -43,17 +44,17 @@ class Medewerkers(models.Model):
     title_documenten = models.CharField(max_length=50, null=True)
 
     def get_absolut_url(self):
-        return reverse('project1:detail', kwargs={'pk': self.pk})
+        return reverse('project1:detail', kwargs={'pk': self.pk}) # dit is voor de details dat elke medewerker zijn eigen detail pagina krijgt met pk
 
     def __str__(self):
-        return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam
+        return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam # de Self voegt deze 3 variabele bij elkaar die je samen kan ophalen.
 
-class Opmerkingenmedewerker(models.Model):
+class Opmerkingen(models.Model):
     DEFAULT = 'DEFAULT'
     MEDEWERKERS = 'MEDEWERKERS'
     EINDKLANTEN = 'EINDKLANTEN'
     BROKERS = 'BROKERS'
-    CATEGORIES = (
+    CATEGORIES = (      # de keuze voor de categorieen.
         (DEFAULT,DEFAULT),
         (MEDEWERKERS,MEDEWERKERS),
         (EINDKLANTEN,EINDKLANTEN),
@@ -61,17 +62,17 @@ class Opmerkingenmedewerker(models.Model):
     )
     title = models.CharField(max_length=100,blank=True,null=True)
     body = models.TextField(null=True,blank=True)
-    due_date = models.DateTimeField(default=timezone.now)
+    due_date = models.DateTimeField(default=timezone.now) # timezone.now vult standaard de tijd waarin je de form opent.
     task_finished = models.BooleanField(default=True)
-    category = models. CharField(max_length=20, choices=CATEGORIES, default=DEFAULT)
+    category = models. CharField(max_length=20, choices=CATEGORIES, default=DEFAULT) # haalt de keuze van de CATEGORIES op.
 
     def __str__(self):
         return f'{self.title}'
 
 class Leaseautos(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE) #door de ForeignKey in te vullen van de medewerker is de lease auto gelinkt met de medewerker.
     kenteken = models.CharField(max_length=10)
-    start_datum_lease_auto = models.DateField(null=True)
+    start_datum_lease_auto = models.DateField(null=True) # DateField is een datum veld.
     eind_datum_lease_auto = models.DateField(null=True)
     merk_auto = models.CharField(max_length=50)
     type_auto = models.CharField(max_length=100)
@@ -84,7 +85,7 @@ class Leaseautos(models.Model):
 
 
 class Contracten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE) #door de ForeignKey in te vullen van de medewerker is het contract gelinkt met de medewerker.
     contract_uren = models.IntegerField(null=True)
     Startdatum = models.DateField(null=True)
     Einddatum = models.DateField(null=True)
@@ -95,7 +96,7 @@ class Contracten(models.Model):
 
 
 class Certificaten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE) #door de ForeignKey in te vullen van de medewerker is de certificaat gelinkt met de medewerker.
     naam_certificaat = models.CharField(max_length=100)
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
@@ -125,10 +126,6 @@ class Eindklanten(models.Model):
     def __str__(self):
         return self.klantnaam
 
-class OpmerkingEindklanten(models.Model):
-    eindklant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE)
-    content = models.TextField(default=False)
-
 
 class Brokers(models.Model):
     ACCOUNTMANAGER_CHOICES = (
@@ -151,16 +148,6 @@ class Brokers(models.Model):
 
     def __str__(self):
         return self.broker_naam
-
-
-class Postbrokers(models.Model):
-    brokers = models.ForeignKey(Brokers, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    body = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-date_added']
 
 
 class Aanbiedingen(models.Model):

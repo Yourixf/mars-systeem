@@ -6,7 +6,6 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from django.views.static import serve
-
 from project1 import views
 
 app_name = 'project1'
@@ -15,7 +14,7 @@ app_name = 'project1'
 
 
 urlpatterns = [
-    # zoekt naar de view registerPage
+    # zoekt naar de view registerPage ( alles in de views.py)
     path(r'register/', views.registerPage, name='register'),
     # zoekt naar de view loginPage
     path('login/', views.loginPage, name="login"),
@@ -91,22 +90,15 @@ urlpatterns = [
     path(r'upload/documenten/<str:pk>/', views.Documenten_Upload, name='documenten_upload'),
     # zoekt naar de view aanbiedingen detail
     path(r'aanbiedingen/<str:pk>/', views.AanbiedingenDetail, name='aanbieding_detail'),
+    # zoekt naar de view TodoItemCreateView
+    path(r'todo/create', views.OpmerkingSchrijvenView.as_view(), name='create_list'),
+    # zoekt naar de view TodoItemlistView
+    path('opmerkingen/', views.OpmerkingenPageView.as_view(), name='todo_list'),
+    # zoekt naar de view TodoItemUpdateView
+    path('opmerkingen/update/<str:pk>/', views.OpmerkingenUpdateView.as_view(), name='update_list'),
+    # zoekt naar de view TodoItemDelete
+    path('opmerkingen/delete/<str:pk>/', views.OpmerkingenDeleteView.as_view(), name='delete_list'),
 
-    path(r'opmerking/broker/<str:pk>/', views.Post_broker, name='opmerking_broker'),
-
-    path(r'todo/create', views.TodoItemCreateView.as_view(), name='create_list'),
-
-    path('opmerkingen/', views.TodoItemListView.as_view(), name='todo_list'),
-
-    path('opmerkingen/update/<str:pk>/', views.TodoItemUpdateView.as_view(), name='update_list'),
-
-    path('opmerkingen/delete/<str:pk>/', views.TodoItemDeleteView.as_view(), name='delete_list'),
-
-    # path(r'opmerking/eindklant/<str:pk>/', views.Post_eindklant, name='opmerking_eindklant'),
-
-    # path('delete_opmerking/<str:pk>/<int:docid>/', views.delete_opmerking, name='delete_opmerking'),
-
-    # path(r'opmerking/medewerker/<str:pk>/', views.OpmerkingMedewerker, name='editor'),
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.
