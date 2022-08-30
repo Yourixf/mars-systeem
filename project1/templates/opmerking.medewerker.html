@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<html>
+<head>
+
+</head>
+<body>
+ <div class="thumbnail">
+{% block content%}
+{% for task in object_list %}
+<li>{{task.body}}</li>
+<li>{{task.due_date}}</li>
+<li>{{task.category}}</li>
+                                    {% csrf_token %}
+    <a href="{% url 'update_list' task.pk %}" class="btn btn-primary btn-sm" role="button">Update</a>
+<input type="hidden">
+
+<a href="{% url 'delete_list' task.pk %}" class="btn btn-primary btn-sm" role="button">Delete</a>
+<input type="hidden" ><br>
+    </div><br>
+{% endfor %}
+{% endblock %}
+</body>
+</html>
+

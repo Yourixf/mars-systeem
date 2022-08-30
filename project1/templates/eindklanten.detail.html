@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Eindklant/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+<table>
+    <tr>
+        <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
+        <th>Accountmanager:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
+        <th>Straat en Huisnummer</th><td>{{ eindklant_pk.straat_klant }} {{ eindklant_pk.huisnummer_klant }}</td>
+        <th>Postcode eindklant:</th><td>{{ eindklant_pk.postcode_klant }}</td></tr>
+        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant_pk.vestigingplaats_klant }}</td>
+        <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td></tr>
+        <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td>
+        </tr>
+</table>
+<br>
+<div style="text-align: center;"><a href="{% url 'opmerking_eindklant'  %}" class="btn btn-success"  role="button"><h5>Opmerkingen / informatie toevoegen</h5></a></div>
+<br>
+
+
+	<h1 class="title">{{ eindklant_pk.opmerking_title }}</h1>
+
+	<small> {{ eindklant_pk.opmerking_date_added }}</small>
+
+	<p><strong>{{ eindklant_pk.opmerking_intro }}</strong></p>
+
+	<p>{{ eindklant_pk.opmerking_body }}</p>
+
+	<hr>
+
+
+</html>
+
+{% endblock %}

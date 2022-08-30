@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Broker/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+<table>
+    <tr>
+        <th>Broker naam:</th><td>{{ broker.broker_naam }}</td>
+        <th>Accountmanager:</th><td>{{ broker.get_accountmanager_display }}</td></tr>
+        <th>Straat en Huisnummer</th><td>{{ broker.straat_broker }} {{ broker.huisnummer_broker }}</td>
+        <th>Postcode broker:</th><td>{{ broker.postcode_broker }}</td><tr></tr>
+        <th>Vestigingplaats broker:</th> <td>{{ broker.vestigingplaats_broker }}</td>
+        <th>Telefoonnummer broker:</th><td>{{ broker.telefoonnummer_broker }}</td><tr></tr>
+        <th>Portaal broker:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td>
+        <tr></tr>
+</table>
+<br>
+<div style="text-align: center;"><a href="{% url 'opmerking_broker' broker.pk %}" class="btn btn-success"  role="button"><h5>Opmerkingen / informatie toevoegen</h5></a></div>
+<br>
+
+
+{% for posts in posts %}
+	<h1 class="title">{{ posts.title }}</h1>
+
+	<small>Posted at {{ posts.date_added }}</small>
+
+	<p><strong>{{ posts.intro }}</strong></p>
+
+	<p>{{ posts.body }}</p>
+
+	<hr>
+{% endfor %}
+
+</html>
+
+{% endblock %}

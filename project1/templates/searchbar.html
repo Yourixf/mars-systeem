@@ -1,0 +1,54 @@
+{% comment %}
+{% extends 'base.html' %}
+{% block title %} 4-Rest/Eindklanten {% endblock %}
+{% block body %}
+
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+
+{% if post %}
+    <div style="text-align: center;"><h1>Gevonden zoek resultaten</h1></div>
+    <br>
+
+{% for i in post %}
+    <a href="/eindklanten_page/"{{ i.slug }}></a>
+
+<table class="table">
+        <thead>
+        <tr>
+            <th>Klantnaam:</th>
+            <th>Accountmanager:</th>
+            <th>Straat klant:</th>
+            <th>Huisnummer klant:</th>
+            <th>Postcode klant:</th>
+            <th>Vestigingplaats klant:</th>
+            <th>Telefoonnummer klant:</th>
+            <th>Portaal klant:</th>
+            <th>Update / Delete</th>
+        </tr>
+        {% for Eindklanten in eindkanten_list  %}
+            <td>{{ Eindklanten.klantnaam }}</td>
+            <td>{{ Eindklanten.get_accountmanager_display }}</td>
+            <td>{{ Eindklanten.straat_klant }}</td>
+            <td>{{ Eindklanten.huisnummer_klant }}</td>
+            <td>{{ Eindklanten.postcode_klant }}</td>
+            <td>{{ Eindklanten.vestigingplaats_klant }}</td>
+            <td>{{ Eindklanten.telefoonnummer_klant }}</td>
+            <td>{{ Eindklanten.portaal_klant }}</td>
+
+            <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+            <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form>
+        </tr>
+            </thead>
+            </table>
+
+{% endfor %}
+   {% endfor %}
+
+{% endif %}
+{% endblock %}{% endcomment %}
