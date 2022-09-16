@@ -62,7 +62,7 @@ class MedewerkersToevoegenForm(forms.ModelForm):
     class Meta:
         model = Medewerkers
         fields = '__all__'
-        exclude = ('document', 'cv', 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
+        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
 
 
 # De Form om wijzigingen van de medewerkers toe te voegen dit is precies de zelfde form als de medewerkerstoevoegen Form alleen dan voor de update.
@@ -78,11 +78,13 @@ class MedewerkersUpdateForm(ModelForm):
 
     class Meta:
         model = Medewerkers
-        fields = '__all__'
+        fields = ['cv', 'title_cv', 'feedback', 'title_feedback', 'title_documenten']
+        #exclude = ('document', 'cv', 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
         widgets = {
             'geboorte_datum': DateField(),
 
         }
+
 
 
 # Dit is de Form om Contracten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -185,7 +187,7 @@ class CertificatenToevoegenForm(ModelForm):
         fields = "__all__"
 
 # Dit is de Form om Leaseauto's toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
-class LeaseautosToevoegenForm(ModelForm):
+class LeaseautosToevoegenForm(forms.ModelForm):
     kenteken = forms.CharField()
     start_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
     eind_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
@@ -195,16 +197,17 @@ class LeaseautosToevoegenForm(ModelForm):
     kilometer_per_jaar = forms.IntegerField()
     lease_bedrag = forms.FloatField()
 
+    class Meta:
+        model = Leaseautos
+        fields = "__all__"
 
-class Meta:
-    model = Leaseautos
-    fields = "__all__"
-
-# Dit is de Form voor aanbiedingen hier heb ik weer gebruikt van de keuzevelden, en wat aanpassingen van de variabele in de Form.
-#    def __init__(self, *args, **kwargs):
-#        super(AanbiedingenToevoegenForm, self).__init__(*args, **kwargs)
-#       self.fields['broker'].required = False
-# Dit is zodat Django begrijpt dat de broker gekozen moet worden uit eerder aangemaakte brokers.
+"""""
+ Dit is de Form voor aanbiedingen hier heb ik weer gebruikt van de keuzevelden, en wat aanpassingen van de variabele in de Form.
+    def __init__(self, *args, **kwargs):
+        super(AanbiedingenToevoegenForm, self).__init__(*args, **kwargs)
+       self.fields['broker'].required = False
+ Dit is zodat Django begrijpt dat de broker gekozen moet worden uit eerder aangemaakte brokers.
+"""""
 
 class AanbiedingenToevoegenForm(ModelForm):
     ACCOUNTMANAGER_CHOICES = (

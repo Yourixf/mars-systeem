@@ -301,7 +301,8 @@ def MedewerkerDelete(request, pk):
 
 @login_required(login_url='login')
 def Leaseautosdetail(request, pk):
-    leaseautos = Leaseautos.objects.get(id=pk)
+    leaseautos = Leaseautos.objects.get(medewerkers_id=pk)
+    #medewerkerAutos = leaseautos.filter(medewerkers_id=pk)
     context = {'leaseautos': leaseautos, }
     return render(request, 'lease.autos.detail.html', context, )
 
@@ -313,16 +314,20 @@ def Leaseautosdetail(request, pk):
 def LeaseautosToevoegen(request, pk):
     medewerker_pk = Medewerkers.objects.get(id=pk)
     leaseauto = Leaseautos.objects.filter(medewerkers_id=pk)
-    form = LeaseautosToevoegenForm(instance=medewerker_pk)
+    #form = LeaseautosToevoegenForm(instance=medewerker_pk)
+    form = LeaseautosToevoegenForm(request.POST or None)
     context = {
         'form': form,
-        'leaseauto': leaseauto,
+        'leaseauto': leaseauto
     }
     if request.method == 'POST':
-        form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        #form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
+        form = LeaseautosToevoegenForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('medewerkers')
+            # FUNCTIE MAKEN
+            return redirect('lease.autos.detail')
+            #return redirect(f'lease.autos.detail/{Leaseautos.objects.get(medewerkers_id=pk)}')
     else:
         return render(request, 'lease.autos.toevoegen.html', context)
 
@@ -330,10 +335,15 @@ def LeaseautosToevoegen(request, pk):
 #Dit is de delete functie vand de lease auto's
 #De .delete is de django functie waardoor de lease auto verwijderd wordt.
 @login_required(login_url='login')
-def LeaseautoDelete(request, id):
-    delete_lease_auto = Leaseautos.objects.get(id=id)
+def LeaseautoDelete(request, pk):
+    delete_lease_auto = Leaseautos.objects.get(pk=pk)
+
     delete_lease_auto.delete()
-    return redirect('lease.autos.detail')
+    return redirect('medewerkers')
+#return redirect('lease.autos.detail')
+    context = {
+        "delete_lease_auto": delete_lease_auto, "lease_auto":lease_auto
+    }
 
 # Dit is de form voor de foto toevoegen voor de medewerkers.
 # Omdat de foto gelinkt is met een medewerker haalt Django eerst de PK op van de medewerker zodat die gelinkt is aan deze medewerker.
@@ -360,7 +370,10 @@ def Foto_Toevoegen(request, pk):
 def Contractendetail(request, pk):
     contracten = Contracten.objects.get(id=pk)
     certificaten = Certificaten.objects.get(id=pk)
-    context = {'contracten': contracten, 'certificaten': certificaten, }
+    context = {
+        'contracten': contracten,
+        'certificaten': certificaten,
+    }
     return render(request, 'contracten.detail.html', context, )
 
 # hier Voeg je een Contract toe aan een medewerker     medewerker_pk = Medewerkers.objects.get(id=pk) haalt de medewerker op zodat die gelinkt is met het contract.
@@ -535,6 +548,3 @@ def ArchiefAanbiedingenPage(request):
 
     }
     return render(request, 'aanbiedingen.archief.html', context)
-
-
-

@@ -12,15 +12,18 @@
 		html {
 			margin: 0;
 			padding: 0;
-			height: 100%;
-			background: #F0F8FF
+			background: #F0F8FF;
+            overflow: hidden;
 		}
 		.user_card {
+            opacity: 85%;
 			width: 350px;
-			margin-top: auto;
+            margin-top: 7%;
 			margin-bottom: auto;
 			background: #008000;
 			position: relative;
+            bottom: 0;
+            right: 0;
 			display: flex;
 			justify-content: center;
 			flex-direction: column;
@@ -38,7 +41,6 @@
 
 		#form-title{
 			color: #fff;
-
 		}
 
 		.login_btn {
@@ -71,54 +73,77 @@
             padding: 10px;
             margin-top: 10px;
         }
-        {#dit is voor de foto zodat die boven de login staat#}
-        .center {
-            display: block;
-            margin: 20px 15px -230px 565px;
-            width: 100%;
+
+        .parent{
+            position: relative;
+            top: 0;
+            left: 0;
         }
+        #forrestWallpaper{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #logoBedrijf{
+            position: relative;
+            padding-top: 0.5%;
+            margin-left: 42.5%;
+            width: 15%;
+            display: block;
+        }
+
 
 	</style>
 {% load static %}
-<img src="/images/logo_4-rest.jpg" alt="logo 4-Rest" class="center" style="width:350px" >
+
+
 
 </head>
 <body>
-	<div class="container h-100">
-		<div class="d-flex justify-content-center h-100">
-			<div class="user_card">
-				<div class="d-flex justify-content-center">
+    <div class="parent">
+        <img src="/images/for7.jpg" alt="forrestWallpaper" id="forrestWallpaper">
+        <img src="/images/Logo-4-rest-IT-white.png" alt="logo 4-Rest" id="logoBedrijf">
+        <div class="container h-100">
+            <div class="d-flex justify-content-center h-100">
+                <div class="user_card">
+                    <div class="d-flex justify-content-center">
+                        <h3 id="form-title">LOGIN</h3>
+                    </div>
+                    <div id="loginForm" class="d-flex justify-content-center form_container">
 
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="username" placeholder="Username..." class="form-control">
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                    <input type="password" name="password" placeholder="Password..." class="form-control" >
+                            </div>
 
-					<h3 id="form-title">LOGIN</h3>
-				</div>
-				<div class="d-flex justify-content-center form_container">
-					<form method="POST" action="">
-                        {% csrf_token %}
-						<div class="input-group mb-3">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							<input type="text" name="username" placeholder="Username..." class="form-control">
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-								<input type="password" name="password" placeholder="Password..." class="form-control" >
-						</div>
+                                <div class="d-flex justify-content-center mt-3 login_container">
+                                    <input class="btn login_btn" type="submit" value="Login">
+                                </div>
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-center links">Don't have an account? <a href="{% url 'register' %}" class="ml-2">Register</a>
+                                    </div>
+                                </div>
+                        </form>
 
-							<div class="d-flex justify-content-center mt-3 login_container">
-				 				<input class="btn login_btn" type="submit" value="Login">
-				   			</div>
-					</form>
-                    {% for message in messages %}
-                    <p id="messages">{{ message }}</p>
-                    {% endfor %}
+                        {% for message in messages %}
+                        <p id="messages">{{ message }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

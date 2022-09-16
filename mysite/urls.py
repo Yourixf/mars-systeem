@@ -35,43 +35,44 @@ urlpatterns = [
     # zoekt naar view Foto toevoegen
     path(r'foto_toevoegen/<str:pk>/', views.Foto_Toevoegen, name='foto_toevoegen'),
     # zoekt naar view Medewerker toevoegen
-    path(r'medewerker.toevoegen/', views.MedewerkersToevoegen, name='medewerker_toevoegen'),
+    path(r'medewerker/toevoegen/', views.MedewerkersToevoegen, name='medewerker_toevoegen'),
     # zoekt naar view Medewerkers delete
     path(r'medewerker/delete/<str:pk>/', views.MedewerkerDelete, name='medewerker_delete'),
     # zoekt naar de view Medewerker update
     path(r'medewerker/update/<str:pk>/', views.MedewerkerUpdate.as_view(), name='medewerker_update'),
     # zoekt naar de view Contracten toevoegen
-    path(r'contracten.toevoegen/<str:pk>/', views.ContractenToevoegen, name='contracten_toevoegen'),
+    path(r'contracten/toevoegen/<str:pk>/', views.ContractenToevoegen, name='contracten_toevoegen'),
     # zoekt naar de view Eindklanten Page
     path(r'eindklanten_page/', views.EindklantenPage, name='eindklanten'),
     # zoekt naar de view Eindklanten toevoegen
-    path(r'eindklanten.toevoegen', views.EindklantToevoegen, name='eindklanten_toevoegen'),
+    path(r'eindklanten/toevoegen', views.EindklantToevoegen, name='eindklanten_toevoegen'),
     # zoekt naar de view Eindklanten delete
     path(r'eindklant/delete/<str:id>/', views.EindklantDelete, name='eindklant_delete'),
     # zoekt naar de view Eindklanten Update
     path(r'eindklant/update/<str:pk>/', views.EindklantUpdate.as_view(), name='eindklant_update'),
+
     # zoekt naar de view Broker Page
     path(r'brokers_page/', views.BrokersPage, name='brokers'),
     # zoekt naar de view Brokers toevoegen
-    path(r'brokers.toevoegen', views.BrokersToevoegen, name='brokers_toevoegen'),
+    path(r'brokers/toevoegen', views.BrokersToevoegen, name='brokers_toevoegen'),
     # zoekt naar de view admin page
     path(r'broker/delete/<str:id>/', views.BrokerDelete, name='broker_delete'),
     # zoekt naar de view Broker update
     path(r'broker/update/<str:pk>/', views.BrokerUpdate.as_view(), name='broker_update'),
     # zoekt naar de view contract update
-    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view, name='contract_update'),
+    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view(), name='contract_update'),
     # zoekt naar de view certificaten
-    path(r'certificaten.toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
+    path(r'certificaten/toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
     # zoekt naar de view lease auto toevoegen
-    path(r'lease-auto.toevoegen/<str:pk>/', views.LeaseautosToevoegen, name='lease-auto_toevoegen'),
+    path(r'lease-auto/toevoegen/<str:pk>/', views.LeaseautosToevoegen, name='lease-auto_toevoegen'),
     # zoekt naar de view lease auto delete
-    path(r'lease-auto/delete/<str:id>/', views.LeaseautoDelete, name='lease-auto_delete'),
+    path(r'lease-auto/delete/<str:pk>/', views.LeaseautoDelete, name='lease-auto_delete'),
     # zoekt naar de view contact delete
     path(r'contract/delete/<str:id>/', views.ContractenDelete, name='contract_delete'),
     # zoekt naar de view aanbieding page
     path(r'aanbiedingen_page/', views.AanbiedingenPage, name='aanbiedingen'),
     # zoekt naar de view aanbieding toevoegen
-    path(r'aanbiedingen.toevoegen/', views.AanbiedingToevoegen, name='aanbieding_toevoegen'),
+    path(r'aanbiedingen/toevoegen/', views.AanbiedingToevoegen, name='aanbieding_toevoegen'),
     # zoekt naar de view aanbieding update
     path(r'aanbieding/update/<str:pk>/', views.AanbiedingUpdate.as_view(), name='aanbieding_update'),
     # zoekt naar de view aanbieding delete
