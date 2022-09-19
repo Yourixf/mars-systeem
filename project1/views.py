@@ -305,7 +305,7 @@ def Leaseautosdetail(request, pk):
     #medewerkerAutos = leaseautos.filter(medewerkers_id=pk)
     context = {'leaseautos': leaseautos, }
 
-    # MAKEN DAT HIJ MEERDER AUTO's KAN WEERGEVEN
+    # MAKEN DAT HIJ MEERDER AUTO's KAN WEERGEVEN test
     return render(request, 'lease.autos.detail.html', context, )
 
 
