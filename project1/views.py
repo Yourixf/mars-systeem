@@ -304,6 +304,8 @@ def Leaseautosdetail(request, pk):
     leaseautos = Leaseautos.objects.get(medewerkers_id=pk)
     #medewerkerAutos = leaseautos.filter(medewerkers_id=pk)
     context = {'leaseautos': leaseautos, }
+
+    # MAKEN DAT HIJ MEERDER AUTO's KAN WEERGEVEN
     return render(request, 'lease.autos.detail.html', context, )
 
 
@@ -326,7 +328,7 @@ def LeaseautosToevoegen(request, pk):
         if form.is_valid():
             form.save()
             # FUNCTIE MAKEN
-            return redirect('lease.autos.detail')
+            return redirect('medewerkers')
             #return redirect(f'lease.autos.detail/{Leaseautos.objects.get(medewerkers_id=pk)}')
     else:
         return render(request, 'lease.autos.toevoegen.html', context)
