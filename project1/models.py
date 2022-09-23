@@ -26,7 +26,7 @@ class Medewerkers(models.Model):
     straat = models.CharField(max_length=150)
     woonplaats = models.CharField(max_length=150)
     postcode = models.CharField(max_length=10)
-    mobielnummer = models.IntegerField(null=True)
+    telefoonnummer = models.CharField(null=True, max_length=20)
     icenummer = models.IntegerField(null=True)
     email = models.EmailField(max_length=150)
     tariefindicatie = models.FloatField(max_length=20)
@@ -140,7 +140,7 @@ class Brokers(models.Model):
     huisnummer_broker = models.CharField(max_length=20)
     postcode_broker = models.CharField(max_length=10)
     vestigingplaats_broker = models.CharField(max_length=150)
-    telefoonnummer_broker = models.IntegerField(null=True)
+    telefoonnummer_broker = models.CharField(null=True, max_length=20)
     portaal_broker = models.URLField(max_length=300, null=True)
 
     def get_absolut_url(self):
