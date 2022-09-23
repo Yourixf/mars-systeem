@@ -50,15 +50,6 @@ OPLEIDINGNIVEAU_CHOICES = (
 # Dit is de Form om medewerkers toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 class MedewerkersToevoegenForm(forms.ModelForm):
-    bnsnummer = forms.IntegerField()
-    geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
-    email = forms.EmailField(max_length=254)
-    telefoonnummer = forms.CharField(max_length=20)
-    icenummer = forms.IntegerField()
-    zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES)
-    opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES)
-    foto_medewerker = forms.ImageField(required=False)
-
     class Meta:
         model = Medewerkers
         fields = '__all__'

@@ -18,30 +18,30 @@ from django.utils import timezone
 # Dit is de Model van de medewerkers hier staan alle gegevens van de medewerkers.
 # Weet je niet wat de models.Charfield betekend kopieer dit en zet er Django krijg je de omschrijving van waar dit voor bedoeld is.
 class Medewerkers(models.Model):
-    voornaam = models.CharField(max_length=100)#max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
+    voornaam = models.CharField(max_length=100, blank=True)#max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
     tussenvoegsel = models.CharField(max_length=6, blank=True) #blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
-    achternaam = models.CharField(max_length=100)
-    bnsnummer = models.IntegerField(null=True)# null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
-    huisnummer = models.CharField(max_length=20)
-    straat = models.CharField(max_length=150)
-    woonplaats = models.CharField(max_length=150)
-    postcode = models.CharField(max_length=10)
-    telefoonnummer = models.CharField(null=True, max_length=20)
-    icenummer = models.IntegerField(null=True)
-    email = models.EmailField(max_length=150)
-    tariefindicatie = models.FloatField(max_length=20)
-    zzper_eigenwerknemer = models.CharField(max_length=50)
-    opleidings_niveau = models.CharField(max_length=50)
-    burgerlijkse_staat = models.CharField(max_length=100)
-    geboorte_datum = models.DateField(null=True)
+    achternaam = models.CharField(max_length=100, blank=True)
+    bnsnummer = models.IntegerField(null=True, blank=True)# null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    huisnummer = models.CharField(max_length=20, blank=True)
+    straat = models.CharField(max_length=150, blank=True)
+    woonplaats = models.CharField(max_length=150, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
+    icenummer = models.IntegerField(null=True, blank=True)
+    email = models.EmailField(max_length=150, blank=True)
+    tariefindicatie = models.FloatField(max_length=20, blank=True)
+    zzper_eigenwerknemer = models.CharField(max_length=50, blank=True)
+    opleidings_niveau = models.CharField(max_length=50, blank=True)
+    burgerlijkse_staat = models.CharField(max_length=100, blank=True)
+    geboorte_datum = models.DateField(null=True, blank=True)
     foto_medewerker = models.ImageField(upload_to='',
-                                        default='userimg.png') # de default foto voor de medewerkers.
-    cv = models.FileField(upload_to='static/', null=True) #upload to upload het naar de static files
-    title_cv = models.CharField(max_length=50, null=True)
-    feedback = models.FileField(upload_to='static/', null=True)
-    title_feedback = models.CharField(max_length=50, null=True)
-    documenten = models.FileField(upload_to='static/', null=True)
-    title_documenten = models.CharField(max_length=50, null=True)
+                                        default='userimg.png', blank=True) # de default foto voor de medewerkers.
+    cv = models.FileField(upload_to='static/', null=True, blank=True) #upload to upload het naar de static files
+    title_cv = models.CharField(max_length=50, null=True, blank=True)
+    feedback = models.FileField(upload_to='static/', null=True, blank=True)
+    title_feedback = models.CharField(max_length=50, null=True, blank=True)
+    documenten = models.FileField(upload_to='static/', null=True, blank=True)
+    title_documenten = models.CharField(max_length=50, null=True, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk}) # dit is voor de details dat elke medewerker zijn eigen detail pagina krijgt met pk
@@ -134,14 +134,14 @@ class Brokers(models.Model):
         ('3', 'Coen Berkhout jr'),
         ('4', 'Jessica Berkhout'),
     )
-    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    broker_naam = models.CharField(max_length=50)
-    straat_broker = models.CharField(max_length=150)
-    huisnummer_broker = models.CharField(max_length=20)
-    postcode_broker = models.CharField(max_length=10)
-    vestigingplaats_broker = models.CharField(max_length=150)
-    telefoonnummer_broker = models.CharField(null=True, max_length=20)
-    portaal_broker = models.URLField(max_length=300, null=True)
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+    broker_naam = models.CharField(max_length=50, blank=True)
+    straat_broker = models.CharField(max_length=150, blank=True)
+    huisnummer_broker = models.CharField(max_length=20, blank=True)
+    postcode_broker = models.CharField(max_length=10, blank=True)
+    vestigingplaats_broker = models.CharField(max_length=150, blank=True)
+    telefoonnummer_broker = models.CharField(null=True, max_length=20, blank=True)
+    portaal_broker = models.URLField(max_length=300, null=True, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:broker.detail', kwargs={'pk': self.pk})
