@@ -149,7 +149,6 @@ class Brokers(models.Model):
     def __str__(self):
         return self.broker_naam
 
-
 class Aanbiedingen(models.Model):
     ACCOUNTMANAGER_CHOICES = (
         ('1', 'Yoeri Tromp'),
@@ -205,7 +204,9 @@ class Aanbiedingen(models.Model):
         ('4', 'Geplaatst'),
         ('5', 'Afgewezen'),
     )
-    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES)
+
+
+    aangemaakt_door = models.CharField(max_length=50)
     registratie = models.DateField(null=True)
     laatste_update = models.DateField(null=True)
     functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)

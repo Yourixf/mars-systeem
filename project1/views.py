@@ -18,6 +18,7 @@ from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, 
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
     Opmerkingen
 
+
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 #@login_required(login_url='login') is een ingebouwde Django functie ter beveiliging als de "User" niet is ingelogd kan die niet op die pagina komen.
 
@@ -505,10 +506,11 @@ def CertificatenToevoegen(request, pk):
 def AanbiedingToevoegen(request):
     form = AanbiedingenToevoegenForm(request.POST or None)
     context = {
-        'form': form,
+        'form': form
     }
     if request.method == 'POST':
         form = AanbiedingenToevoegenForm(request.POST, request.FILES)
+        # NO VALID FUNCTIE INDOUWEN
         if form.is_valid():
             form.save()
             return redirect('aanbiedingen')
