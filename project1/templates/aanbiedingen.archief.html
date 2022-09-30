@@ -39,30 +39,32 @@ td, th {
 
 <script>
 $(document).ready(function() {
-    $('#editableTable').DataTable({
+    $("#basic-datatable").DataTable({
       pageLength: 10,
       lengthChange: false,
       bInfo : false,
-      order: [[ 4, "asc" ]],
+      order: [[ 0, "asc" ]],
       dom: 'Bfrtip',
         buttons: [ {
             extend: 'excelHtml5',
-            title: 'Aanbiedingen ' +
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                },
+            title: 'Archief aanbiedingen' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
-                $('row c[r^="C"]', sheet).attr( 's', '2' );
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
             }
         } ]
-    }
-    );
-} );
+    });
+  });
 </script>
 
 
-<table id="editableTable" class="table" style="width:100%">
+<table id="basic-datatable" class="table" style="width:100%">
         <thead>
         <tr>
             <th>Klantnaam</th>
@@ -77,25 +79,30 @@ $(document).ready(function() {
             <th>Update</th>
             <th>Details</th>
         </tr>
-        {% for aanbiedingen in aanbieding_list %}
+
         <tbody id="myTable">
-            <td>{{ aanbiedingen.klant_naam }}</td>
-            <td>{{ aanbiedingen.medewerker }}</td>
-            <td>{{ aanbiedingen.tarief }}</td>
-            <td>{{ aanbiedingen.registratie }}</td>
-            <td>{{ aanbiedingen.laatste_update }}</td>
-            <td>{{ aanbiedingen.broker }}</td>
-            <td>{{ aanbiedingen.functie_aanbieding }}</td>
-            <td>{{ aanbiedingen.betaalkorting }}</td>
-            <td>{{ aanbiedingen.get_status_display }}</td>
+            {% for aanbiedingen in aanbieding_list %}
+            <tr>
+                <td>{{ aanbiedingen.klant_naam }}</td>
+                <td>{{ aanbiedingen.medewerker }}</td>
+                <td>{{ aanbiedingen.tarief }}</td>
+                <td>{{ aanbiedingen.registratie }}</td>
+                <td>{{ aanbiedingen.laatste_update }}</td>
+                <td>{{ aanbiedingen.broker }}</td>
+                <td>{{ aanbiedingen.functie_aanbieding }}</td>
+                <td>{{ aanbiedingen.betaalkorting }}</td>
+                <td>{{ aanbiedingen.get_status_display }}</td>
 
 
-            {% csrf_token %}
-            <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
-            <td><a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                                <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" /></td></form>
-            </tbody>
+                {% csrf_token %}
+                <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                    <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
+                <td><a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                    <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" /></td></form>
+
+            </tr>
+            {% endfor %}
+        </tbody>
 
 
 <script>
@@ -109,7 +116,7 @@ $(document).ready(function(){
 });
 </script>
 
-{% endfor %}
+
 </table>
 <br><br><br>
 {% endblock %}

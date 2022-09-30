@@ -51,6 +51,15 @@ OPLEIDINGNIVEAU_CHOICES = (
 # Dit is de Form om medewerkers toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 class MedewerkersToevoegenForm(forms.ModelForm):
+    bnsnummer = forms.IntegerField(required=False)
+    geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
+    email = forms.EmailField(max_length=254, required=False)
+    telefoonnummer = forms.CharField(max_length=20, required=False)
+    icenummer = forms.IntegerField(required=False)
+    foto_medewerker = forms.FileField(required=False)
+
+    zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES, required=False)
+    opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES, required=False)
     class Meta:
         model = Medewerkers
         fields = '__all__'
@@ -70,9 +79,10 @@ class MedewerkersUpdateForm(ModelForm):
 
     class Meta:
         model = Medewerkers
-        fields = ['cv', 'title_cv', 'feedback', 'title_feedback', 'title_documenten']
-        #exclude = ('document', 'cv', 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
-        widgets = {
+        fields = '__all__'
+        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
+
+    widgets = {
             'geboorte_datum': DateField(),
 
         }
@@ -200,22 +210,91 @@ class LeaseautosToevoegenForm(forms.ModelForm):
        self.fields['broker'].required = False
  Dit is zodat Django begrijpt dat de broker gekozen moet worden uit eerder aangemaakte brokers.
 """""
+ACCOUNTMANAGER_CHOICES = (
+    ('1', 'Yoeri Tromp'),
+    ('2', 'Nicky Slothouwer'),
+    ('3', 'Coen Berkhout jr'),
+    ('4', 'Jessica Berkhout'),
+)
+FUNCTIE_CHOICES = (
+    ('1', '.NET Developer'), ('3', ' 3D - tekenaar'), ('4', ' Android Developer '), ('5', ' App Developer'),
+    ('6', 'Applicatie Specialist'), ('7', ' Applicatiebeheerder'), ('8', 'Applicatieontwerper'),
+    ('9', 'Applicatieontwerper'),
+    ('10', 'Applicatieontwikkelaar'), ('11', 'Application Designer'), ('12', 'Assistent filiaalmanager '),
+    ('13', 'Backend Developer'),
+    ('14', 'Beleidsmedewerker Informatiebeveiliging'), ('15', 'Business Analist'), ('16', 'Business Architect '),
+    ('17', 'Citrix Specialist'),
+    ('18', 'Commercieel Directeur'), ('19', 'Content Manager'), ('20', 'Contractmanager '),
+    ('21', 'Data - analist'),
+    ('22', 'Database Administrator'), ('23', 'Directeur ICT'), ('24', 'Directeur IT '), ('25', 'Embedded Engineer'),
+    ('26', 'Filiaalmanager'), ('27', 'Functioneel Beheerder'), ('28', 'Hacker '), ('29', 'Hardware Engineer'),
+    ('30', 'Helpdeskmedewerker'), ('31', ' HTML Specialist'), ('32', 'Applicatieontwerper'),
+    ('33', 'ICT Specialist'), ('34', ' ICT Supportmedewerker'), ('35', 'Informatieanalist'),
+    ('36', 'Informatiemanager'),
+    ('37', 'Infrastructuur Ontwerper'), ('38', ' Infrastructuur Specialist'), ('39', 'iOS Developer'),
+    ('40', 'Architect'),
+    ('41', 'IT Auditor'), ('42', ' IT Trainee'), ('43', 'JAVA Developer'), ('44', 'Junior Pega Developer'),
+    ('45', 'Leraar Informatica'), ('46', ' Management Consultant'), ('47', 'Netwerk Engineer'),
+    ('48', 'Netwerkbeheerder'),
+    ('49', 'Netwerkmanager'), ('50', ' Netwerkspecialist'), ('51', 'Operations Manager'), ('52', 'PHP Developer'),
+    ('53', 'PHP Programmeur'), ('54', ' PLC Engineer'), ('55', 'PLC Programmeur'), ('56', 'Procesmanager'),
+    ('57', 'Processpecialist'), ('58', ' Programmeur'), ('59', 'Projectcontroller'), ('60', 'Projectmanager IT'),
+    ('61', 'ApplicatieSpecialist'), ('62', ' Applicatiebeheerder'), ('63', 'Applicatieontwerper'),
+    ('64', 'Requirements Analist'),
+    ('65', 'Sales Analist'), ('66', ' Sales Manager'), ('67', 'Scrum Master'), ('68', 'SEO specialist'),
+    ('69', 'Service Analist'), ('70', ' Service Co�rdinator'), ('71', 'Servicedesk Medewerker'),
+    ('71', 'Shopmanager'),
+    ('72', 'Software designer'), ('73', ' Software Engineer'), ('74', 'Software tester'),
+    ('75', 'Supportmedewerker'),
+    ('76', 'Systeemarchitect'), ('77', ' Systeembeheerder'), ('78', 'Systeemontwerper'),
+    ('79', 'Systeemontwikkelaar'),
+    ('80', 'Systeemoperator'), ('81', ' Systeemspecialist'), ('82', 'System Engineer'),
+    ('83', 'Technical support engineer'),
+    ('84', 'Technisch adviseur'), ('85', ' Technisch Ontwerper'), ('86', 'Telecom Engineer'),
+    ('87', 'Telecommunicatiemanager'),
+    ('88', 'Test Engineer'), ('89', ' Testanalist'), ('90', 'Testconsultant'), ('91', 'Tester'),
+    ('92', 'Testmanager'), ('93', ' Webdeveloper'), ('94', 'Webmaster'), ('95', 'Servicemanager'),
+    ('96', 'Packager'),
 
-class AanbiedingenToevoegenForm(ModelForm):
-
-
-    aangemaakt_door = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
+)
+STATUS_CHOICES = (
+    ('1', 'Open'),
+    ('2', 'Geselecteerd'),
+    ('3', 'Intake'),
+    ('4', 'Geplaatst'),
+    ('5', 'Afgewezen'),
+)
+class AanbiedingenToevoegenForm(forms.ModelForm):
+    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     registratie = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     laatste_update = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
     medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
-    functie = forms.ChoiceField(required=False)
+    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
     functie_aanbieding = forms.CharField(required=False)
-    status = forms.ChoiceField(required=False)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
     klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
-    broker = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), blank=True, required=False)
-    accountmanager = forms.CharField(required=False)
+    broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
+    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES )
+    class Meta:
+        model = Aanbiedingen
+        fields = '__all__'
+
+
+class AanbiedingenUpdateForm(ModelForm):
+    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    registratie = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
+    laatste_update = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
+    tarief = forms.DecimalField(initial=00.00, required=False)
+    betaalkorting = forms.DecimalField(initial=00.00, required=False)
+    medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
+    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
+    functie_aanbieding = forms.CharField(required=False)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
+    klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
+    broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
+    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
     class Meta:
         model = Aanbiedingen
         fields = '__all__'

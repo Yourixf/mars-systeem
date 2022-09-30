@@ -34,8 +34,7 @@ class Medewerkers(models.Model):
     opleidings_niveau = models.CharField(max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(max_length=100, blank=True)
     geboorte_datum = models.DateField(null=True, blank=True)
-    foto_medewerker = models.ImageField(upload_to='',
-                                        default='userimg.png', blank=True) # de default foto voor de medewerkers.
+    foto_medewerker = models.FileField(upload_to='images/', default='userimg.png') # de default foto voor de medewerkers.
     cv = models.FileField(upload_to='static/', null=True, blank=True) #upload to upload het naar de static files
     title_cv = models.CharField(max_length=50, null=True, blank=True)
     feedback = models.FileField(upload_to='static/', null=True, blank=True)
@@ -206,7 +205,7 @@ class Aanbiedingen(models.Model):
     )
 
 
-    aangemaakt_door = models.CharField(max_length=50)
+    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES)
     registratie = models.DateField(null=True)
     laatste_update = models.DateField(null=True)
     functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)
@@ -215,8 +214,8 @@ class Aanbiedingen(models.Model):
     broker = models.CharField(max_length=50, null=True)
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
-    tarief = models.FloatField(max_length=14, default=True, null=False)
-    betaalkorting = models.FloatField(max_length=14, default=True, null=False)
+    tarief = models.FloatField(max_length=14, default=True, null=True)
+    betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     medewerker = models.CharField(max_length=50)
 
     def get_status_count(self):

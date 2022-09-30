@@ -25,29 +25,31 @@ td, th {
 
 <script>
 $(document).ready(function() {
-    $('#editableTable').DataTable({
+    $("#basic-datatable").DataTable({
       pageLength: 10,
       lengthChange: false,
       bInfo : false,
-      order: [[ 4, "asc" ]],
+      order: [[ 0, "asc" ]],
       dom: 'Bfrtip',
         buttons: [ {
             extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4 ]
+                },
             title: 'Eindklanten' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
-                $('row c[r^="C"]', sheet).attr( 's', '2' );
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
             }
         } ]
-    }
-    );
-} );
+    });
+  });
 </script>
 
-<table id="editableTable" class="table" style="width:100%">
+<table id="basic-datatable" class="table" style="width:100%">
         <thead>
         <tr>
             <th>Klantnaam:</th>
@@ -58,8 +60,10 @@ $(document).ready(function() {
             <th>Update / Delete</th>
             <th>Detail </th>
         </tr>
-        {% for Eindklanten in eindkanten_list %}
+
         <tbody id="myTable">
+            {% for Eindklanten in eindkanten_list %}
+                <tr>
             <td>{{ Eindklanten.klantnaam }}</td>
             <td>{{ Eindklanten.get_accountmanager_display }}</td>
 
@@ -75,7 +79,9 @@ $(document).ready(function() {
                 <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
             <td><a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                 <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" /></td></form>
-            </tbody>
+            {% endfor %}
+                </tr>
+        </tbody>
 
 <script>
 $(document).ready(function(){
@@ -88,11 +94,8 @@ $(document).ready(function(){
 });
 </script>
 
-{% endfor %}
+
 </table>
 <br><br><br>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-
-
-

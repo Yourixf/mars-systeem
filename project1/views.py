@@ -271,7 +271,7 @@ def MedewerkersToevoegen(request):
         'form': form
     }
     if request.method == 'POST':
-        form = MedewerkersToevoegenForm(request.POST)
+        form = MedewerkersToevoegenForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('medewerkers')
@@ -279,11 +279,14 @@ def MedewerkersToevoegen(request):
         return render(request, 'medewerker.toevoegen.html', context)
 
 # De MedewerkersUpdate form uit de Forms.py
-class MedewerkerUpdate(LoginRequiredMixin, UpdateView):
-    model = Medewerkers
-    fields = '__all__'
-    template_name = 'update.medewerker.html'
-    success_url = reverse_lazy('medewerkers')
+# Nieuwe update functie, pakt nu de zelfde form als toevoegen zodat het gesynchroniseerd is
+@login_required(login_url='login')
+def MedewerkersUpdaten(request, pk):
+    medewerker = Medewerkers.objects.get(id=pk)
+    form = MedewerkersToevoegenForm(request.POST or None, instance=medewerker)
+
+    return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
+
 
 # De medewerkerDelete hier vraagt django om de pk van de medewerker en met de .delete functie verwijdert Django deze medewerker en geeft een succes message.
 
@@ -435,11 +438,13 @@ def EindklantToevoegen(request):
         return render(request, 'eindklant.toevoegen.html', context)
 
 # De updateview voor de Eindklanten.
-class EindklantUpdate(LoginRequiredMixin, UpdateView):
-    model = Eindklanten
-    fields = '__all__'
-    template_name = 'update.eindklant.html'
-    success_url = reverse_lazy('eindklanten')
+
+@login_required(login_url='login')
+def EindklantenUpdaten(request, pk):
+    eindklant = Eindklanten.objects.get(id=pk)
+    form = EindklantenToevoegenForm(request.POST or None, instance=eindklant)
+
+    return render(request, "update.eindklant.html", {'eindklant': eindklant, 'form': form})
 
 # De Delete functie voor de eindklanten.
 @login_required(login_url='login')
@@ -477,11 +482,13 @@ def BrokerDelete(request, id):
     return redirect('brokers')
 
 # De updateview voor de Brokers.
-class BrokerUpdate(LoginRequiredMixin, UpdateView):
-    model = Brokers
-    fields = '__all__'
-    template_name = 'update.broker.html'
-    success_url = reverse_lazy('brokers')
+
+@login_required(login_url='login')
+def BrokerUpdaten(request, pk):
+    broker = Brokers.objects.get(id=pk)
+    form = BrokersToevoegenForm(request.POST or None, instance=broker)
+
+    return render(request, "update.broker.html", {'broker': broker, 'form': form})
 
 # De Certificaten toevoegen form CertificatenToevoegenForm uit de forms.py
 @login_required(login_url='login')
@@ -525,17 +532,27 @@ def AanbiedingDelete(request, id):
     return redirect('aanbiedingen')
 
 # De updateview voor de UpdateView.
+
+@login_required(login_url='login')
+def EindklantenUpdaten(request, pk):
+    aanbieding = Aanbiedingen.objects.get(id=pk)
+    form = AanbiedingenToevoegenForm(request.POST or None, instance=aanbieding)
+
+    return render(request, "aanbieding.update.html", {'aanbieding': aanbieding, 'form': form})
+
 class AanbiedingUpdate(LoginRequiredMixin, UpdateView):
     model = Aanbiedingen
     fields = '__all__'
     template_name = 'aanbieding.update.html'
     success_url = reverse_lazy('aanbiedingen')
 
+
 # Dit is de openstaande aanbiedingen deze zijn gefilterd op status Open, Geselecteerd, of Intake. Dan komen ze bij mee open aanbiedingen te staan op deze pagina.
 #    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2) | Q(status=3)) dit is de filter for de 3 statussen waardoor ze op deze pagina komen.
 @login_required(login_url='login')
 def AanbiedingenPage(request):
     aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2) | Q(status=3))
+
     context = {
         'aanbieding_list': aanbieding_list,
 
