@@ -75,7 +75,7 @@ urlpatterns = [
     # zoekt naar de view aanbieding toevoegen
     path(r'aanbiedingen/toevoegen/', views.AanbiedingToevoegen, name='aanbieding_toevoegen'),
     # zoekt naar de view aanbieding update
-    path(r'aanbieding/update/<str:pk>/', views.AanbiedingUpdate.as_view(), name='aanbieding_update'),
+    path(r'aanbieding/update/<str:pk>/', views.AanbiedingUpdaten, name='aanbieding_update'),
     # zoekt naar de view aanbieding delete
     path(r'aanbieding/delete/<str:id>/', views.ContractenDelete, name='aanbieding_delete'),
     # zoekt naar de view aan archief aanbiedingen page

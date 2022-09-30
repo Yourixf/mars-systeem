@@ -11,8 +11,8 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
 from project1 import forms
-from .forms import FotoForm, MedewerkersToevoegenForm, ContractenToevoegenForm, EindklantenToevoegenForm, \
-    BrokersToevoegenForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenToevoegenForm, \
+from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
+    BrokersForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenForm, \
     CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
     TaskItemUpdateForm
 from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
@@ -265,13 +265,13 @@ def MedewerkersPage(request):
 # De Medewerkerstoevoegen form uit de Forms.py
 @login_required(login_url='login')
 def MedewerkersToevoegen(request):
-    form = MedewerkersToevoegenForm(request.POST or None)
+    form = MedewerkersForm(request.POST or None)
 
     context = {
         'form': form
     }
     if request.method == 'POST':
-        form = MedewerkersToevoegenForm(request.POST, request.FILES)
+        form = MedewerkersForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('medewerkers')
@@ -283,7 +283,7 @@ def MedewerkersToevoegen(request):
 @login_required(login_url='login')
 def MedewerkersUpdaten(request, pk):
     medewerker = Medewerkers.objects.get(id=pk)
-    form = MedewerkersToevoegenForm(request.POST or None, instance=medewerker)
+    form = MedewerkersForm(request.POST or None, instance=medewerker)
 
     return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
 
@@ -425,12 +425,12 @@ def EindklantenPage(request):
 # De eindklant toevoegen form EindklantenToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def EindklantToevoegen(request):
-    form = EindklantenToevoegenForm(request.POST or None)
+    form = EindklantenForm(request.POST or None)
     context = {
         'form': form
     }
     if request.method == 'POST':
-        form = EindklantenToevoegenForm(request.POST)
+        form = EindklantenForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('eindklanten')
@@ -442,7 +442,7 @@ def EindklantToevoegen(request):
 @login_required(login_url='login')
 def EindklantenUpdaten(request, pk):
     eindklant = Eindklanten.objects.get(id=pk)
-    form = EindklantenToevoegenForm(request.POST or None, instance=eindklant)
+    form = EindklantenForm(request.POST or None, instance=eindklant)
 
     return render(request, "update.eindklant.html", {'eindklant': eindklant, 'form': form})
 
@@ -462,12 +462,12 @@ def BrokersPage(request):
 # De Brokers toevoegen form BrokersToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def BrokersToevoegen(request):
-    form = BrokersToevoegenForm(request.POST or None)
+    form = BrokersForm(request.POST or None)
     context = {
         'form': form
     }
     if request.method == 'POST':
-        form = BrokersToevoegenForm(request.POST)
+        form = BrokersForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('brokers')
@@ -486,7 +486,7 @@ def BrokerDelete(request, id):
 @login_required(login_url='login')
 def BrokerUpdaten(request, pk):
     broker = Brokers.objects.get(id=pk)
-    form = BrokersToevoegenForm(request.POST or None, instance=broker)
+    form = BrokersForm(request.POST or None, instance=broker)
 
     return render(request, "update.broker.html", {'broker': broker, 'form': form})
 
@@ -511,12 +511,12 @@ def CertificatenToevoegen(request, pk):
 # De aanbiedingen toevoegen form AanbiedingenToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def AanbiedingToevoegen(request):
-    form = AanbiedingenToevoegenForm(request.POST or None)
+    form = AanbiedingenForm(request.POST or None)
     context = {
         'form': form
     }
     if request.method == 'POST':
-        form = AanbiedingenToevoegenForm(request.POST, request.FILES)
+        form = AanbiedingenForm(request.POST, request.FILES)
         # NO VALID FUNCTIE INDOUWEN
         if form.is_valid():
             form.save()
@@ -534,17 +534,11 @@ def AanbiedingDelete(request, id):
 # De updateview voor de UpdateView.
 
 @login_required(login_url='login')
-def EindklantenUpdaten(request, pk):
+def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
-    form = AanbiedingenToevoegenForm(request.POST or None, instance=aanbieding)
+    form = AanbiedingenForm(request.POST or None, instance=aanbieding)
 
     return render(request, "aanbieding.update.html", {'aanbieding': aanbieding, 'form': form})
-
-class AanbiedingUpdate(LoginRequiredMixin, UpdateView):
-    model = Aanbiedingen
-    fields = '__all__'
-    template_name = 'aanbieding.update.html'
-    success_url = reverse_lazy('aanbiedingen')
 
 
 # Dit is de openstaande aanbiedingen deze zijn gefilterd op status Open, Geselecteerd, of Intake. Dan komen ze bij mee open aanbiedingen te staan op deze pagina.

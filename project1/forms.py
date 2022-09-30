@@ -50,7 +50,7 @@ OPLEIDINGNIVEAU_CHOICES = (
 
 # Dit is de Form om medewerkers toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
-class MedewerkersToevoegenForm(forms.ModelForm):
+class MedewerkersForm(forms.ModelForm):
     bnsnummer = forms.IntegerField(required=False)
     geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     email = forms.EmailField(max_length=254, required=False)
@@ -64,28 +64,6 @@ class MedewerkersToevoegenForm(forms.ModelForm):
         model = Medewerkers
         fields = '__all__'
         exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
-
-
-# De Form om wijzigingen van de medewerkers toe te voegen dit is precies de zelfde form als de medewerkerstoevoegen Form alleen dan voor de update.
-class MedewerkersUpdateForm(ModelForm):
-    bnsnummer = forms.IntegerField()
-    geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
-    email = forms.EmailField(max_length=254)
-    telefoonnummer = forms.CharField(max_length=20)
-    icenummer = forms.IntegerField()
-    teriefindicatie = forms.FloatField()
-    zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES)
-    opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES)
-
-    class Meta:
-        model = Medewerkers
-        fields = '__all__'
-        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
-
-    widgets = {
-            'geboorte_datum': DateField(),
-
-        }
 
 
 
@@ -110,54 +88,16 @@ class ContractenToevoegenForm(ModelForm):
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 # Met de fields = '__all__' pakt Django alle variabele uit de model.
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
-class EindklantenToevoegenForm(forms.ModelForm):
+class EindklantenForm(forms.ModelForm):
     class Meta:
         model = Eindklanten
         fields = '__all__'
         exclude = ['opmerking_title', 'opmerking_intro', 'opmerking_body', 'opmerking_date_added']
 
 
-# De Form om wijzigingen van de Eindklanten toe te voegen dit is precies de zelfde form als de Eindklanten Form alleen dan voor de update.
-class EindklantenUpdateForm(forms.ModelForm):
-    ACCOUNTMANAGER_CHOICES = (
-        ('1', 'Yoeri Tromp'),
-        ('2', 'Nicky Slothouwer'),
-        ('3', 'Coen Berkhout jr'),
-        ('4', 'Jessica Berkhout'),
-    )
-    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES)
-    klantnaam = forms.CharField(max_length=50)
-    straat_klant = forms.CharField(max_length=150)
-    huisnummer_klant = forms.CharField(max_length=20)
-    postcode_klant = forms.CharField(max_length=10)
-    vestigingplaats_klant = forms.CharField(max_length=150)
-    telefoonnummer_klant = forms.CharField(max_length=17)
-    portaal_klant = forms.URLField(max_length=300)
-
-# De Form om wijzigingen van de Brokers toe te voegen dit is precies de zelfde form als de Brokers Form alleen dan voor de update.
-    class BrokersUpdateForm(forms.ModelForm):
-        ACCOUNTMANAGER_CHOICES = (
-            ('1', 'Yoeri Tromp'),
-            ('2', 'Nicky Slothouwer'),
-            ('3', 'Coen Berkhout jr'),
-            ('4', 'Jessica Berkhout'),
-        )
-        accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES)
-        klantnaam = forms.CharField(max_length=50)
-        straat_klant = forms.CharField(max_length=150)
-        huisnummer_klant = forms.CharField(max_length=20)
-        postcode_klant = forms.CharField(max_length=10)
-        vestigingplaats_klant = forms.CharField(max_length=150)
-        telefoonnummer_klant = forms.CharField(max_length=17)
-        portaal_klant = forms.URLField(max_length=300)
-
-    class Meta:
-        model = Brokers
-        fields = '__all__'
-        exclude = ['opm_title', 'opm_intro', 'opm_body', 'opm_date_added']
 
 # DIt is de form om brokers toe te voegen waarbij die alle variabele pakt uit de Brokers model.
-class BrokersToevoegenForm(forms.ModelForm):
+class BrokersForm(forms.ModelForm):
     class Meta:
         portaal_broker = forms.URLField(max_length=300)
         model = Brokers
@@ -264,7 +204,7 @@ STATUS_CHOICES = (
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
 )
-class AanbiedingenToevoegenForm(forms.ModelForm):
+class AanbiedingenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     registratie = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     laatste_update = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
@@ -282,22 +222,7 @@ class AanbiedingenToevoegenForm(forms.ModelForm):
         fields = '__all__'
 
 
-class AanbiedingenUpdateForm(ModelForm):
-    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    registratie = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    laatste_update = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    tarief = forms.DecimalField(initial=00.00, required=False)
-    betaalkorting = forms.DecimalField(initial=00.00, required=False)
-    medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
-    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
-    functie_aanbieding = forms.CharField(required=False)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
-    klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
-    broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
-    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
-    class Meta:
-        model = Aanbiedingen
-        fields = '__all__'
+
 
 # Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class CvUploadForm(ModelForm):
