@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.fields import DateField
 # Haalt de models uit models.py
-from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Leaseautos, Aanbiedingen, \
+from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Aanbiedingen, \
     Opmerkingen
 
 from .models import *
@@ -57,9 +57,9 @@ class MedewerkersForm(forms.ModelForm):
     telefoonnummer = forms.CharField(max_length=20, required=False)
     icenummer = forms.IntegerField(required=False)
     foto_medewerker = forms.FileField(required=False)
-
     zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES, required=False)
     opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES, required=False)
+    lease_auto = forms.ChoiceField(choices=LEASE_AUTO_CHOICES, required=False)
     class Meta:
         model = Medewerkers
         fields = '__all__'
@@ -89,6 +89,20 @@ class ContractenToevoegenForm(ModelForm):
 # Met de fields = '__all__' pakt Django alle variabele uit de model.
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
 class EindklantenForm(forms.ModelForm):
+    ACCOUNTMANAGER_CHOICES = (
+        ('1', 'Yoeri Tromp'),
+        ('2', 'Nicky Slothouwer'),
+        ('3', 'Coen Berkhout jr'),
+        ('4', 'Jessica Berkhout'),
+    )
+    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    klantnaam = forms.CharField(max_length=50, required=False)
+    straat_klant = forms.CharField(max_length=150, required=False)
+    huisnummer_klant = forms.CharField(max_length=20, required=False)
+    postcode_klant = forms.CharField(max_length=10, required=False)
+    vestigingplaats_klant = forms.CharField(max_length=150, required=False)
+    telefoonnummer_klant = forms.CharField(max_length=17, required=False)
+    portaal_klant = forms.URLField(max_length=300, required=False)
     class Meta:
         model = Eindklanten
         fields = '__all__'
@@ -128,20 +142,6 @@ class CertificatenToevoegenForm(ModelForm):
         model = Certificaten
         fields = "__all__"
 
-# Dit is de Form om Leaseauto's toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
-class LeaseautosToevoegenForm(forms.ModelForm):
-    kenteken = forms.CharField()
-    start_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
-    eind_datum_lease_auto = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
-    merk_auto = forms.CharField()
-    type_auto = forms.CharField()
-    leasemaatschappij = forms.CharField()
-    kilometer_per_jaar = forms.IntegerField()
-    lease_bedrag = forms.FloatField()
-
-    class Meta:
-        model = Leaseautos
-        fields = "__all__"
 
 """""
  Dit is de Form voor aanbiedingen hier heb ik weer gebruikt van de keuzevelden, en wat aanpassingen van de variabele in de Form.

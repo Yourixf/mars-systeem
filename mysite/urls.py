@@ -27,7 +27,6 @@ urlpatterns = [
     # zoekt naar de view Detail(medewerkers)
     path(r'medewerkers/<str:pk>/', views.Detail, name='details'),
     # zoekt naar de view Leaseautosdetail
-    path('lease.autos.detail/<str:pk>/', views.Leaseautosdetail, name='lease.autos.detail'),
     # zoekt naar de view Contractendetail
     path('contracten.detail/<str:pk>/', views.Contractendetail, name='contracten.detail'),
     # zoekt naar de admin page
@@ -64,10 +63,6 @@ urlpatterns = [
     path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view(), name='contract_update'),
     # zoekt naar de view certificaten
     path(r'certificaten/toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
-    # zoekt naar de view lease auto toevoegen
-    path(r'lease-auto/toevoegen/<str:pk>/', views.LeaseautosToevoegen, name='lease-auto_toevoegen'),
-    # zoekt naar de view lease auto delete
-    path(r'lease-auto/delete/<str:pk>/', views.LeaseautoDelete, name='lease-auto_delete'),
     # zoekt naar de view contact delete
     path(r'contract/delete/<str:id>/', views.ContractenDelete, name='contract_delete'),
     # zoekt naar de view aanbieding page

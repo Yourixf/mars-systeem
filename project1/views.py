@@ -12,10 +12,10 @@ from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
-    BrokersForm, CertificatenToevoegenForm, LeaseautosToevoegenForm, AanbiedingenForm, \
+    BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, \
     CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
     TaskItemUpdateForm
-from .models import Medewerkers, Leaseautos, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
+from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
     Opmerkingen
 
 

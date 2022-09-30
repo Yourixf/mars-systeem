@@ -17,6 +17,13 @@ from django.utils import timezone
 
 # Dit is de Model van de medewerkers hier staan alle gegevens van de medewerkers.
 # Weet je niet wat de models.Charfield betekend kopieer dit en zet er Django krijg je de omschrijving van waar dit voor bedoeld is.
+LEASE_AUTO_CHOICES = (
+    ('1', 'Ja'),
+    ('2', 'All in'),
+    ('3', 'Lease vergoeding'),
+    ('4', 'Geen')
+)
+
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)#max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
     tussenvoegsel = models.CharField(max_length=6, blank=True) #blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
@@ -41,6 +48,7 @@ class Medewerkers(models.Model):
     title_feedback = models.CharField(max_length=50, null=True, blank=True)
     documenten = models.FileField(upload_to='static/', null=True, blank=True)
     title_documenten = models.CharField(max_length=50, null=True, blank=True)
+    lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={'pk': self.pk}) # dit is voor de details dat elke medewerker zijn eigen detail pagina krijgt met pk
@@ -63,24 +71,11 @@ class Opmerkingen(models.Model):
     body = models.TextField(null=True,blank=True)
     due_date = models.DateTimeField(default=timezone.now) # timezone.now vult standaard de tijd waarin je de form opent.
     task_finished = models.BooleanField(default=True)
-    category = models. CharField(max_length=20, choices=CATEGORIES, default=DEFAULT) # haalt de keuze van de CATEGORIES op.
+    category = models.CharField(max_length=20, choices=CATEGORIES, default=DEFAULT) # haalt de keuze van de CATEGORIES op.
 
     def __str__(self):
         return f'{self.title}'
 
-class Leaseautos(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE) #door de ForeignKey in te vullen van de medewerker is de lease auto gelinkt met de medewerker.
-    kenteken = models.CharField(max_length=10)
-    start_datum_lease_auto = models.DateField(null=True) # DateField is een datum veld.
-    eind_datum_lease_auto = models.DateField(null=True)
-    merk_auto = models.CharField(max_length=50)
-    type_auto = models.CharField(max_length=100)
-    leasemaatschappij = models.CharField(max_length=100)
-    kilometer_per_jaar = models.IntegerField(null=True)
-    lease_bedrag = models.FloatField(max_length=20)
-
-    def __str__(self):
-        return self.merk_auto + " " + self.kenteken
 
 
 class Contracten(models.Model):
@@ -109,14 +104,14 @@ class Eindklanten(models.Model):
         ('3', 'Coen Berkhout jr'),
         ('4', 'Jessica Berkhout'),
     )
-    accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES)
-    klantnaam = models.CharField(max_length=50)
-    straat_klant = models.CharField(max_length=150)
-    huisnummer_klant = models.CharField(max_length=20)
-    postcode_klant = models.CharField(max_length=10)
-    vestigingplaats_klant = models.CharField(max_length=150)
-    telefoonnummer_klant = models.CharField(max_length=17, null=True)
-    portaal_klant = models.URLField(max_length=300, null=True)
+    accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
+    klantnaam = models.CharField(max_length=50, null=True, blank=True)
+    straat_klant = models.CharField(max_length=150, null=True, blank=True)
+    huisnummer_klant = models.CharField(max_length=20, null=True, blank=True)
+    postcode_klant = models.CharField(max_length=10, null=True, blank=True)
+    vestigingplaats_klant = models.CharField(max_length=150, null=True, blank=True)
+    telefoonnummer_klant = models.CharField(max_length=17, null=True, blank=True)
+    portaal_klant = models.URLField(max_length=300, null=True, blank=True)
 
 
     def get_absolut_url(self):

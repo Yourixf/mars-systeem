@@ -50,6 +50,11 @@ td, th {
     width: 89%;
 }
 
+#medeName{
+    text-align: center;
+}
+
+
 </style>
 {#        <link rel="stylesheet" href=#}
 {#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
@@ -59,7 +64,7 @@ td, th {
 
 </head>
 
-<h3>{{ medewerkers }}<a> - </a>{{ medewerkers.pk}}</h3>
+<h3 id="medeName">{{ medewerkers }}<a> - </a>{{ medewerkers.pk }}</h3>
 <br>
 
 <body>
@@ -78,6 +83,7 @@ td, th {
         <th>ICE nummer</th><td>{{ medewerkers.icenummer }}</td><tr>
         <th>Geboortedatum</th><td>{{ medewerkers.geboorte_datum }}</td>
         <th>Email</th><td>{{ medewerkers.email }}</td><tr>
+        <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
         </tr>
         <tr>
 </tr>
@@ -90,12 +96,10 @@ td, th {
 <button class="btnn btn1"><a href="{% url 'cv_upload' medewerkers.pk %}" style="color:white"> Cv Uploaden / downloadennn</a></button>
 <button class="btnn btn2"><a href="{% url 'feedback_upload' medewerkers.pk %}" style="color:white">Feedback Upload / download</a></button>
 <button class="btnn btn3"><a href="{% url 'documenten_upload' medewerkers.pk %}" style="color:white">Documenten Upload / download</a></button><br>
-<button class="btnn btn3"><a href="{% url 'lease.autos.detail' medewerkers.id %}" style="color:white">Lease auto</a></button>
 <button class="btnn btn3"><a href="{% url 'contracten.detail' medewerkers.id %}" style="color:white">Contracten</a></button>
 <button class="btnn btn3"><a href="{% url 'foto_toevoegen' medewerkers.id %}" style="color:white">Foto toevoegen</a></button><br>
 <button class="btnn btn3"><a href="{% url 'contracten_toevoegen' medewerkers.id %}" style="color:white">Contract toevoegen</a></button>
 <button class="btnn btn3"><a href="{% url 'certificaten_toevoegen' medewerkers.id %}" style="color:white">Certificaat toevoegen</a></button>
-<button class="btnn btn3"><a href="{% url 'lease-auto_toevoegen' medewerkers.id %}" style="color:white">Lease Auto toevoegen</a></button><br>
 
 
     {#<button class="btnn btn4"><a href="{% url 'editor' medewerkers.id %}" style="color:white">Opmerkingen medewerker : {{ medewerkers.voornaam }}</a></button>#}
