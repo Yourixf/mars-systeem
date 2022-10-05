@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Medewerkers/datails{% endblock %}
+{% block title %}Medewerkers/details{% endblock %}
 {% block body %}
 
 <html lang="">
@@ -85,6 +85,10 @@ td, th {
         <th>Email</th><td>{{ medewerkers.email }}</td><tr>
         <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
         </tr>
+            <td>
+                <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+            </td>
         <tr>
 </tr>
 </table>

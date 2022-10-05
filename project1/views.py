@@ -14,9 +14,9 @@ from project1 import forms
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, \
     CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
-    TaskItemUpdateForm
+    TaskItemUpdateForm, VestigingplaatsForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
-    Opmerkingen
+    Opmerkingen, Vestigingplaats
 
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
@@ -25,10 +25,28 @@ from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers,
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
 
+
+@login_required(login_url='login')
+def VestigingToevoegen(request, pk):
+    eind_klant_pk = Eindklanten.objects.get(id=pk)
+    form = VestigingplaatsForm()
+
+    context = {
+        'form': form,
+        'eind_klant_pk': eind_klant_pk.id,
+    }
+    if request.method == 'POST':
+        form = VestigingplaatsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('eindklant_detail', pk)
+    else:
+       return render(request, 'vestiging.toevoegen.html', context)
+
+
 # Dit is de "ListView" van opmerkingen in die template krijg je alle ingevoerde opmerkingen.
 # in de ListView,CreateView,UpdateView, DeleteView kan je geen @login_required(login_url='login') maar inplaats daarvan doe je tussen de haakjes
 #class BLABLA(LoginRequiredMixin, ListView): zoals hier onder
-
 class OpmerkingenPageView(LoginRequiredMixin, ListView):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -63,9 +81,9 @@ class OpmerkingenDeleteView(LoginRequiredMixin, DeleteView):
 @login_required(login_url='login')
 def EindklantDetail(request, pk):
     eindklant_pk = Eindklanten.objects.get(id=pk)
-    eindklant = Eindklanten.objects.all()
+    #eindklant = Eindklanten.objects.all()
     context = {
-        'eindklant': eindklant,
+        #'eindklant': eindklant,
         'eindklant_pk': eindklant_pk,
 
     }
@@ -91,7 +109,7 @@ def Detail(request, pk):
     context = {
         'medewerkers': medewerkers,
     }
-    return render(request, 'detail.html', context)
+    return render(request, 'medewerker.detail.html', context)
 
 # Dit is de de details pagina voor de Brokers,   aanbieding = Aanbiedingen.objects.get(id=pk) is bedoeld om elke detail per eindklant te zien is.
 #   aanbiedingen_list = Aanbiedingen.objects.all() is bedoeld zodat je elke variabele op de details pagina kan laten zien.
@@ -285,6 +303,13 @@ def MedewerkersUpdaten(request, pk):
     medewerker = Medewerkers.objects.get(id=pk)
     form = MedewerkersForm(request.POST or None, instance=medewerker)
 
+    if request.method == 'POST':
+        form = MedewerkersForm(request.POST or None, instance=medewerker)
+        # form.save() om de nieuwe data op te slaan
+        if form.is_valid():
+            form.save()
+            return redirect('details', pk)
+
     return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
 
 
@@ -301,55 +326,6 @@ def MedewerkerDelete(request, pk):
     context = {"delete_med": delete_med, "med": med}
     return render(request, "confirm.delete.html", context)
 
-# Dit is de de details pagina voor de Leaseautos,  leaseautos = Leaseautos.objects.get(id=pk) is bedoeld om elke detail per lease auto te zien is.
-
-@login_required(login_url='login')
-def Leaseautosdetail(request, pk):
-    leaseautos = Leaseautos.objects.get(medewerkers_id=pk)
-    #medewerkerAutos = leaseautos.filter(medewerkers_id=pk)
-    context = {'leaseautos': leaseautos, }
-
-    # MAKEN DAT HIJ MEERDER AUTO's KAN WEERGEVEN test
-    return render(request, 'lease.autos.detail.html', context, )
-
-
-# hier Voeg je een lease auto toe aan een medewerker     medewerker_pk = Medewerkers.objects.get(id=pk) haalt de medewerker op zodat die gelinkt is met de lease auto.
-# deze LeaseautosToevoegenForm is de form die gebruit wordt uit de forms.py
-
-@login_required(login_url='login')
-def LeaseautosToevoegen(request, pk):
-    medewerker_pk = Medewerkers.objects.get(id=pk)
-    leaseauto = Leaseautos.objects.filter(medewerkers_id=pk)
-    #form = LeaseautosToevoegenForm(instance=medewerker_pk)
-    form = LeaseautosToevoegenForm(request.POST or None)
-    context = {
-        'form': form,
-        'leaseauto': leaseauto
-    }
-    if request.method == 'POST':
-        #form = LeaseautosToevoegenForm(request.POST, request.FILES, instance=medewerker_pk)
-        form = LeaseautosToevoegenForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # FUNCTIE MAKEN
-            return redirect('medewerkers')
-            #return redirect(f'lease.autos.detail/{Leaseautos.objects.get(medewerkers_id=pk)}')
-    else:
-        return render(request, 'lease.autos.toevoegen.html', context)
-
-
-#Dit is de delete functie vand de lease auto's
-#De .delete is de django functie waardoor de lease auto verwijderd wordt.
-@login_required(login_url='login')
-def LeaseautoDelete(request, pk):
-    delete_lease_auto = Leaseautos.objects.get(pk=pk)
-
-    delete_lease_auto.delete()
-    return redirect('medewerkers')
-#return redirect('lease.autos.detail')
-    context = {
-        "delete_lease_auto": delete_lease_auto, "lease_auto":lease_auto
-    }
 
 # Dit is de form voor de foto toevoegen voor de medewerkers.
 # Omdat de foto gelinkt is met een medewerker haalt Django eerst de PK op van de medewerker zodat die gelinkt is aan deze medewerker.
@@ -388,7 +364,7 @@ def Contractendetail(request, pk):
 def ContractenToevoegen(request, pk):
     medewerker_pk = Medewerkers.objects.get(id=pk)
     contract = Contracten.objects.filter(medewerkers_id=pk)
-    form = ContractenToevoegenForm(instance=medewerker_pk)
+    form = ContractenToevoegenForm()
     context = {
         'form': form,
         'contract': contract,
@@ -443,6 +419,15 @@ def EindklantToevoegen(request):
 def EindklantenUpdaten(request, pk):
     eindklant = Eindklanten.objects.get(id=pk)
     form = EindklantenForm(request.POST or None, instance=eindklant)
+    #eindklanten = Eindklanten.objects.get(id=pk)
+    context = {
+        'eindklant': eindklant
+    }
+    if request.method == 'POST':
+        form = EindklantenForm(request.POST or None, instance=eindklant)
+        if form.is_valid():
+            form.save()
+            return redirect('eindklanten')
 
     return render(request, "update.eindklant.html", {'eindklant': eindklant, 'form': form})
 
@@ -487,6 +472,12 @@ def BrokerDelete(request, id):
 def BrokerUpdaten(request, pk):
     broker = Brokers.objects.get(id=pk)
     form = BrokersForm(request.POST or None, instance=broker)
+
+    if request.method == 'POST':
+        form = BrokersForm(request.POST or None, instance=broker)
+        if form.is_valid():
+            form.save()
+            return redirect('brokers')
 
     return render(request, "update.broker.html", {'broker': broker, 'form': form})
 
@@ -537,6 +528,11 @@ def AanbiedingDelete(request, id):
 def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
     form = AanbiedingenForm(request.POST or None, instance=aanbieding)
+    if request.method == 'POST':
+        form = AanbiedingenForm(request.POST or None, instance=aanbieding)
+        if form.is_valid():
+            form.save()
+            return redirect('aanbiedingen')
 
     return render(request, "aanbieding.update.html", {'aanbieding': aanbieding, 'form': form})
 

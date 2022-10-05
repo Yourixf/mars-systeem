@@ -90,6 +90,7 @@ class ContractenToevoegenForm(ModelForm):
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
 class EindklantenForm(forms.ModelForm):
     ACCOUNTMANAGER_CHOICES = (
+        ('0', ''),
         ('1', 'Yoeri Tromp'),
         ('2', 'Nicky Slothouwer'),
         ('3', 'Coen Berkhout jr'),
@@ -100,7 +101,7 @@ class EindklantenForm(forms.ModelForm):
     straat_klant = forms.CharField(max_length=150, required=False)
     huisnummer_klant = forms.CharField(max_length=20, required=False)
     postcode_klant = forms.CharField(max_length=10, required=False)
-    vestigingplaats_klant = forms.CharField(max_length=150, required=False)
+    plaats_klant = forms.CharField(max_length=150, required=False)
     telefoonnummer_klant = forms.CharField(max_length=17, required=False)
     portaal_klant = forms.URLField(max_length=300, required=False)
     class Meta:
@@ -115,6 +116,18 @@ class BrokersForm(forms.ModelForm):
     class Meta:
         portaal_broker = forms.URLField(max_length=300)
         model = Brokers
+        fields = '__all__'
+
+
+class VestigingplaatsForm(forms.ModelForm):
+    soort = forms.CharField(max_length=20, required=False)
+    postcode = forms.CharField(max_length=10, required=False)
+    straatnaam = forms.CharField(max_length=30, required=False)
+    huisnummer = forms.IntegerField(required=False)
+    plaats = forms.CharField(max_length=20, required=False)
+    #klant_id = forms.ForeignKey()
+    class Meta:
+        model = Vestigingplaats
         fields = '__all__'
 
 # De Form om wijzigingen van de Contracten toe te voegen dit is precies de zelfde form als de ContractenToevoegen Form alleen dan voor de update.
@@ -182,7 +195,7 @@ FUNCTIE_CHOICES = (
     ('61', 'ApplicatieSpecialist'), ('62', ' Applicatiebeheerder'), ('63', 'Applicatieontwerper'),
     ('64', 'Requirements Analist'),
     ('65', 'Sales Analist'), ('66', ' Sales Manager'), ('67', 'Scrum Master'), ('68', 'SEO specialist'),
-    ('69', 'Service Analist'), ('70', ' Service Co�rdinator'), ('71', 'Servicedesk Medewerker'),
+    ('69', 'Service Analist'), ('70', ' Service Coördinator'), ('71', 'Servicedesk Medewerker'),
     ('71', 'Shopmanager'),
     ('72', 'Software designer'), ('73', ' Software Engineer'), ('74', 'Software tester'),
     ('75', 'Supportmedewerker'),
@@ -216,10 +229,11 @@ class AanbiedingenForm(forms.ModelForm):
     status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
     klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
     broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
-    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES )
+    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
+
 
 
 

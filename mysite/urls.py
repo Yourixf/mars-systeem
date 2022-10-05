@@ -96,6 +96,8 @@ urlpatterns = [
     # zoekt naar de view TodoItemDelete
     path('opmerkingen/delete/<str:pk>/', views.OpmerkingenDeleteView.as_view(), name='delete_list'),
 
+    path(r'vestiging/toevoegen/<str:pk>/', views.VestigingToevoegen, name='vestiging_toevoegen'),
+
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

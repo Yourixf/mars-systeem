@@ -67,7 +67,7 @@ class Opmerkingen(models.Model):
         (EINDKLANTEN,EINDKLANTEN),
         (BROKERS,BROKERS),
     )
-    title = models.CharField(max_length=100,blank=True,null=True)
+    title = models.CharField(max_length=100,blank=True, null=True)
     body = models.TextField(null=True,blank=True)
     due_date = models.DateTimeField(default=timezone.now) # timezone.now vult standaard de tijd waarin je de form opent.
     task_finished = models.BooleanField(default=True)
@@ -99,17 +99,18 @@ class Certificaten(models.Model):
 
 class Eindklanten(models.Model):
     ACCOUNTMANAGER_CHOICES = (
-        ('1', 'Yoeri Tromp'),
-        ('2', 'Nicky Slothouwer'),
-        ('3', 'Coen Berkhout jr'),
-        ('4', 'Jessica Berkhout'),
+        ('1', ''),
+        ('2', 'Yoeri Tromp'),
+        ('3', 'Nicky Slothouwer'),
+        ('4', 'Coen Berkhout jr'),
+        ('5', 'Jessica Berkhout'),
     )
     accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
     klantnaam = models.CharField(max_length=50, null=True, blank=True)
     straat_klant = models.CharField(max_length=150, null=True, blank=True)
     huisnummer_klant = models.CharField(max_length=20, null=True, blank=True)
     postcode_klant = models.CharField(max_length=10, null=True, blank=True)
-    vestigingplaats_klant = models.CharField(max_length=150, null=True, blank=True)
+    plaats_klant = models.CharField(max_length=150, null=True, blank=True)
     telefoonnummer_klant = models.CharField(max_length=17, null=True, blank=True)
     portaal_klant = models.URLField(max_length=300, null=True, blank=True)
 
@@ -142,6 +143,16 @@ class Brokers(models.Model):
 
     def __str__(self):
         return self.broker_naam
+
+
+class Vestigingplaats(models.Model):
+    soort = models.CharField(max_length=20, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    straatnaam = models.CharField(max_length=30, blank=True)
+    huisnummer = models.IntegerField(blank=True)
+    plaats = models.CharField(max_length=20, blank=True)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE)
+
 
 class Aanbiedingen(models.Model):
     ACCOUNTMANAGER_CHOICES = (

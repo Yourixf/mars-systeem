@@ -25,9 +25,15 @@ td, th {
         <th>Accountmanager:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
         <th>Straat en Huisnummer</th><td>{{ eindklant_pk.straat_klant }} {{ eindklant_pk.huisnummer_klant }}</td>
         <th>Postcode eindklant:</th><td>{{ eindklant_pk.postcode_klant }}</td></tr>
-        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant_pk.vestigingplaats_klant }}</td>
+        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant_pk.plaats_klant }}</td>
         <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td></tr>
         <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td>
+        <tr>
+            <td>
+                <a href="{% url 'eindklant_update' eindklant_pk.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                <a href="{% url 'vestiging_toevoegen' eindklant_pk.id %}" class="btn btn-primary btn-sm" role="button">Vestiging Toevoegen</a>
+            </td>
         </tr>
 </table>
 <br>
@@ -48,3 +54,4 @@ td, th {
 </html>
 
 {% endblock %}
+
