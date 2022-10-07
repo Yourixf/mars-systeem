@@ -23,9 +23,9 @@ td, th {
     <tr>
         <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
         <th>Accountmanager:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
-        <th>Straat en Huisnummer</th><td>{{ eindklant_pk.straat_klant }} {{ eindklant_pk.huisnummer_klant }}</td>
-        <th>Postcode eindklant:</th><td>{{ eindklant_pk.postcode_klant }}</td></tr>
-        <th>Vestigingplaats eindklant:</th> <td>{{ eindklant_pk.plaats_klant }}</td>
+        <th>Vestiging soort:</th><td> {{ vestiging }} </td>
+        <th>Postcode eindklant:</th><td></td></tr>
+        <th>Vestigingplaats eindklant:</th> <td></td>
         <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td></tr>
         <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td>
         <tr>

@@ -1,5 +1,4 @@
 import os
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -81,10 +80,13 @@ class OpmerkingenDeleteView(LoginRequiredMixin, DeleteView):
 @login_required(login_url='login')
 def EindklantDetail(request, pk):
     eindklant_pk = Eindklanten.objects.get(id=pk)
+    vestiging = Vestigingplaats.objects.all()
     #eindklant = Eindklanten.objects.all()
     context = {
         #'eindklant': eindklant,
         'eindklant_pk': eindklant_pk,
+        'vestiging': vestiging,
+
 
     }
     return render(request, 'eindklanten.detail.html', context)
@@ -402,13 +404,29 @@ def EindklantenPage(request):
 @login_required(login_url='login')
 def EindklantToevoegen(request):
     form = EindklantenForm(request.POST or None)
+    form2 = VestigingplaatsForm(request.POST or None)
+
+
+    #form2.fields['klant'].disabled = 'disabled'
+    #form2.fields['klant'].
+  #  form2.fields['klant'].required = False
+
+    #form2.fields['klant'].exclude = False
+    #form2.pop('klant')
+
+
     context = {
-        'form': form
+        'form': form,
+        'form2': form2
     }
     if request.method == 'POST':
         form = EindklantenForm(request.POST)
+        form2 = VestigingplaatsForm(request.POST)
+
         if form.is_valid():
             form.save()
+            form2.klant = form.klantnaam
+            form2.save()
             return redirect('eindklanten')
     else:
         return render(request, 'eindklant.toevoegen.html', context)
@@ -428,7 +446,6 @@ def EindklantenUpdaten(request, pk):
         if form.is_valid():
             form.save()
             return redirect('eindklanten')
-
     return render(request, "update.eindklant.html", {'eindklant': eindklant, 'form': form})
 
 # De Delete functie voor de eindklanten.

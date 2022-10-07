@@ -84,6 +84,19 @@ class ContractenToevoegenForm(ModelForm):
                   'Onkostenvergoeding']
 
 
+class VestigingplaatsForm(forms.ModelForm):
+    soort_vestiging = forms.CharField(max_length=20, required=False)
+    postcode = forms.CharField(max_length=10, required=False)
+    straatnaam = forms.CharField(max_length=30, required=False)
+    huisnummer = forms.IntegerField(required=False)
+    plaats = forms.CharField(max_length=20, required=False)
+
+    class Meta:
+        model = Vestigingplaats
+        fields = '__all__'
+        exclude = ['klant']
+
+
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 # Met de fields = '__all__' pakt Django alle variabele uit de model.
@@ -98,16 +111,13 @@ class EindklantenForm(forms.ModelForm):
     )
     accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     klantnaam = forms.CharField(max_length=50, required=False)
-    straat_klant = forms.CharField(max_length=150, required=False)
-    huisnummer_klant = forms.CharField(max_length=20, required=False)
-    postcode_klant = forms.CharField(max_length=10, required=False)
-    plaats_klant = forms.CharField(max_length=150, required=False)
     telefoonnummer_klant = forms.CharField(max_length=17, required=False)
     portaal_klant = forms.URLField(max_length=300, required=False)
+    #vestigingSoort = forms.ModelChoiceField(queryset=Vestigingplaats.objects.get(Vestigingplaats.soort))
     class Meta:
         model = Eindklanten
-        fields = '__all__'
-        exclude = ['opmerking_title', 'opmerking_intro', 'opmerking_body', 'opmerking_date_added']
+        fields = ['accountmanager', 'klantnaam', 'telefoonnummer_klant', 'portaal_klant',]
+        #exclude = ('straat_klant', 'plaats_klant', 'postcode_klant', 'huisnummer_klant', 'opmerking_title', 'opmerking_intro', 'opmerking_body', 'opmerking_date_added',)
 
 
 
@@ -119,16 +129,7 @@ class BrokersForm(forms.ModelForm):
         fields = '__all__'
 
 
-class VestigingplaatsForm(forms.ModelForm):
-    soort = forms.CharField(max_length=20, required=False)
-    postcode = forms.CharField(max_length=10, required=False)
-    straatnaam = forms.CharField(max_length=30, required=False)
-    huisnummer = forms.IntegerField(required=False)
-    plaats = forms.CharField(max_length=20, required=False)
-    #klant_id = forms.ForeignKey()
-    class Meta:
-        model = Vestigingplaats
-        fields = '__all__'
+
 
 # De Form om wijzigingen van de Contracten toe te voegen dit is precies de zelfde form als de ContractenToevoegen Form alleen dan voor de update.
 class ContractenUpdateForm(ModelForm):
