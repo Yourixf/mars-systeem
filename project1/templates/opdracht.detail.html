@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Aanbiedingen/datails{% endblock %}
+{% block body %}
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Details opdrachten 4-Rest</h3></div><br>
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+</head>
+
+<table>
+    <tr>
+        <th>Klantnaam</th><td>{{ opdracht.aanbieding.klant_naam }}</td>
+        <th>Medewerker</th><td>{{ opdracht.aanbieding.medewerker }}</td><tr></tr>
+        <th>Tarief</th><td>{{ opdracht.tarief_opdracht }}</td>
+        <th>Registratiedatum</th><td>{{ opdracht.date_created }}</td><tr></tr>
+        <th>Functie</th><td>{{ opdracht.aanbieding.get_functie_display }}</td>
+        <th>Fuctie aanbieding</th><td>{{ opdracht.aanbieding.functie_aanbieding }}</td><tr></tr>
+        <th>Accountmanager</th><td>{{ opdracht.aanbieding.accountmanager }}</td>
+        <th>Start datum</th><td>{{ opdracht.startdatum }}</td><tr></tr>
+        <th>Eind datum</th><td>{{ opdracht.einddatum }}</td>
+        <th>Status</th><td>{{ opdracht.get_status_opdracht_display }}</td>
+        <tr>
+            <td>
+                <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+            </td>
+        </tr>
+
+</table>
+
+</html>
+
+{% endblock %}

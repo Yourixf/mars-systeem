@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Lopende opdrachten{% endblock %}
+{% block body %}
+    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Archief opdrachten 4-Rest</h3></div>
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+{% endblock %}
+{% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- scripts voor sortable table -->
+
+    <!-- scripts voor pagination -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+     <!-- scripts voor export -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                },
+            title: 'Lopende opdrachten' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+
+<table id="basic-datatable" class="table" style="width:100%">
+        <thead>
+        <tr>
+            <th>Klantnaam</th>
+            <th>Medewerker</th>
+            <th>Functie</th>
+            <th>Startdatum</th>
+            <th>Einddatum</th>
+            <th>Tarief</th>
+            <th>Broker</th>
+            <th>Update</th>
+            <th>Detail</th>
+        </tr>
+
+        <tbody id="myTable">
+            {% for opdracht in opdrachtenLijst %}
+                <tr>
+                    <td>{{ opdracht.aanbieding.klant_naam }}</td>
+                    <td>{{ opdracht.aanbieding.medewerker }}</td>
+                    <td>{{ opdracht.aanbieding.get_functie_display }}</td>
+                    <td>{{ opdracht.startdatum }}</td>
+                    <td>{{ opdracht.einddatum }}</td>
+                    <td>{{ opdracht.tarief_opdracht }}</td>
+                    <td>{{ opdracht.aanbieding.broker }}</td>
+
+
+                    {% csrf_token %}
+                        <form><td><a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                            <input type="hidden" name="" value="{{ opdracht.id }}" />
+                            <td><a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                            <input type="hidden" name="" value="{{ opdracht.id }}" /></td>
+                        </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+
+</table>
+<br><br><br>
+{% endblock %}
+<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+
+
