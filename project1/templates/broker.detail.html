@@ -23,9 +23,9 @@ td, th {
     <tr>
         <th>Broker naam:</th><td>{{ broker.broker_naam }}</td>
         <th>Accountmanager:</th><td>{{ broker.get_accountmanager_display }}</td></tr>
-        <th>Straat en Huisnummer</th><td>{{ broker.straat_broker }} {{ broker.huisnummer_broker }}</td>
-        <th>Postcode broker:</th><td>{{ broker.postcode_broker }}</td><tr></tr>
-        <th>Vestigingplaats broker:</th> <td>{{ broker.vestigingplaats_broker }}</td>
+        <th>Vestiging soort</th><td>{{ vestiging.soort_vestiging }}</td>
+        <th>Postcode broker:</th><td>{{ vestiging.postcode }}</td><tr></tr>
+        <th>Vestigingplaats broker:</th> <td>{{ vestiging.plaats }}</td>
         <th>Telefoonnummer broker:</th><td>{{ broker.telefoonnummer_broker }}</td><tr></tr>
         <th>Portaal broker:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td>
          </tr>

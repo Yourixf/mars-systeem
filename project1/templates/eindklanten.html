@@ -54,7 +54,7 @@ $(document).ready(function() {
         <tr>
             <th>Klantnaam:</th>
             <th>Accountmanager:</th>
-            <th>Vestigingplaats klant:</th>
+            <th>Vestigingplaats:</th>
             <th>Telefoonnummer klant:</th>
             <th>Portaal klant:</th>
             <th>Update / Delete</th>
@@ -62,12 +62,12 @@ $(document).ready(function() {
         </tr>
 
         <tbody id="myTable">
-            {% for Eindklanten in eindkanten_list %}
+            {% for Eindklanten in eindklanten_list %}
                 <tr>
             <td>{{ Eindklanten.klantnaam }}</td>
-            <td>{{ Eindklanten.get_accountmanager_display }}</td>
+            <td>{{ Eindklanten.get_accountmanager_display}}</td>
 
-            <td>{{ Eindklanten.plaats_klant }}</td>
+            <td></td>
             <td>{{ Eindklanten.telefoonnummer_klant }}</td>
             <td><a href="{{ Eindklanten.portaal_klant }}" target="_blank">{{Eindklanten.portaal_klant}}</a></td>
 

@@ -23,11 +23,12 @@ td, th {
     <tr>
         <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
         <th>Accountmanager:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
-        <th>Vestiging soort:</th><td> {{ vestiging }} </td>
-        <th>Postcode eindklant:</th><td></td></tr>
-        <th>Vestigingplaats eindklant:</th> <td></td>
+        <th>Vestiging soort:</th><td> {{ vestiging.soort_vestiging }} </td>
+        <th>Postcode eindklant:</th><td>{{ vestiging.postcode }}</td></tr>
+        <th>Vestigingplaats eindklant:</th><td>{{ vestiging.plaats }}</td>
         <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td></tr>
         <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td>
+        <th>Straat:</th><td>{{ vestiging.straatnaam }}</td>
         <tr>
             <td>
                 <a href="{% url 'eindklant_update' eindklant_pk.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

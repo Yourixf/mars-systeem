@@ -95,9 +95,10 @@ urlpatterns = [
     path('opmerkingen/update/<str:pk>/', views.OpmerkingenUpdateView.as_view(), name='update_list'),
     # zoekt naar de view TodoItemDelete
     path('opmerkingen/delete/<str:pk>/', views.OpmerkingenDeleteView.as_view(), name='delete_list'),
-
+    # voor vestigingsadres
     path(r'vestiging/toevoegen/<str:pk>/', views.VestigingToevoegen, name='vestiging_toevoegen'),
-
+    #voor opdrachten
+    path(r'Lopendeopdrachten/', views.lopendeOpdrachtenPage, name='lopende_opdrachten'),
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

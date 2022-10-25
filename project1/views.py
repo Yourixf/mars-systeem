@@ -12,10 +12,10 @@ from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, \
-    CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
+    OpdrachtenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
     TaskItemUpdateForm, VestigingplaatsForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
-    Opmerkingen, Vestigingplaats
+    Opdrachten, Opmerkingen, Vestigingplaats
 
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
@@ -23,6 +23,9 @@ from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers,
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
+
+
+
 
 
 @login_required(login_url='login')
@@ -80,10 +83,17 @@ class OpmerkingenDeleteView(LoginRequiredMixin, DeleteView):
 @login_required(login_url='login')
 def EindklantDetail(request, pk):
     eindklant_pk = Eindklanten.objects.get(id=pk)
-    vestiging = Vestigingplaats.objects.all()
-    #eindklant = Eindklanten.objects.all()
+    #vestiging = Vestigingplaats.objects.get(id=pk)
+
+    #hier kijkt de code als ware of er een vestiging adres is
+    try:
+        #als er een vestiging adres is bij de klant dan is staat die info in 'vestiging'
+        vestiging = Vestigingplaats.objects.get(klant_id=eindklant_pk)
+    except:
+        #als er geen vestiging adres is bij de klant dan is de 'vestiging' variable leeg
+        vestiging = ''
+
     context = {
-        #'eindklant': eindklant,
         'eindklant_pk': eindklant_pk,
         'vestiging': vestiging,
 
@@ -96,11 +106,18 @@ def EindklantDetail(request, pk):
 @login_required(login_url='login')
 def BrokerDetail(request, pk):
     broker = Brokers.objects.get(id=pk)
-    broker_list = Brokers.objects.all()
-    context = {
 
-        'broker_list': broker_list,
+    try:
+        # als er een vestiging adres is bij de broker dan is staat die info in 'vestiging' variable
+        vestiging = Vestigingplaats.objects.get(broker_id=broker)
+    except:
+        #als er geen vestiging adres is bij de broker dan is de 'vestiging' variable leeg
+        vestiging=''
+
+    context = {
+        # 'broker_list': broker_list,
         'broker': broker,
+        'vestiging': vestiging
     }
     return render(request, 'broker.detail.html', context)
 
@@ -276,6 +293,7 @@ def Index(request):
     }
     return render(request, 'index.html', context)
 
+
 # Dit is de Medewerkers pagina  medewerkers = Medewerkers.objects.all() haalt allemedewerkers op.
 @login_required(login_url='login')
 def MedewerkersPage(request):
@@ -394,26 +412,31 @@ class ContractenUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'update.contracten.html'
     success_url = reverse_lazy('contracten.detail')
 
-# De is de overzicht pagina van de Eindklanten     eindkanten_list = Eindklanten.objects.all() haalt alle gegevens op uit de Eindklanten model.
+# De is de overzicht pagina van de Eindklanten     eindklanten_list = Eindklanten.objects.all() haalt alle gegevens op uit de Eindklanten model.
 @login_required(login_url='login')
 def EindklantenPage(request):
-    eindkanten_list = Eindklanten.objects.all()
-    return render(request, 'eindklanten.html', {'eindkanten_list': eindkanten_list, })
+    eindklanten_list = Eindklanten.objects.all()
+
+    eindklant_pk = Eindklanten.objects.filter()
+
+#    vestiging = Vestigingplaats.objects.get(klant_id=eindklanten_list)
+
+
+    vestiging = Vestigingplaats.objects.all()
+
+    context = {
+        'eindklanten_list': eindklanten_list,
+        'vestiging': vestiging,
+        'eindklant_pk': eindklant_pk,
+    }
+
+    return render(request, 'eindklanten.html', context)
 
 # De eindklant toevoegen form EindklantenToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def EindklantToevoegen(request):
     form = EindklantenForm(request.POST or None)
     form2 = VestigingplaatsForm(request.POST or None)
-
-
-    #form2.fields['klant'].disabled = 'disabled'
-    #form2.fields['klant'].
-  #  form2.fields['klant'].required = False
-
-    #form2.fields['klant'].exclude = False
-    #form2.pop('klant')
-
 
     context = {
         'form': form,
@@ -425,7 +448,7 @@ def EindklantToevoegen(request):
 
         if form.is_valid():
             form.save()
-            form2.klant = form.klantnaam
+            form2.klant = Eindklanten.pk
             form2.save()
             return redirect('eindklanten')
     else:
@@ -576,3 +599,20 @@ def ArchiefAanbiedingenPage(request):
 
     }
     return render(request, 'aanbiedingen.archief.html', context)
+
+
+@login_required(login_url='login')
+def lopendeOpdrachtenPage(request):
+    lopendeOpdrachtenList = Opdrachten.objects.filter(Q(status=1))
+
+    lopendeOpdrachten = Opdrachten.objects.all()
+
+    context = {
+        'lopendeOpdrachtenList': lopendeOpdrachtenList,
+    }
+
+    context1 = {
+        'lopendeOpdrachten':lopendeOpdrachten,
+    }
+
+    return render(request, 'lopende.opdrachten.html', context1)

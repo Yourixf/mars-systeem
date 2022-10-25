@@ -90,11 +90,13 @@ class VestigingplaatsForm(forms.ModelForm):
     straatnaam = forms.CharField(max_length=30, required=False)
     huisnummer = forms.IntegerField(required=False)
     plaats = forms.CharField(max_length=20, required=False)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE)
+    broker = models.ForeignKey(Brokers, on_delete=models.CASCADE)
 
     class Meta:
         model = Vestigingplaats
         fields = '__all__'
-        exclude = ['klant']
+        exclude = ['klant', 'broker']
 
 
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -103,11 +105,11 @@ class VestigingplaatsForm(forms.ModelForm):
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
 class EindklantenForm(forms.ModelForm):
     ACCOUNTMANAGER_CHOICES = (
-        ('0', ''),
-        ('1', 'Yoeri Tromp'),
-        ('2', 'Nicky Slothouwer'),
-        ('3', 'Coen Berkhout jr'),
-        ('4', 'Jessica Berkhout'),
+        ('1', ''),
+        ('2', 'Yoeri Tromp'),
+        ('3', 'Nicky Slothouwer'),
+        ('4', 'Coen Berkhout jr'),
+        ('5', 'Jessica Berkhout'),
     )
     accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     klantnaam = forms.CharField(max_length=50, required=False)
@@ -236,7 +238,16 @@ class AanbiedingenForm(forms.ModelForm):
         fields = '__all__'
 
 
-
+class OpdrachtenForm(forms.ModelForm):
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
+    startdatum = models.DateField(null=True)
+    einddatum = models.DateField(null=True)
+    tarief = models.FloatField(max_length=14, default=True, null=True)
+    betaalkorting = models.FloatField(max_length=14, default=True, null=True)
+    aantal_uren = models.IntegerField(blank=True)
+    aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
+    Date_created = models.DateField(null=True)
 
 
 # Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
