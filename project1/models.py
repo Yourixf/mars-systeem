@@ -78,15 +78,16 @@ STATUS_CHOICES = (
     ('5', 'Afgewezen'),
 )
 
+STATUS_OPDRACHT_CHOICES = (
+    ('1', 'Open'),
+    ('2', 'Gesloten'),
+)
 
 class Medewerkers(models.Model):
-    voornaam = models.CharField(max_length=100,
-                                blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
-    tussenvoegsel = models.CharField(max_length=6,
-                                     blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
+    voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
+    tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     achternaam = models.CharField(max_length=100, blank=True)
-    bnsnummer = models.IntegerField(null=True,
-                                    blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    bnsnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     huisnummer = models.CharField(max_length=20, blank=True)
     straat = models.CharField(max_length=150, blank=True)
     woonplaats = models.CharField(max_length=150, blank=True)
@@ -99,8 +100,7 @@ class Medewerkers(models.Model):
     opleidings_niveau = models.CharField(max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(max_length=100, blank=True)
     geboorte_datum = models.DateField(null=True, blank=True)
-    foto_medewerker = models.FileField(upload_to='images/',
-                                       default='userimg.png')  # de default foto voor de medewerkers.
+    foto_medewerker = models.FileField(upload_to='images/', default='userimg.png')  # de default foto voor de medewerkers.
     cv = models.FileField(upload_to='static/', null=True, blank=True)  # upload to upload het naar de static files
     title_cv = models.CharField(max_length=50, null=True, blank=True)
     feedback = models.FileField(upload_to='static/', null=True, blank=True)
@@ -233,15 +233,15 @@ class Aanbiedingen(models.Model):
 
 
 class Opdrachten(models.Model):
-    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
-    startdatum = models.DateField(null=True)
-    einddatum = models.DateField(null=True)
-    tarief_opdracht = models.FloatField(max_length=14, default=True, null=True)
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
+    status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
+    startdatum = models.CharField(null=True, max_length=15)
+    einddatum = models.CharField(null=True, max_length=15)
+    tarief_opdracht = models.IntegerField(max_length=14, default=True)
     opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    date_created = models.DateField(null=True)
+    date_created = models.CharField(null=True, max_length=15)
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()

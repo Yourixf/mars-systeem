@@ -77,6 +77,7 @@ $(document).ready(function() {
             <th>Status</th>
             <th>Update</th>
             <th>Detail</th>
+            <th>opdr tv</th>
         </tr>
 
         <tbody id="myTable">
@@ -93,10 +94,20 @@ $(document).ready(function() {
                     <td>{{ aanbiedingen.get_status_display }}</td>
 
                     {% csrf_token %}
-                       <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                        <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" />
-                        <td><a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                                        <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" /></td></form>
+                       <form>
+                           <td>
+                               <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                           </td>
+                           <td>
+                               <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                           </td>
+                           <td>
+                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">Opdracht</a>
+                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                           </td>
+                       </form>
                 </tr>
             {% endfor %}
         </tbody>

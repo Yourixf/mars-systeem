@@ -78,22 +78,22 @@ $(document).ready(function() {
         </tr>
 
         <tbody id="myTable">
-            {% for opdracht in lopendeOpdrachten %}
+            {% for opdracht in lopendeOpdrachtenList %}
                 <tr>
                     <td>{{ opdracht.aanbieding.klant_naam }}</td>
                     <td>{{ opdracht.aanbieding.medewerker }}</td>
                     <td>{{ opdracht.aanbieding.get_functie_display }}</td>
                     <td>{{ opdracht.startdatum }}</td>
                     <td>{{ opdracht.einddatum }}</td>
-                    <td>{{ opdracht.tarief }}</td>
+                    <td>{{ opdracht.tarief_opdracht }}</td>
                     <td>{{ opdracht.aanbieding.broker }}</td>
 
 
                     {% csrf_token %}
-                        <form><td><a href="" class="btn btn-primary btn-sm" role="button">Update</a>
-                            <input type="hidden" name="" value="" />
-                            <td><a href=""  class="btn btn-success btn-sm" role="button">View Details</a>
-                            <input type="hidden" name="" value="" /></td>
+                        <form><td><a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                            <input type="hidden" name="" value="{{ opdracht.id }}" />
+                            <td><a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                            <input type="hidden" name="" value="{{ opdracht.id }}" /></td>
                         </form>
                 </tr>
             {% endfor %}

@@ -12,10 +12,10 @@ from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, \
-    OpdrachtenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
+    OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
     TaskItemUpdateForm, VestigingplaatsForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
-    Opdrachten, Opmerkingen, Vestigingplaats
+    Opdrachten, Opmerkingen, Vestigingplaats, STATUS_OPDRACHT_CHOICES
 
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
@@ -602,17 +602,66 @@ def ArchiefAanbiedingenPage(request):
 
 
 @login_required(login_url='login')
-def lopendeOpdrachtenPage(request):
-    lopendeOpdrachtenList = Opdrachten.objects.filter(Q(status=1))
+def OpdrachtToevoegen(request, pk):
+    aanbiedingID = Aanbiedingen.objects.get(id=pk)
+    form1 = OpdrachtenToevoegenForm(request.POST or None)
 
-    lopendeOpdrachten = Opdrachten.objects.all()
+    context = {
+        'form1':form1,
+    }
+
+    if request.method == 'POST':
+        form1 = OpdrachtenToevoegenForm(request.POST)
+        if form1.is_valid():
+            form1.aanbieding = aanbiedingID
+            form1.aanbieding.save()
+            form1.save()
+            return redirect('lopende_opdrachten')
+    else:
+        return render(request, 'opdracht.toevoegen.html', context)
+
+
+
+@login_required(login_url='login')
+def lopendeOpdrachtenPage(request):
+    lopendeOpdrachtenList = Opdrachten.objects.filter(Q(status_opdracht=1))
 
     context = {
         'lopendeOpdrachtenList': lopendeOpdrachtenList,
     }
 
-    context1 = {
-        'lopendeOpdrachten':lopendeOpdrachten,
+    return render(request, 'lopende.opdrachten.html', context)
+
+
+@login_required(login_url='login')
+def archiefOpdrachtenPage(request):
+    opdrachtenLijst = Opdrachten.objects.filter(Q(status_opdracht=2))
+
+    context = {
+        'opdrachtenLijst':opdrachtenLijst,
     }
 
-    return render(request, 'lopende.opdrachten.html', context1)
+    return render(request, 'archief.opdrachten.html', context)
+
+@login_required(login_url='login')
+def OpdrachtenUpdaten(request, pk):
+    opdracht = Opdrachten.objects.get(id=pk)
+    form = OpdrachtenForm(request.POST or None, instance=opdracht)
+    if request.method == 'POST':
+        form = OpdrachtenForm(request.POST or None, instance=opdracht)
+        if form.is_valid():
+            form.save()
+            return redirect('lopende_opdrachten')
+
+
+    return render(request, 'opdracht.update.html', {'opdracht':opdracht, 'form':form})
+
+@login_required(login_url='login')
+def OpdrachtenDetail(request, pk):
+    opdracht = Opdrachten.objects.get(id=pk)
+    opdracht_list = Opdrachten.objects.all()
+    context = {
+        'opdracht': opdracht,
+        'opdracht_list': opdracht_list
+    }
+    return render(request, 'opdracht.detail.html', context)

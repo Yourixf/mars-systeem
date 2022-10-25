@@ -239,17 +239,30 @@ class AanbiedingenForm(forms.ModelForm):
 
 
 class OpdrachtenForm(forms.ModelForm):
+    #aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
+    status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
+    startdatum = forms.CharField(required=False)
+    einddatum = forms.CharField(required=False)
+    tarief_opdracht = forms.IntegerField(required=False)
+    opdracht_betaalkorting = forms.FloatField(required=False)
+    aantal_uren = forms.IntegerField(required=False)
+    opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    date_created = forms.CharField(required=False)
+
+    class Meta:
+        model = Opdrachten
+        fields = '__all__'
+
+class OpdrachtenToevoegenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
-    startdatum = models.DateField(null=True)
-    einddatum = models.DateField(null=True)
-    tarief = models.FloatField(max_length=14, default=True, null=True)
-    betaalkorting = models.FloatField(max_length=14, default=True, null=True)
-    aantal_uren = models.IntegerField(blank=True)
-    aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    Date_created = models.DateField(null=True)
-
-
+    #status = forms.CharField(required=False)
+    #opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    class Meta:
+        model = Opdrachten
+        #fields = ['aanbieding','aantal_uren', 'startdatum', 'einddatum', 'tarief_opdracht', 'opdracht_betaalkorting']
+        fields = '__all__'
+        exclude = ['aanbieding','status_opdracht', 'opdracht_aangemaakt_door', 'date_created',]
 # Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class CvUploadForm(ModelForm):
     class Meta:
