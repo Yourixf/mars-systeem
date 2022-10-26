@@ -77,7 +77,7 @@ $(document).ready(function() {
             <th>Status</th>
             <th>Update</th>
             <th>Detail</th>
-            <th>opdr tv</th>
+            <th>opdracht</th>
         </tr>
 
         <tbody id="myTable">
@@ -104,7 +104,7 @@ $(document).ready(function() {
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                            </td>
                            <td>
-                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">Opdracht</a>
+                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">Opdr maken</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                            </td>
                        </form>

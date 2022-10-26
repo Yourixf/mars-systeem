@@ -29,8 +29,10 @@ td, th {
         <th>Fuctie aanbieding</th><td>{{ opdracht.aanbieding.functie_aanbieding }}</td><tr></tr>
         <th>Accountmanager</th><td>{{ opdracht.aanbieding.accountmanager }}</td>
         <th>Start datum</th><td>{{ opdracht.startdatum }}</td><tr></tr>
-        <th>Eind datum</th><td>{{ opdracht.einddatum }}</td>
         <th>Status</th><td>{{ opdracht.get_status_opdracht_display }}</td>
+        <th>Eind datum</th><td>{{ opdracht.einddatum }}</td><tr></tr>
+        <th>Aantal uur</th><td>{{ opdracht.aantal_uren }}</td>
+        <th>Aangemaakt door</th><td>{{ opdracht.get_opdracht_aangemaakt_door_display }}</td>
         <tr>
             <td>
                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

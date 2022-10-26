@@ -3,7 +3,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, dateformat
 
 # Dit is de Model template hier staan bepaalde classes in en daaronder staan variable onder neerzetten die je vervolgens in functies weer naar boven kan halen.
 # Meest gebruikte zijn (models.)
@@ -76,6 +76,7 @@ STATUS_CHOICES = (
     ('3', 'Intake'),
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
+    ('6', 'Opdracht'),
 )
 
 STATUS_OPDRACHT_CHOICES = (
@@ -141,8 +142,7 @@ class Opmerkingen(models.Model):
 
 
 class Contracten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers,
-                                    on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is het contract gelinkt met de medewerker.
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is het contract gelinkt met de medewerker.
     contract_uren = models.IntegerField(null=True)
     Startdatum = models.DateField(null=True)
     Einddatum = models.DateField(null=True)
@@ -153,8 +153,7 @@ class Contracten(models.Model):
 
 
 class Certificaten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers,
-                                    on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is de certificaat gelinkt met de medewerker.
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is de certificaat gelinkt met de medewerker.
     naam_certificaat = models.CharField(max_length=100)
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
@@ -237,11 +236,11 @@ class Opdrachten(models.Model):
     status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
     startdatum = models.CharField(null=True, max_length=15)
     einddatum = models.CharField(null=True, max_length=15)
-    tarief_opdracht = models.IntegerField(max_length=14, default=True)
+    tarief_opdracht = models.IntegerField(default=True)
     opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    date_created = models.CharField(null=True, max_length=15)
+    date_created = models.CharField(null=True, max_length=15, default=dateformat.format(timezone.now(), 'd-m-o'))
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()

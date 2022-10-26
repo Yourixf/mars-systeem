@@ -11,7 +11,7 @@ from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
 from project1 import forms
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
-    BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, \
+    BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, AanbiedingUpdatenForm, \
     OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
     TaskItemUpdateForm, VestigingplaatsForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
@@ -435,21 +435,24 @@ def EindklantenPage(request):
 # De eindklant toevoegen form EindklantenToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def EindklantToevoegen(request):
-    form = EindklantenForm(request.POST or None)
-    form2 = VestigingplaatsForm(request.POST or None)
+    klant_form = EindklantenForm(request.POST or None)
+    vestiging_form = VestigingplaatsForm(request.POST or None)
 
     context = {
-        'form': form,
-        'form2': form2
+        'klant_form': klant_form,
+        'vestiging_form': vestiging_form,
     }
     if request.method == 'POST':
-        form = EindklantenForm(request.POST)
-        form2 = VestigingplaatsForm(request.POST)
+        klant_form = EindklantenForm(request.POST, request.FILES)
+        vestiging_form = VestigingplaatsForm(request.POST, request.FILES)
 
-        if form.is_valid():
-            form.save()
-            form2.klant = Eindklanten.pk
-            form2.save()
+        if klant_form.is_valid():
+            klant = klant_form.save()
+            vestiging = vestiging_form.save()
+            klant.save()
+            vestiging.klant = klant
+            vestiging.save()
+
             return redirect('eindklanten')
     else:
         return render(request, 'eindklant.toevoegen.html', context)
@@ -567,14 +570,20 @@ def AanbiedingDelete(request, id):
 @login_required(login_url='login')
 def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
-    form = AanbiedingenForm(request.POST or None, instance=aanbieding)
+    form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
+
+    context = {
+        'aanbieding':aanbieding,
+        'form':form,
+    }
+
     if request.method == 'POST':
-        form = AanbiedingenForm(request.POST or None, instance=aanbieding)
+        form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
         if form.is_valid():
             form.save()
             return redirect('aanbiedingen')
 
-    return render(request, "aanbieding.update.html", {'aanbieding': aanbieding, 'form': form})
+    return render(request, "aanbieding.update.html", context)
 
 
 # Dit is de openstaande aanbiedingen deze zijn gefilterd op status Open, Geselecteerd, of Intake. Dan komen ze bij mee open aanbiedingen te staan op deze pagina.
@@ -602,21 +611,50 @@ def ArchiefAanbiedingenPage(request):
 
 
 @login_required(login_url='login')
-def OpdrachtToevoegen(request, pk):
-    aanbiedingID = Aanbiedingen.objects.get(id=pk)
-    form1 = OpdrachtenToevoegenForm(request.POST or None)
-
+def AanbiedingMetOpdracht(request):
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=6))
     context = {
-        'form1':form1,
+        'aanbieding_list': aanbieding_list,
     }
 
+    return render(request, 'aanbiedingen.met.opdracht.html', context)
+@login_required(login_url='login')
+def OpdrachtToevoegen(request, pk):
+    #hier pakt het script de primary key van de aanbieding
+    aanbiedingID = Aanbiedingen.objects.get(id=pk)
+    #hier pakt het script de opdracht toevoegen form
+    opdracht_form = OpdrachtenToevoegenForm(request.POST or None)
+
+    context = {
+        'opdracht_form':opdracht_form,
+    }
+    #als de form is ingevuld en verstuurd word doet hij het volgende
     if request.method == 'POST':
-        form1 = OpdrachtenToevoegenForm(request.POST)
-        if form1.is_valid():
-            form1.aanbieding = aanbiedingID
-            form1.aanbieding.save()
-            form1.save()
+        #hiet pakt hij nog is de opdracht toevoegen form en de ingevulde data
+        opdracht_form = OpdrachtenToevoegenForm(request.POST, request.FILES)
+        #hier kijkt het script of de form valid is
+        if opdracht_form.is_valid():
+            #hier maak ik een opdracht variabele aan om de data te kunnen manipuleren
+            opdracht = opdracht_form.save()
+            #hier maak ik de PK van een aanbieding de FK van de opdracht aanbieding_id
+            opdracht.aanbieding = aanbiedingID
+            #hier maak ik de opdracht status 1 zodat het bij de lopende opdrachten word gezet
+            opdracht.status_opdracht = '1'
+            #hier pak ik de data van de aanbieding en zet ik in de opdracht tabel
+            opdracht.opdracht_aangemaakt_door = aanbiedingID.aangemaakt_door
+            #hier sla ik de form op
+            opdracht.save()
+            #hier maak ik de status van de aanbieding 'Opdracht'
+            aanbiedingID.status = '6'
+            #hier sla ik de status op
+            aanbiedingID.save()
+            #hier stuurt de code je door naar de lopende opdrachten pagina
             return redirect('lopende_opdrachten')
+        #dit gebeurt als de form niet valid is
+        else:
+            #hier word de gebruiker doorgestuurd naar de form
+            return render(request, 'opdracht.toevoegen.html', context)
+    #als er niet ge "POST" word stuurt hij je naar de form
     else:
         return render(request, 'opdracht.toevoegen.html', context)
 

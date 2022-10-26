@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Lopende opdrachten{% endblock %}
+{% block title %}Aanbiedingen met opdracht{% endblock %}
 {% block body %}
-    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Lopende opdrachten 4-Rest</h3></div>
+    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Aanbiedingen met opdracht 4-Rest</h3></div><br>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
 table {
+
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -47,9 +48,9 @@ $(document).ready(function() {
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
-            title: 'Lopende opdrachten' +
+            title: 'Aanbiedingen met opdracht' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
@@ -68,34 +69,38 @@ $(document).ready(function() {
         <tr>
             <th>Klantnaam</th>
             <th>Medewerker</th>
-            <th>Functie</th>
-            <th>Startdatum</th>
-            <th>Einddatum</th>
             <th>Tarief</th>
+            <th>Registratiedatum</th>
+            <th>Laatste Update</th>
             <th>Broker</th>
+            <th>Fuctie aanbieding</th>
+            <th>Betaalkorting</th>
+            <th>Status</th>
             <th>Update</th>
-            <th>Detail</th>
+            <th>Details</th>
         </tr>
 
         <tbody id="myTable">
-            {% for opdracht in lopendeOpdrachtenList %}
-                <tr>
-                    <td>{{ opdracht.aanbieding.klant_naam }}</td>
-                    <td>{{ opdracht.aanbieding.medewerker }}</td>
-                    <td>{{ opdracht.aanbieding.get_functie_display }}</td>
-                    <td>{{ opdracht.startdatum }}</td>
-                    <td>{{ opdracht.einddatum }}</td>
-                    <td>{{ opdracht.tarief_opdracht }}</td>
-                    <td>{{ opdracht.aanbieding.broker }}</td>
+            {% for aanbiedingen in aanbieding_list %}
+            <tr>
+                <td>{{ aanbiedingen.klant_naam }}</td>
+                <td>{{ aanbiedingen.medewerker }}</td>
+                <td>{{ aanbiedingen.tarief }}</td>
+                <td>{{ aanbiedingen.registratie }}</td>
+                <td>{{ aanbiedingen.laatste_update }}</td>
+                <td>{{ aanbiedingen.broker }}</td>
+                <td>{{ aanbiedingen.functie_aanbieding }}</td>
+                <td>{{ aanbiedingen.betaalkorting }}</td>
+                <td>{{ aanbiedingen.get_status_display }}</td>
 
 
-                    {% csrf_token %}
-                        <form><td><a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                            <input type="hidden" name="" value="{{ opdracht.id }}" />
-                            <td><a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                            <input type="hidden" name="" value="{{ opdracht.id }}" /></td>
-                        </form>
-                </tr>
+                {% csrf_token %}
+                <form><td><a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                    <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
+                <td><a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                    <input type="hidden" name="medewerker_id" value="{{ aanbiedingen.id }}" /></td></form>
+
+            </tr>
             {% endfor %}
         </tbody>
 
@@ -116,5 +121,3 @@ $(document).ready(function(){
 <br><br><br>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-
-

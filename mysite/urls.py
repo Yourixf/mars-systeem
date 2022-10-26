@@ -75,6 +75,8 @@ urlpatterns = [
     path(r'aanbieding/delete/<str:id>/', views.ContractenDelete, name='aanbieding_delete'),
     # zoekt naar de view aan archief aanbiedingen page
     path(r'archief/aanbiedingen_page/', views.ArchiefAanbiedingenPage, name='archief_aanbiedingen'),
+    # zoekt naar de view aanbieding met opdracht
+    path(r'opdracht/aanbieding/', views.AanbiedingMetOpdracht, name='opdracht_aanbieding'),
     # zoekt naar de view Broker detail
     path(r'broker/<str:pk>/', views.BrokerDetail, name='broker_detail'),
     # zoekt naar de view eindklant detail

@@ -219,27 +219,52 @@ STATUS_CHOICES = (
     ('3', 'Intake'),
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
+    ('6', 'Opdracht')
 )
+medewerkers_list = []
+medewerkers = forms.ModelChoiceField(queryset=Medewerkers.objects.all())
+
+medewerkers_list.append(medewerkers)
+
 class AanbiedingenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    registratie = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    laatste_update = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    tarief = forms.DecimalField(initial=00.00, required=False)
-    betaalkorting = forms.DecimalField(initial=00.00, required=False)
-    medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
+    registratie = forms.CharField(required=False)
+    laatste_update = forms.CharField(required=False)
     functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
     functie_aanbieding = forms.CharField(required=False)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
     klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
     broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
     accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
+    tarief = forms.DecimalField(initial=00.00, required=False)
+    betaalkorting = forms.DecimalField(initial=00.00, required=False)
+    medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
+
+    class Meta:
+        model = Aanbiedingen
+        fields = '__all__'
+
+
+class AanbiedingUpdatenForm(forms.ModelForm):
+    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    registratie = forms.CharField(required=False)
+    laatste_update = forms.CharField(required=False)
+    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
+    functie_aanbieding = forms.CharField(required=False)
+    klant_naam = forms.CharField(required=False)
+    broker = forms.CharField(required=False)
+    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
+    tarief = forms.DecimalField(initial=00.00, required=False)
+    betaalkorting = forms.DecimalField(initial=00.00, required=False)
+    medewerker = forms.CharField(required=False)
+
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
 
 
 class OpdrachtenForm(forms.ModelForm):
-    #aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
     startdatum = forms.CharField(required=False)
@@ -256,13 +281,10 @@ class OpdrachtenForm(forms.ModelForm):
 
 class OpdrachtenToevoegenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
-    #status = forms.CharField(required=False)
-    #opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     class Meta:
         model = Opdrachten
-        #fields = ['aanbieding','aantal_uren', 'startdatum', 'einddatum', 'tarief_opdracht', 'opdracht_betaalkorting']
         fields = '__all__'
-        exclude = ['aanbieding','status_opdracht', 'opdracht_aangemaakt_door', 'date_created',]
+        exclude = ['aanbieding', 'status_opdracht', 'opdracht_aangemaakt_door', 'date_created',]
 # Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class CvUploadForm(ModelForm):
     class Meta:

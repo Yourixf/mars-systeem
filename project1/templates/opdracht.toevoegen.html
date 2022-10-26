@@ -19,8 +19,7 @@
             <div style="width: 25%" class="center-block">
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form1|crispy }}
-                {{ form2|crispy }}
+                {{ opdracht_form|crispy }}
             <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
             <input class="btn btn-primary" type="submit" name="next">
             </form>
