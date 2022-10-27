@@ -299,7 +299,11 @@ def Index(request):
 @login_required(login_url='login')
 def MedewerkersPage(request):
     medewerkers = Medewerkers.objects.all()
-    return render(request, 'medewerkers.html', {'medewerkers': medewerkers})
+
+    context = {
+        'medewerkers':medewerkers,
+    }
+    return render(request, 'medewerkers.html', context)
 
 # De Medewerkerstoevoegen form uit de Forms.py
 @login_required(login_url='login')
@@ -546,15 +550,15 @@ def CertificatenToevoegen(request, pk):
 # De aanbiedingen toevoegen form AanbiedingenToevoegenForm uit de forms.py
 @login_required(login_url='login')
 def AanbiedingToevoegen(request):
-    form = AanbiedingenForm(request.POST or None)
+    aanbieding_form = AanbiedingenForm(request.POST or None)
     context = {
-        'form': form
+        'aanbieding_form': aanbieding_form
     }
     if request.method == 'POST':
-        form = AanbiedingenForm(request.POST, request.FILES)
+        aanbieding_form = AanbiedingenForm(request.POST, request.FILES)
         # NO VALID FUNCTIE INDOUWEN
-        if form.is_valid():
-            form.save()
+        if aanbieding_form.is_valid():
+            aanbieding_form.save()
             return redirect('aanbiedingen')
     else:
         return render(request, 'aanbiedingen.toevoegen.html', context)
@@ -614,6 +618,7 @@ def ArchiefAanbiedingenPage(request):
 @login_required(login_url='login')
 def AanbiedingMetOpdracht(request):
     aanbieding_list = Aanbiedingen.objects.filter(Q(status=6))
+    aanbieding_list.all()
     context = {
         'aanbieding_list': aanbieding_list,
     }
@@ -676,7 +681,7 @@ def lopendeOpdrachtenPage(request):
 def aflopendeOpdrachtenPage(request):
     datum_nu = date.today()
     eind_datum = datum_nu + timedelta(days=31)
-    aflopendeOpdrachten = Opdrachten.objects.exclude(einddatum__range=[datum_nu, eind_datum])
+    aflopendeOpdrachten = Opdrachten.objects.filter(einddatum__range=[datum_nu, eind_datum])
 
     context = {
         'aflopendeOpdrachten':aflopendeOpdrachten,

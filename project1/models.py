@@ -76,7 +76,7 @@ STATUS_CHOICES = (
     ('3', 'Intake'),
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
-    ('6', 'Opdracht'),
+
 )
 
 STATUS_OPDRACHT_CHOICES = (
@@ -109,6 +109,7 @@ class Medewerkers(models.Model):
     documenten = models.FileField(upload_to='static/', null=True, blank=True)
     title_documenten = models.CharField(max_length=50, null=True, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
+    status = models.CharField(max_length=50, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={

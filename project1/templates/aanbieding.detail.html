@@ -27,10 +27,11 @@ td, th {
         <th>Registratiedatum</th><td>{{ aanbieding.registratie }}</td><tr></tr>
         <th>Functie</th> <td>{{ aanbieding.get_functie_display }}</td>
         <th>Fuctie aanbieding</th><td>{{ aanbieding.functie_aanbieding }}</td><tr></tr>
-        <th>Accountmanager</th><td>{{ aanbieding.get_accountmanager_display }}</td>
+        <th>4-Rest contactpersoon</th><td>{{ aanbieding.get_accountmanager_display }}</td>
         <th>Laatste Update</th><td>{{ aanbieding.laatste_update }}</td><tr></tr>
         <th>Betaalkorting</th><td>{{ aanbieding.betaalkorting }}</td>
-        <th>Status</th><td>{{ aanbieding.get_status_display }}</td>
+        <th>Status</th><td>{{ aanbieding.get_status_display }}</td><tr></tr>
+        <th>Broker</th><td>{{ aanbieding.broker }}</td>
         <tr>
             <td>
                 <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

@@ -27,12 +27,13 @@ td, th {
         <th>Registratiedatum</th><td>{{ opdracht.date_created }}</td><tr></tr>
         <th>Functie</th><td>{{ opdracht.aanbieding.get_functie_display }}</td>
         <th>Fuctie aanbieding</th><td>{{ opdracht.aanbieding.functie_aanbieding }}</td><tr></tr>
-        <th>Accountmanager</th><td>{{ opdracht.aanbieding.accountmanager }}</td>
+        <th>4-Rest contactpersoon</th><td>{{ opdracht.aanbieding.get_accountmanager_display }}</td>
         <th>Start datum</th><td>{{ opdracht.startdatum }}</td><tr></tr>
         <th>Status</th><td>{{ opdracht.get_status_opdracht_display }}</td>
         <th>Eind datum</th><td>{{ opdracht.einddatum }}</td><tr></tr>
         <th>Aantal uur</th><td>{{ opdracht.aantal_uren }}</td>
-        <th>Aangemaakt door</th><td>{{ opdracht.get_opdracht_aangemaakt_door_display }}</td>
+        <th>Aangemaakt door</th><td>{{ opdracht.get_opdracht_aangemaakt_door_display }}</td><tr></tr>
+        <th>Broker</th><td>{{ opdracht.aanbieding.broker }}</td>
         <tr>
             <td>
                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

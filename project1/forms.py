@@ -56,14 +56,14 @@ class MedewerkersForm(forms.ModelForm):
     email = forms.EmailField(max_length=254, required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
     icenummer = forms.IntegerField(required=False)
-    foto_medewerker = forms.FileField(required=False)
+    #foto_medewerker = forms.FileField(required=False)
     zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES, required=False)
     opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES, required=False)
     lease_auto = forms.ChoiceField(choices=LEASE_AUTO_CHOICES, required=False)
     class Meta:
         model = Medewerkers
         fields = '__all__'
-        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten')
+        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten', 'foto_medewerker')
 
 
 
@@ -219,12 +219,7 @@ STATUS_CHOICES = (
     ('3', 'Intake'),
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
-    ('6', 'Opdracht')
 )
-medewerkers_list = []
-medewerkers = forms.ModelChoiceField(queryset=Medewerkers.objects.all())
-
-medewerkers_list.append(medewerkers)
 
 class AanbiedingenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
