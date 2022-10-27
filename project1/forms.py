@@ -267,13 +267,13 @@ class AanbiedingUpdatenForm(forms.ModelForm):
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
-    startdatum = forms.CharField(required=False)
-    einddatum = forms.CharField(required=False)
+    startdatum = forms.DateField(required=False)
+    einddatum = forms.DateField(required=False)
     tarief_opdracht = forms.IntegerField(required=False)
     opdracht_betaalkorting = forms.FloatField(required=False)
     aantal_uren = forms.IntegerField(required=False)
     opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    date_created = forms.CharField(required=False)
+    date_created = forms.DateField(required=False)
 
     class Meta:
         model = Opdrachten

@@ -234,13 +234,13 @@ class Aanbiedingen(models.Model):
 class Opdrachten(models.Model):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
     status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
-    startdatum = models.CharField(null=True, max_length=15)
-    einddatum = models.CharField(null=True, max_length=15)
+    startdatum = models.DateField(null=True)
+    einddatum = models.DateField(null=True)
     tarief_opdracht = models.IntegerField(default=True)
     opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    date_created = models.CharField(null=True, max_length=15, default=dateformat.format(timezone.now(), 'd-m-o'))
+    date_created = models.DateField(null=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()

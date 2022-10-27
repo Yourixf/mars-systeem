@@ -101,6 +101,8 @@ urlpatterns = [
     path(r'vestiging/toevoegen/<str:pk>/', views.VestigingToevoegen, name='vestiging_toevoegen'),
     #voor lopende opdrachten
     path(r'opdrachten/lopende', views.lopendeOpdrachtenPage, name='lopende_opdrachten'),
+    #voor opdrachten die aflopen
+    path(r'opdrachten/aflopende', views.aflopendeOpdrachtenPage, name='aflopende_opdrachten'),
     #voor archief opdrachten
     path(r'opdrachten/archief', views.archiefOpdrachtenPage, name='archief_opdrachten'),
     #voor opdrachten updaten
@@ -109,6 +111,7 @@ urlpatterns = [
     path(r'opdrachten/detail/<str:pk>/', views.OpdrachtenDetail, name='detail_opdracht'),
     #voor opdrachten maken
     path(r'opdracht/toevoegen/<str:pk>/', views.OpdrachtToevoegen, name='toevoegen_opdracht'),
+
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

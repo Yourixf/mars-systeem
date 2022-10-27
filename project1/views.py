@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
 from project1 import forms
+from datetime import *
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, AanbiedingUpdatenForm, \
     OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
@@ -670,6 +671,18 @@ def lopendeOpdrachtenPage(request):
 
     return render(request, 'lopende.opdrachten.html', context)
 
+
+@login_required(login_url='login')
+def aflopendeOpdrachtenPage(request):
+    datum_nu = date.today()
+    eind_datum = datum_nu + timedelta(days=31)
+    aflopendeOpdrachten = Opdrachten.objects.exclude(einddatum__range=[datum_nu, eind_datum])
+
+    context = {
+        'aflopendeOpdrachten':aflopendeOpdrachten,
+    }
+
+    return render(request, 'aflopende.opdrachten.html', context)
 
 @login_required(login_url='login')
 def archiefOpdrachtenPage(request):
