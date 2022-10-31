@@ -68,21 +68,21 @@ $(document).ready(function() {
         <tr>
             <th>Klantnaam</th>
             <th>Medewerker</th>
-            <th>Functie</th>
+            <th>Functie aanbieding</th>
             <th>Startdatum</th>
             <th>Einddatum</th>
             <th>Tarief</th>
             <th>Broker</th>
-            <th>Update</th>
+            <th>Update / Delete</th>
             <th>Detail</th>
         </tr>
 
         <tbody id="myTable">
             {% for opdracht in lopendeOpdrachtenList %}
                 <tr>
-                    <td>{{ opdracht.aanbieding.klant_naam }}</td>
+                    <td>{{ opdracht.aanbieding.klant }}</td>
                     <td>{{ opdracht.aanbieding.medewerker }}</td>
-                    <td>{{ opdracht.aanbieding.get_functie_display }}</td>
+                    <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
                     <td>{{ opdracht.startdatum }}</td>
                     <td>{{ opdracht.einddatum }}</td>
                     <td>{{ opdracht.tarief_opdracht }}</td>
@@ -90,10 +90,17 @@ $(document).ready(function() {
 
 
                     {% csrf_token %}
-                        <form><td><a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                            <input type="hidden" name="" value="{{ opdracht.id }}" />
-                            <td><a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                            <input type="hidden" name="" value="{{ opdracht.id }}" /></td>
+                        <form action="{% url 'delete_opdracht' opdracht.id %}">
+                            <td>
+                                <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <input type="hidden" name="" value="{{ opdracht.id }}" />
+                                <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
+                            </td>
+                            <td>
+                                <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <input type="hidden" name="" value="{{ opdracht.id }}" />
+                            </td>
                         </form>
                 </tr>
             {% endfor %}

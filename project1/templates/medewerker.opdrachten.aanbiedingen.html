@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Lopende opdrachten{% endblock %}
+{% block title %}Medewerker opdr aanb{% endblock %}
 {% block body %}
-    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Archief opdrachten 4-Rest</h3></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Medewerker Opdrachten en Aanbiedingen 4-Rest</h3></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
-table {
+table1, table2 {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -36,9 +36,11 @@ td, th {
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
 
 
+<h3>Medewerker aanbiedingen</h3>
+
 <script>
 $(document).ready(function() {
-    $("#basic-datatable").DataTable({
+    $("#basic-datatable1").DataTable({
       pageLength: 10,
       lengthChange: false,
       bInfo : false,
@@ -47,9 +49,9 @@ $(document).ready(function() {
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
-            title: 'Archief opdrachten' +
+            title: 'Medewerker aanbiedingen' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
@@ -63,7 +65,98 @@ $(document).ready(function() {
 </script>
 
 
-<table id="basic-datatable" class="table" style="width:100%">
+<table id="basic-datatable1" class="table1" style="width:100%">
+        <thead>
+        <tr>
+            <th>Klantnaam</th>
+            <th>Medewerker</th>
+            <th>Tarief</th>
+            <th>Registratiedatum</th>
+            <th>Laatste Update</th>
+            <th>Broker</th>
+            <th>Fuctie aanbieding</th>
+            <th>Status</th>
+            <th>Update / Delete</th>
+            <th>Detail</th>
+        </tr>
+
+        <tbody id="myTable">
+            {% for aanbiedingen in aanbieding_list %}
+                <tr>
+                    <td>{{ aanbiedingen.klant.klantnaam }}</td>
+                    <td>{{ aanbiedingen.medewerker }}</td>
+                    <td>{{ aanbiedingen.tarief }}</td>
+                    <td>{{ aanbiedingen.registratie }}</td>
+                    <td>{{ aanbiedingen.laatste_update }}</td>
+                    <td>{{ aanbiedingen.broker.broker_naam }}</td>
+                    <td>{{ aanbiedingen.functie_aanbieding }}</td>
+                    <td>{{ aanbiedingen.get_status_display }}</td>
+
+                    {% csrf_token %}
+                       <form action="{% url 'aanbieding_delete' aanbiedingen.id %}" style="display: inline;">
+                           <td>
+                               <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                               <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
+                               <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
+                           </td>
+                           <td>
+                               <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                           </td>
+                       </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+
+</table>
+<br><br><br>
+
+
+<h3>Medewerker opdrachten</h3>
+
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                },
+            title: 'Medewerker opdrachten' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+
+<table id="basic-datatable" class="table2" style="width:100%">
         <thead>
         <tr>
             <th>Klantnaam</th>
@@ -78,7 +171,7 @@ $(document).ready(function() {
         </tr>
 
         <tbody id="myTable">
-            {% for opdracht in opdrachtenLijst %}
+            {% for opdracht in opdracht_list %}
                 <tr>
                     <td>{{ opdracht.aanbieding.klant }}</td>
                     <td>{{ opdracht.aanbieding.medewerker }}</td>
@@ -122,6 +215,3 @@ $(document).ready(function(){
 </table>
 <br><br><br>
 {% endblock %}
-<input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-
-

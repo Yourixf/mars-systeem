@@ -1,8 +1,8 @@
 <!-- laad het pad naar de static file -->
 {% extends 'base.html' %}
-{% block title %}4-Rest/Medewerkers{% endblock %}
+{% block title %}Leegloop Medewerkers{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Medewerkers 4-Rest</h3><a href="{% url 'medewerker_toevoegen' %}" class="btn btn-success" role="button"><h5>Medewerker Toevoegen</h5></a></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Leegloop Medewerkers 4-Rest</h3><a href="{% url 'medewerker_toevoegen' %}" class="btn btn-success" role="button"><h5>Medewerker Toevoegen</h5></a></div>
 
 {% if medewerkers %}
 <style>
@@ -53,7 +53,7 @@ $(document).ready(function() {
             <th>Status:</th>
             <th>Woonplaats:</th>
             <th>Straat:</th>
-            <th>E-mail:</th>
+            <th>Opdracht / Aanbiedingen</th>
             <th>Update / Delete</th>
             <th>Detail</th>
         </tr>
@@ -66,15 +66,25 @@ $(document).ready(function() {
                     <td>{{ medewerker.get_status_display }}</td>
                     <td>{{ medewerker.woonplaats }}</td>
                     <td>{{ medewerker.straat }}</td>
-                    <td>{{ medewerker.email }}</td>
+
                      <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
-                     {% csrf_token %}
-                     <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
-                         <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                         <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
-                     <td><a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" /></td></form>
+                         {% csrf_token %}
+                         <td>
+                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Opdracht / aanbiedingen</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td>
+                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
+                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+
+                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td>
+                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                     </form>
             {% endfor %}
                 </tr>
 

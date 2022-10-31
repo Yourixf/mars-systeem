@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Aanbiedingen/datails{% endblock %}
+{% block title %}Opdracht/datails{% endblock %}
 {% block body %}
 <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Details opdrachten 4-Rest</h3></div><br>
 <html lang="">
@@ -21,7 +21,7 @@ td, th {
 
 <table>
     <tr>
-        <th>Klantnaam</th><td>{{ opdracht.aanbieding.klant_naam }}</td>
+        <th>Klantnaam</th><td>{{ opdracht.aanbieding.klant }}</td>
         <th>Medewerker</th><td>{{ opdracht.aanbieding.medewerker }}</td><tr></tr>
         <th>Tarief</th><td>{{ opdracht.tarief_opdracht }}</td>
         <th>Registratiedatum</th><td>{{ opdracht.date_created }}</td><tr></tr>

@@ -52,19 +52,22 @@ OPLEIDINGNIVEAU_CHOICES = (
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 class MedewerkersForm(forms.ModelForm):
     bnsnummer = forms.IntegerField(required=False)
-    geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
+    #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     email = forms.EmailField(max_length=254, required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
     icenummer = forms.IntegerField(required=False)
     #foto_medewerker = forms.FileField(required=False)
-    zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES, required=False)
-    opleidings_niveau = forms.ChoiceField(choices=OPLEIDINGNIVEAU_CHOICES, required=False)
-    lease_auto = forms.ChoiceField(choices=LEASE_AUTO_CHOICES, required=False)
+
     class Meta:
         model = Medewerkers
         fields = '__all__'
         exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten', 'foto_medewerker')
 
+        widgets = {
+            'geboorte_datum': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type':'date'}),
+        }
 
 
 # Dit is de Form om Contracten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -90,8 +93,8 @@ class VestigingplaatsForm(forms.ModelForm):
     straatnaam = forms.CharField(max_length=30, required=False)
     huisnummer = forms.IntegerField(required=False)
     plaats = forms.CharField(max_length=20, required=False)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE)
-    broker = models.ForeignKey(Brokers, on_delete=models.CASCADE)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
 
     class Meta:
         model = Vestigingplaats
@@ -104,14 +107,7 @@ class VestigingplaatsForm(forms.ModelForm):
 # Met de fields = '__all__' pakt Django alle variabele uit de model.
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
 class EindklantenForm(forms.ModelForm):
-    ACCOUNTMANAGER_CHOICES = (
-        ('1', ''),
-        ('2', 'Yoeri Tromp'),
-        ('3', 'Nicky Slothouwer'),
-        ('4', 'Coen Berkhout jr'),
-        ('5', 'Jessica Berkhout'),
-    )
-    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+
     klantnaam = forms.CharField(max_length=50, required=False)
     telefoonnummer_klant = forms.CharField(max_length=17, required=False)
     portaal_klant = forms.URLField(max_length=300, required=False)
@@ -213,7 +209,7 @@ FUNCTIE_CHOICES = (
     ('96', 'Packager'),
 
 )
-STATUS_CHOICES = (
+STATUS_CHOICES1 = (
     ('1', 'Open'),
     ('2', 'Geselecteerd'),
     ('3', 'Intake'),
@@ -221,65 +217,108 @@ STATUS_CHOICES = (
     ('5', 'Afgewezen'),
 )
 
+STATUS_CHOICES2 = (
+    ('1', 'Open'),
+    ('2', 'Geselecteerd'),
+    ('3', 'Intake'),
+    ('4', 'Geplaatst'),
+    ('5', 'Afgewezen'),
+    ('6', 'Opdracht'),
+)
+
 class AanbiedingenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    registratie = forms.CharField(required=False)
-    laatste_update = forms.CharField(required=False)
+    #registratie = forms.CharField(required=False)
+    #laatste_update = forms.CharField(required=False)
     functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
     functie_aanbieding = forms.CharField(required=False)
-    klant_naam = forms.ModelChoiceField(queryset=Eindklanten.objects.all(), required=False)
-    broker = forms.ModelChoiceField(queryset=Brokers.objects.all(), blank=True, required=False)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
     accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES2)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
-    medewerker = forms.ModelChoiceField(queryset=Medewerkers.objects.all(), required=False)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
 
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
 
+        widgets = {
+            'registratie': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
+            'laatste_update': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
 
+        }
 class AanbiedingUpdatenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    registratie = forms.CharField(required=False)
-    laatste_update = forms.CharField(required=False)
+    #registratie = forms.CharField(required=False)
+    #laatste_update = forms.CharField(required=False)
     functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
     functie_aanbieding = forms.CharField(required=False)
-    klant_naam = forms.CharField(required=False)
-    broker = forms.CharField(required=False)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
     accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES)
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES2)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
-    medewerker = forms.CharField(required=False)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
 
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
 
+        widgets = {
+            'registratie': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
+            'laatste_update': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
 
+        }
 class OpdrachtenForm(forms.ModelForm):
-    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
-    startdatum = forms.DateField(required=False)
-    einddatum = forms.DateField(required=False)
     tarief_opdracht = forms.IntegerField(required=False)
     opdracht_betaalkorting = forms.FloatField(required=False)
     aantal_uren = forms.IntegerField(required=False)
     opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    date_created = forms.DateField(required=False)
 
     class Meta:
         model = Opdrachten
         fields = '__all__'
 
+        widgets = {
+            'startdatum': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
+            'einddatum': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
+            'date_created': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'})
+        }
 class OpdrachtenToevoegenForm(forms.ModelForm):
-    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE)
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING)
     class Meta:
         model = Opdrachten
         fields = '__all__'
         exclude = ['aanbieding', 'status_opdracht', 'opdracht_aangemaakt_door', 'date_created',]
+
+        widgets = {
+            'startdatum': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}),
+            'einddatum': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'})
+        }
+
 # Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class CvUploadForm(ModelForm):
     class Meta:

@@ -72,7 +72,7 @@ urlpatterns = [
     # zoekt naar de view aanbieding update
     path(r'aanbieding/update/<str:pk>/', views.AanbiedingUpdaten, name='aanbieding_update'),
     # zoekt naar de view aanbieding delete
-    path(r'aanbieding/delete/<str:id>/', views.ContractenDelete, name='aanbieding_delete'),
+    path(r'aanbieding/delete/<str:id>/', views.AanbiedingDelete, name='aanbieding_delete'),
     # zoekt naar de view aan archief aanbiedingen page
     path(r'archief/aanbiedingen_page/', views.ArchiefAanbiedingenPage, name='archief_aanbiedingen'),
     # zoekt naar de view aanbieding met opdracht
@@ -111,7 +111,12 @@ urlpatterns = [
     path(r'opdrachten/detail/<str:pk>/', views.OpdrachtenDetail, name='detail_opdracht'),
     #voor opdrachten maken
     path(r'opdracht/toevoegen/<str:pk>/', views.OpdrachtToevoegen, name='toevoegen_opdracht'),
-
+    #voor opdrachten te deleten
+    path(r'opdracht/delete<str:pk>', views.OpdrachtDelete, name='delete_opdracht'),
+    #voor medewerkers die in de leegloop zijn
+    path(r'leegloop/medewerkers', views.MedewerkersLeegloop, name='leegloop_medewerkers'),
+    #voor medewerkers met aanbiedingen / opdrachten
+    path(r'medewerker/aanbiedingen/opdrachten/<str:pk>', views.MedewerkerAanbiedingOpdrachten, name='opdracht_aanbieding_medewerkers'),
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

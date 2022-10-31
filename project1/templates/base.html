@@ -68,11 +68,12 @@
 
         <div class="collapse navbar-collapse" id="topnavbar">
             <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="{% url 'medewerkers' %}">
-                        <span class="glyphicon"></span>
-                        Medewerkers
-                    </a>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Medewerker <span class="glyphicon"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'medewerkers' %}">Overzicht medewerkers</a></li>
+                        <li><a href="{% url 'leegloop_medewerkers' %}">Leegloop medewerkers</a></li>
+                    </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav">

@@ -76,12 +76,30 @@ STATUS_CHOICES = (
     ('3', 'Intake'),
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
-
+    ('6', 'Opdracht'),
 )
 
 STATUS_OPDRACHT_CHOICES = (
     ('1', 'Open'),
     ('2', 'Gesloten'),
+)
+
+EIGENWERKNEMER_CHOICES = (
+    ("1", "Zzper"),
+    ("2", "Eigenwerknemer"),
+
+)
+OPLEIDINGNIVEAU_CHOICES = (
+    ("1", "Middelbaar beroepsonderwijs (MBO)"),
+    ("2", "Hoger beroepsonderwijs (HBO)"),
+    ("3", "Wetenschappelijk onderwijs (WO)"),
+
+)
+
+STATUS_MEDEWERKER_CHOICES = (
+    ('1', 'Intake'),
+    ('2', 'Opdracht'),
+    ('3', 'Leegloop'),
 )
 
 class Medewerkers(models.Model):
@@ -97,8 +115,8 @@ class Medewerkers(models.Model):
     icenummer = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=150, blank=True)
     tariefindicatie = models.FloatField(max_length=20, blank=True)
-    zzper_eigenwerknemer = models.CharField(max_length=50, blank=True)
-    opleidings_niveau = models.CharField(max_length=50, blank=True)
+    zzper_eigenwerknemer = models.CharField(choices=EIGENWERKNEMER_CHOICES, max_length=50, blank=True)
+    opleidings_niveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES,max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(max_length=100, blank=True)
     geboorte_datum = models.DateField(null=True, blank=True)
     foto_medewerker = models.FileField(upload_to='images/', default='userimg.png')  # de default foto voor de medewerkers.
@@ -109,7 +127,7 @@ class Medewerkers(models.Model):
     documenten = models.FileField(upload_to='static/', null=True, blank=True)
     title_documenten = models.CharField(max_length=50, null=True, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
-    status = models.CharField(max_length=50, blank=True)
+    status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={
@@ -143,7 +161,7 @@ class Opmerkingen(models.Model):
 
 
 class Contracten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is het contract gelinkt met de medewerker.
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)  # door de ForeignKey in te vullen van de medewerker is het contract gelinkt met de medewerker.
     contract_uren = models.IntegerField(null=True)
     Startdatum = models.DateField(null=True)
     Einddatum = models.DateField(null=True)
@@ -154,7 +172,7 @@ class Contracten(models.Model):
 
 
 class Certificaten(models.Model):
-    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.CASCADE)  # door de ForeignKey in te vullen van de medewerker is de certificaat gelinkt met de medewerker.
+    medewerkers = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)  # door de ForeignKey in te vullen van de medewerker is de certificaat gelinkt met de medewerker.
     naam_certificaat = models.CharField(max_length=100)
     datum_afronding = models.DateField(null=True)
     accreditatie_nummer = models.CharField(max_length=100)
@@ -210,38 +228,38 @@ class Vestigingplaats(models.Model):
     straatnaam = models.CharField(max_length=30, blank=True)
     huisnummer = models.IntegerField(blank=True)
     plaats = models.CharField(max_length=20, blank=True)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.CASCADE, blank=True)
-    broker = models.ForeignKey(Brokers, on_delete=models.CASCADE, blank=True)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
 
 
 class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES)
-    registratie = models.DateField(null=True)
-    laatste_update = models.DateField(null=True)
+    registratie = models.DateField(null=True, blank=True)
+    laatste_update = models.DateField(null=True, blank=True)
     functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)
     functie_aanbieding = models.CharField(max_length=50)
-    klant_naam = models.CharField(max_length=50)
-    broker = models.CharField(max_length=50, null=True)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
-    medewerker = models.CharField(max_length=50)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=True)
 
     def get_status_count(self):
         return Aanbiedingen.objects.all().filter(status='1').count()
 
 
 class Opdrachten(models.Model):
-    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.CASCADE, blank=True)
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
-    startdatum = models.DateField(null=True)
-    einddatum = models.DateField(null=True)
-    tarief_opdracht = models.IntegerField(default=True)
-    opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True)
+    startdatum = models.DateField(null=True, blank=True)
+    einddatum = models.DateField(null=True, blank=True)
+    tarief_opdracht = models.IntegerField(default=True, blank=True)
+    opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True, blank=True)
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    date_created = models.DateField(null=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    date_created = models.DateField(null=True, blank=True,default=dateformat.format(timezone.now(), 'o-m-d'))
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()

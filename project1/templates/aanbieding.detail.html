@@ -21,7 +21,7 @@ td, th {
 
 <table>
     <tr>
-        <th>Klantnaam</th><td>{{ aanbieding.klant_naam }}</td>
+        <th>Klantnaam</th><td>{{ aanbieding.klant.klantnaam }}</td>
         <th>Medewerker</th><td>{{ aanbieding.medewerker}}</td><tr></tr>
         <th>Tarief</th><td>{{ aanbieding.tarief }}</td>
         <th>Registratiedatum</th><td>{{ aanbieding.registratie }}</td><tr></tr>
@@ -31,7 +31,7 @@ td, th {
         <th>Laatste Update</th><td>{{ aanbieding.laatste_update }}</td><tr></tr>
         <th>Betaalkorting</th><td>{{ aanbieding.betaalkorting }}</td>
         <th>Status</th><td>{{ aanbieding.get_status_display }}</td><tr></tr>
-        <th>Broker</th><td>{{ aanbieding.broker }}</td>
+        <th>Broker</th><td>{{ aanbieding.broker.broker_naam }}</td>
         <tr>
             <td>
                 <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

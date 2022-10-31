@@ -84,6 +84,7 @@ td, th {
         <th>Geboortedatum</th><td>{{ medewerkers.geboorte_datum }}</td>
         <th>Email</th><td>{{ medewerkers.email }}</td><tr>
         <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
+        <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
         </tr>
             <td>
                 <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
