@@ -77,11 +77,12 @@ STATUS_CHOICES = (
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
     ('6', 'Opdracht'),
+    ('7', 'Verlopen'),
 )
 
 STATUS_OPDRACHT_CHOICES = (
-    ('1', 'Open'),
-    ('2', 'Gesloten'),
+    ('1', 'Lopend'),
+    ('2', 'Afgelopen'),
 )
 
 EIGENWERKNEMER_CHOICES = (
@@ -233,14 +234,14 @@ class Vestigingplaats(models.Model):
 
 
 class Aanbiedingen(models.Model):
-    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES)
+    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     registratie = models.DateField(null=True, blank=True)
     laatste_update = models.DateField(null=True, blank=True)
     functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)
     functie_aanbieding = models.CharField(max_length=50)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
-    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
@@ -255,11 +256,11 @@ class Opdrachten(models.Model):
     status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
     startdatum = models.DateField(null=True, blank=True)
     einddatum = models.DateField(null=True, blank=True)
-    tarief_opdracht = models.IntegerField(default=True, blank=True)
-    opdracht_betaalkorting = models.FloatField(max_length=14, default=True, null=True, blank=True)
+    tarief_opdracht = models.FloatField(default=True, blank=True)
+    opdracht_betaalkorting = models.FloatField(default=True, null=True, blank=True)
     aantal_uren = models.IntegerField(blank=True)
-    opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES)
-    date_created = models.DateField(null=True, blank=True,default=dateformat.format(timezone.now(), 'o-m-d'))
+    opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+    date_created = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()

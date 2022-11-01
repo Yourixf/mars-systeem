@@ -224,17 +224,14 @@ STATUS_CHOICES2 = (
     ('4', 'Geplaatst'),
     ('5', 'Afgewezen'),
     ('6', 'Opdracht'),
+    ('7', 'Verlopen'),
 )
 
 class AanbiedingenForm(forms.ModelForm):
-    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    #registratie = forms.CharField(required=False)
-    #laatste_update = forms.CharField(required=False)
     functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
-    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
     status = forms.ChoiceField(required=False, choices=STATUS_CHOICES2)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
@@ -283,11 +280,9 @@ class AanbiedingUpdatenForm(forms.ModelForm):
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
-    tarief_opdracht = forms.IntegerField(required=False)
+    tarief_opdracht = forms.FloatField(required=False)
     opdracht_betaalkorting = forms.FloatField(required=False)
     aantal_uren = forms.IntegerField(required=False)
-    opdracht_aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-
     class Meta:
         model = Opdrachten
         fields = '__all__'
@@ -305,6 +300,7 @@ class OpdrachtenForm(forms.ModelForm):
         }
 class OpdrachtenToevoegenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING)
+    tarief_opdracht = forms.FloatField(required=False)
     class Meta:
         model = Opdrachten
         fields = '__all__'

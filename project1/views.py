@@ -621,15 +621,21 @@ def AanbiedingToevoegen(request):
             aanbieding_status = aanbieding.status
             aanbieding.save()
             medewerker = aanbieding.medewerker
-
-            if aanbieding_status == '3':
+            if aanbieding_status == '1':
+                medewerker.status = '3'
+                medewerker.save()
+            elif aanbieding_status == '2':
                 medewerker.status = '1'
                 medewerker.save()
-                aanbieding.save()
+            elif aanbieding_status == '3':
+                medewerker.status = '1'
+                medewerker.save()
             elif aanbieding_status == '4':
                 medewerker.status = '2'
                 medewerker.save()
-                aanbieding.save()
+            elif aanbieding_status == '5':
+                medewerker.status = '3'
+                medewerker.save()
             elif aanbieding_status == '6':
                 medewerker.status = '2'
                 medewerker.save()
@@ -638,6 +644,11 @@ def AanbiedingToevoegen(request):
                     return redirect('aanbiedingen')
                 else:
                     return redirect('toevoegen_opdracht', aanbieding.pk)
+            elif aanbieding_status == '7':
+                medewerker.status = '3'
+                medewerker.save()
+            else:
+                aanbieding.save()
             return redirect('aanbiedingen')
     else:
         return render(request, 'aanbiedingen.toevoegen.html', context)
@@ -645,8 +656,8 @@ def AanbiedingToevoegen(request):
 
 # De Delete functie voor de Aanbiedingen.
 @login_required(login_url='login')
-def AanbiedingDelete(request, id):
-    delete_aanbieding = Aanbiedingen.objects.get(id=id)
+def AanbiedingDelete(request, pk):
+    delete_aanbieding = Aanbiedingen.objects.get(id=pk)
     delete_aanbieding.delete()
     return redirect('aanbiedingen')
 
@@ -667,17 +678,36 @@ def AanbiedingUpdaten(request, pk):
         aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
         if aanbieding_form.is_valid():
             aanbieding = aanbieding_form.save()
-            status = aanbieding.status
-            if status == '6':
-                aanbieding_form.save()
+            aanbieding_status = aanbieding.status
+            medewerker = aanbieding.medewerker
+            if aanbieding_status == '1':
+                medewerker.status = '3'
+                medewerker.save()
+            elif aanbieding_status == '2':
+                medewerker.status = '1'
+                medewerker.save()
+            elif aanbieding_status == '3':
+                medewerker.status = '1'
+                medewerker.save()
+            elif aanbieding_status == '4':
+                medewerker.status = '2'
+                medewerker.save()
+            elif aanbieding_status == '5':
+                medewerker.status = '3'
+                medewerker.save()
+            elif aanbieding_status == '6':
+                medewerker.status = '2'
+                medewerker.save()
                 if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
                     return redirect('aanbiedingen')
                 else:
                     return redirect('toevoegen_opdracht', aanbieding.pk)
-
-            elif status != '6':
+            elif aanbieding_status == '7':
+                medewerker.status = '3'
+                medewerker.save()
+            else:
                 aanbieding_form.save()
-                return redirect('aanbiedingen')
+            return redirect('aanbiedingen')
     return render(request, "aanbieding.update.html", context)
 
 
@@ -698,7 +728,7 @@ def AanbiedingenPage(request):
 #     aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=5)) dit is de filter for de overige 2 statussen waardoor ze op deze pagina komen.
 @login_required(login_url='login')
 def ArchiefAanbiedingenPage(request):
-    aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=5))
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=5) | Q(status=7))
     context = {
         'aanbieding_list': aanbieding_list,
 
@@ -708,7 +738,7 @@ def ArchiefAanbiedingenPage(request):
 
 @login_required(login_url='login')
 def AanbiedingMetOpdracht(request):
-    aanbieding_list = Aanbiedingen.objects.filter(Q(status=6))
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=6))
     aanbieding_list.all()
     context = {
         'aanbieding_list': aanbieding_list,
@@ -720,7 +750,10 @@ def AanbiedingMetOpdracht(request):
 @login_required(login_url='login')
 def OpdrachtToevoegen(request, pk):
     aanbiedingID = Aanbiedingen.objects.get(id=pk)
-    opdracht_form = OpdrachtenToevoegenForm(request.POST or None)
+    aanbieding_tarief = aanbiedingID.tarief
+    aanbieding_betaal_korting = aanbiedingID.betaalkorting
+
+    opdracht_form = OpdrachtenToevoegenForm(initial={'tarief_opdracht':aanbieding_tarief, 'opdracht_betaalkorting': aanbieding_betaal_korting})
 
     context = {
         'opdracht_form': opdracht_form,
@@ -741,6 +774,8 @@ def OpdrachtToevoegen(request, pk):
             medewerker.status = '4'
             medewerker.save()
             opdracht.save()
+
+
 
             return redirect('lopende_opdrachten')
         # dit gebeurt als de form niet valid is
@@ -767,7 +802,7 @@ def lopendeOpdrachtenPage(request):
 def aflopendeOpdrachtenPage(request):
     datum_nu = date.today()
     eind_datum = datum_nu + timedelta(days=31)
-    aflopendeOpdrachten = Opdrachten.objects.filter(einddatum__range=[datum_nu, eind_datum])
+    aflopendeOpdrachten = Opdrachten.objects.filter(Q(status_opdracht=1), einddatum__range=[datum_nu, eind_datum])
 
     context = {
         'aflopendeOpdrachten': aflopendeOpdrachten,
@@ -805,10 +840,16 @@ def OpdrachtenUpdaten(request, pk):
     if request.method == 'POST':
         opdracht_form = OpdrachtenForm(request.POST or None, instance=opdracht)
         aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
-
         if opdracht_form.is_valid() and aanbieding_form.is_valid():
-            opdracht_form.save()
-            aanbieding_form.save()
+            opdracht = opdracht_form.save()
+            aanbieding = aanbieding_form.save()
+            medewerker = aanbieding.medewerker
+            if opdracht.status_opdracht == '2':
+                aanbieding.status = '7'
+                aanbieding.save()
+                medewerker.status = '3'
+                medewerker.save()
+
             return redirect('lopende_opdrachten')
     return render(request, 'opdracht.update.html', context)
 
@@ -825,7 +866,11 @@ def OpdrachtenDetail(request, pk):
 
 
 @login_required(login_url='login')
-def OpdrachtDelete(request, id):
-    opdracht = Opdrachten.objects.get(id=id)
+def OpdrachtDelete(request, pk):
+    opdracht = Opdrachten.objects.get(id=pk)
+    aanbieding = opdracht.aanbieding
+    aanbieding.status = '1'
+    aanbieding.save()
     opdracht.delete()
+
     return redirect('lopende_opdrachten')

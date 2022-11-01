@@ -95,7 +95,7 @@ $(document).ready(function() {
 
 
                 {% csrf_token %}
-                <form action="{% url 'aanbieding_delete' aanbiedingen.id %}" style="display: inline;">
+                <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" style="display: inline;">
                     <td>
 
                         <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>

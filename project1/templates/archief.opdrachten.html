@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 
                     {% csrf_token %}
-                        <form action="{% url 'delete_opdracht' opdracht.id %}">
+                        <form action="{% url 'delete_opdracht' opdracht.pk %}">
                             <td>
                                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
