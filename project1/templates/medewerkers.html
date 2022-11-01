@@ -17,6 +17,19 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+
+#opdrachtAanbieding {
+    max-width: 110px;
+}
+
+#deleteUpdate {
+    max-width: 100px;
+    min-width: 100px;
+}
+
+#detail {
+    max-width: 60px;
+}
 </style>
 <script>
 $(document).ready(function() {
@@ -54,8 +67,9 @@ $(document).ready(function() {
             <th>Woonplaats:</th>
             <th>Straat:</th>
             <th>E-mail:</th>
-            <th>Update / Delete</th>
-            <th>Detail</th>
+            <th id="opdrachtAanbieding">Opdracht / Aanbieding</th>
+            <th id="deleteUpdate">Update / Delete</th>
+            <th id="detail">Detail</th>
         </tr>
 
         <tbody id="myTable">
@@ -68,13 +82,23 @@ $(document).ready(function() {
                     <td>{{ medewerker.straat }}</td>
                     <td>{{ medewerker.email }}</td>
                      <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
-                     {% csrf_token %}
-                     <td><button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
-                         <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                         <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
-                     <td><a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
-                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" /></td></form>
+                         {% csrf_token %}
+                         <td id="opdrachtAanbieding">
+                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Opdracht / aanbieding</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td id="deleteUpdate">
+                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
+                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+
+                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td id="detail">
+                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                     </form>
             {% endfor %}
                 </tr>
 

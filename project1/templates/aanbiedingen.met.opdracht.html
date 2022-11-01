@@ -17,6 +17,18 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+
+#deleteUpdate {
+    max-width: 99px;
+}
+
+#deleteUpdate a {
+    margin-bottom: 5px;
+}
+
+#detail {
+    max-width: 60px;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -76,8 +88,8 @@ $(document).ready(function() {
             <th>Fuctie aanbieding</th>
             <th>Betaalkorting</th>
             <th>Status</th>
-            <th>Update / Delete</th>
-            <th>Details</th>
+            <th id="deleteUpdate">Update / Delete</th>
+            <th id="detail">Details</th>
         </tr>
 
         <tbody id="myTable">
@@ -96,13 +108,13 @@ $(document).ready(function() {
 
                 {% csrf_token %}
                 <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" style="display: inline;">
-                    <td>
+                    <td id="deleteUpdate">
                         <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                         <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                         <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
                         <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
                     </td>
-                    <td>
+                    <td id="detail">
                         <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                         <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                     </td>
