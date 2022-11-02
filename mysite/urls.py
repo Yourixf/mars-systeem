@@ -25,7 +25,7 @@ urlpatterns = [
     # zoekt naar de view MedewerkersPage
     path(r'medewerkers/', views.MedewerkersPage, name='medewerkers'),
     # zoekt naar de view Detail(medewerkers)
-    path(r'medewerkers/<str:pk>/', views.Detail, name='details'),
+    path(r'medewerkers/<str:pk>/', views.MedewerkerDetail, name='details'),
     # zoekt naar de view Leaseautosdetail
     # zoekt naar de view Contractendetail
     path('contracten.detail/<str:pk>/', views.Contractendetail, name='contracten.detail'),
@@ -115,6 +115,8 @@ urlpatterns = [
     path(r'opdracht/delete/<str:pk>', views.OpdrachtDelete, name='delete_opdracht'),
     #voor medewerkers die in de leegloop zijn
     path(r'leegloop/medewerkers', views.MedewerkersLeegloop, name='leegloop_medewerkers'),
+    #voor oud medewerkers
+    path(r'archief/medewerkers', views.ArchiefMedewerkers, name='archief_medewerkers'),
     #voor medewerkers met aanbiedingen / opdrachten
     path(r'medewerker/aanbiedingen/opdrachten/<str:pk>', views.MedewerkerAanbiedingOpdrachten, name='opdracht_aanbieding_medewerkers'),
 

@@ -16,6 +16,39 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+
+#tarief {
+    max-width: 30px;
+}
+
+#registratie {
+    max-width: 100px;
+}
+
+#updateDatum {
+    max-width: 90px;
+}
+
+#status {
+    max-width: 60px;
+}
+
+#deleteUpdate {
+    max-width: 100px;
+    min-width: 100px;
+}
+
+#deleteUpdate a {
+    margin-bottom: 5px;
+}
+
+#detail {
+    max-width: 60px;
+}
+
+#detail a{
+    margin-top: 5px;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -35,8 +68,9 @@ td, th {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
 
+<h3 style="text-align: center">Medewerker: {{ medewerker }}</h3>
 
-<h3>Medewerker aanbiedingen</h3>
+<h3 style="text-align: center; margin-top: 50px">Medewerker aanbiedingen</h3>
 
 <script>
 $(document).ready(function() {
@@ -70,14 +104,14 @@ $(document).ready(function() {
         <tr>
             <th>Klantnaam</th>
             <th>Medewerker</th>
-            <th>Tarief</th>
-            <th>Registratiedatum</th>
-            <th>Laatste Update</th>
+            <th id="tarief">Tarief</th>
+            <th id="registratie">Registratiedatum</th>
+            <th id="updateDatum">Laatste Update</th>
             <th>Broker</th>
             <th>Fuctie aanbieding</th>
-            <th>Status</th>
-            <th>Update / Delete</th>
-            <th>Detail</th>
+            <th id="status">Status</th>
+            <th id="deleteUpdate">Update / Delete</th>
+            <th id="detail">Detail</th>
         </tr>
 
         <tbody id="myTable">
@@ -85,22 +119,22 @@ $(document).ready(function() {
                 <tr>
                     <td>{{ aanbiedingen.klant.klantnaam }}</td>
                     <td>{{ aanbiedingen.medewerker }}</td>
-                    <td>{{ aanbiedingen.tarief }}</td>
-                    <td>{{ aanbiedingen.registratie }}</td>
-                    <td>{{ aanbiedingen.laatste_update }}</td>
+                    <td id="tarief">{{ aanbiedingen.tarief }}</td>
+                    <td id="registratie">{{ aanbiedingen.registratie }}</td>
+                    <td id="updateDatum">{{ aanbiedingen.laatste_update }}</td>
                     <td>{{ aanbiedingen.broker.broker_naam }}</td>
                     <td>{{ aanbiedingen.functie_aanbieding }}</td>
-                    <td>{{ aanbiedingen.get_status_display }}</td>
+                    <td id="status">{{ aanbiedingen.get_status_display }}</td>
 
                     {% csrf_token %}
                        <form action="{% url 'aanbieding_delete' aanbiedingen.id %}" style="display: inline;">
-                           <td>
+                           <td id="deleteUpdate">
                                <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                                <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
                            </td>
-                           <td>
+                           <td id="detail">
                                <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                            </td>
@@ -126,7 +160,7 @@ $(document).ready(function(){
 <br><br><br>
 
 
-<h3>Medewerker opdrachten</h3>
+<h3 style="text-align: center;">Medewerker opdrachten</h3>
 
 
 <script>
@@ -164,10 +198,10 @@ $(document).ready(function() {
             <th>Functie aanbieding</th>
             <th>Startdatum</th>
             <th>Einddatum</th>
-            <th>Tarief</th>
+            <th id="tarief">Tarief</th>
             <th>Broker</th>
-            <th>Update / Delete</th>
-            <th>Detail</th>
+            <th id="deleteUpdate">Update / Delete</th>
+            <th id="detail">Detail</th>
         </tr>
 
         <tbody id="myTable">
@@ -184,13 +218,13 @@ $(document).ready(function() {
 
                     {% csrf_token %}
                         <form action="{% url 'delete_opdracht' opdracht.id %}">
-                            <td>
+                            <td id="deleteUpdate">
                                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
                                 <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
                                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
                             </td>
-                            <td>
+                            <td id="detail">
                                 <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
                             </td>

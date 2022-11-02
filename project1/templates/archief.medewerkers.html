@@ -1,0 +1,115 @@
+<!-- laad het pad naar de static file -->
+{% extends 'base.html' %}
+{% block title %}4-Rest/Archief Medewerkers{% endblock %}
+{% block body %}
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Archief Medewerkers 4-Rest</h3></div>
+
+{% if medewerkers %}
+<style>
+ table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#opdrachtAanbieding {
+    max-width: 110px;
+}
+
+#deleteUpdate {
+    max-width: 100px;
+    min-width: 100px;
+}
+
+#detail {
+    max-width: 60px;
+}
+</style>
+<script>
+$(document).ready(function() {
+    $("#basic-datatable").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                },
+            title: 'Medewerkers' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+
+<table id="basic-datatable" class="table" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Naam:</th>
+            <th>Telefoonnummer:</th>
+            <th>Status:</th>
+            <th>Woonplaats:</th>
+            <th>Straat:</th>
+            <th>E-mail:</th>
+            <th id="opdrachtAanbieding">Opdracht / Aanbieding</th>
+            <th id="deleteUpdate">Update / Delete</th>
+            <th id="detail">Detail</th>
+        </tr>
+
+        <tbody id="myTable">
+            {% for medewerker in medewerkers %}
+                <tr>
+                    <td>{{ medewerker }} </td>
+                    <td>{{ medewerker.telefoonnummer }}</td>
+                    <td>{{ medewerker.get_status_display }}</td>
+                    <td>{{ medewerker.woonplaats }}</td>
+                    <td>{{ medewerker.straat }}</td>
+                    <td>{{ medewerker.email }}</td>
+                     <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
+                         {% csrf_token %}
+                         <td id="opdrachtAanbieding">
+                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Opdracht / aanbieding</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td id="deleteUpdate">
+                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
+                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+
+                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                         <td id="detail">
+                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                         </td>
+                     </form>
+            {% endfor %}
+                </tr>
+
+        </tbody>
+    </thead>
+
+</table>
+
+{% else %}
+    {% comment %}<h3>Deze medewerker is verwijderd.</h3>
+    <div style="text-align: center;"><a href="{% url 'medewerkers' %}" class="btn btn-success"  role="button"><h5>Terug naar medewerkers</h5></a></div>{% endcomment %}
+{% endif %}
+{% endblock %}
+

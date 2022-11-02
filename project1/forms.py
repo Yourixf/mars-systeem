@@ -209,22 +209,15 @@ FUNCTIE_CHOICES = (
     ('96', 'Packager'),
 
 )
-STATUS_CHOICES1 = (
-    ('1', 'Open'),
-    ('2', 'Geselecteerd'),
-    ('3', 'Intake'),
-    ('4', 'Geplaatst'),
-    ('5', 'Afgewezen'),
-)
 
-STATUS_CHOICES2 = (
+
+STATUS_AANBIEDING_CHOICES = (
     ('1', 'Open'),
-    ('2', 'Geselecteerd'),
-    ('3', 'Intake'),
-    ('4', 'Geplaatst'),
-    ('5', 'Afgewezen'),
-    ('6', 'Opdracht'),
-    ('7', 'Verlopen'),
+    ('2', 'Intake'),
+    ('3', 'Geplaatst'),
+    ('4', 'Afgewezen'),
+    ('5', 'Opdracht'),
+    ('6', 'Verlopen'),
 )
 
 class AanbiedingenForm(forms.ModelForm):
@@ -232,7 +225,7 @@ class AanbiedingenForm(forms.ModelForm):
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES2)
+    status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
@@ -259,7 +252,7 @@ class AanbiedingUpdatenForm(forms.ModelForm):
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
     accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
-    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES2)
+    status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)

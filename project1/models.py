@@ -70,14 +70,13 @@ FUNCTIE_CHOICES = (
     ('96', 'Packager'),
 
 )
-STATUS_CHOICES = (
+STATUS_AANBIEDING_CHOICES = (
     ('1', 'Open'),
-    ('2', 'Geselecteerd'),
-    ('3', 'Intake'),
-    ('4', 'Geplaatst'),
-    ('5', 'Afgewezen'),
-    ('6', 'Opdracht'),
-    ('7', 'Verlopen'),
+    ('2', 'Intake'),
+    ('3', 'Geplaatst'),
+    ('4', 'Afgewezen'),
+    ('5', 'Opdracht'),
+    ('6', 'Verlopen'),
 )
 
 STATUS_OPDRACHT_CHOICES = (
@@ -101,6 +100,15 @@ STATUS_MEDEWERKER_CHOICES = (
     ('1', 'Intake'),
     ('2', 'Opdracht'),
     ('3', 'Leegloop'),
+    ('4', 'Uit dienst'),
+)
+
+BV_CHOICES = (
+    ('1', 'Holding'),
+    ('2', 'Ict'),
+    ('3', 'Infra'),
+    ('4', 'III'),
+    ('5', 'Extern')
 )
 
 class Medewerkers(models.Model):
@@ -129,6 +137,7 @@ class Medewerkers(models.Model):
     title_documenten = models.CharField(max_length=50, null=True, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
+    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={
@@ -181,13 +190,6 @@ class Certificaten(models.Model):
 
 
 class Eindklanten(models.Model):
-    ACCOUNTMANAGER_CHOICES = (
-        ('1', ''),
-        ('2', 'Yoeri Tromp'),
-        ('3', 'Nicky Slothouwer'),
-        ('4', 'Coen Berkhout jr'),
-        ('5', 'Jessica Berkhout'),
-    )
     accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
     klantnaam = models.CharField(max_length=50, null=True, blank=True)
     telefoonnummer_klant = models.CharField(max_length=17, null=True, blank=True)
@@ -201,12 +203,6 @@ class Eindklanten(models.Model):
 
 
 class Brokers(models.Model):
-    ACCOUNTMANAGER_CHOICES = (
-        ('1', 'Yoeri Tromp'),
-        ('2', 'Nicky Slothouwer'),
-        ('3', 'Coen Berkhout jr'),
-        ('4', 'Jessica Berkhout'),
-    )
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     broker_naam = models.CharField(max_length=50, blank=True)
     straat_broker = models.CharField(max_length=150, blank=True)
@@ -242,7 +238,7 @@ class Aanbiedingen(models.Model):
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=True)

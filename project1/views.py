@@ -127,12 +127,13 @@ def BrokerDetail(request, pk):
 
 # Dit is de de details pagina voor de Medewerkers,    medewerkers = Medewerkers.objects.get(id=pk) is bedoeld om elke detail per eindklant te zien is.
 @login_required(login_url='login')
-def Detail(request, pk):
+def MedewerkerDetail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
     context = {
         'medewerkers': medewerkers,
     }
     return render(request, 'medewerker.detail.html', context)
+
 
 
 # Dit is de de details pagina voor de Brokers,   aanbieding = Aanbiedingen.objects.get(id=pk) is bedoeld om elke detail per eindklant te zien is.
@@ -311,7 +312,7 @@ def Index(request):
 # Dit is de Medewerkers pagina  medewerkers = Medewerkers.objects.all() haalt allemedewerkers op.
 @login_required(login_url='login')
 def MedewerkersPage(request):
-    medewerkers = Medewerkers.objects.all()
+    medewerkers = Medewerkers.objects.filter(Q(status='1') | Q(status='2') | Q(status='3'))
 
     context = {
         'medewerkers': medewerkers,
@@ -331,6 +332,14 @@ def MedewerkersLeegloop(request):
 
     return render(request, 'leegloop.medewerkers.html', context)
 
+@login_required(login_url='login')
+def ArchiefMedewerkers(request):
+    medewerkers = Medewerkers.objects.filter(Q(status='4'))
+
+    context = {
+        'medewerkers': medewerkers,
+    }
+    return render(request, 'archief.medewerkers.html', context)
 
 @login_required(login_url='login')
 def MedewerkerAanbiedingOpdrachten(request, pk):
@@ -344,6 +353,7 @@ def MedewerkerAanbiedingOpdrachten(request, pk):
     context = {
         'aanbieding_list': aanbieding_list,
         'opdracht_list': opdracht_list,
+        'medewerker':medewerker,
 
     }
 
@@ -379,7 +389,7 @@ def MedewerkersUpdaten(request, pk):
         # form.save() om de nieuwe data op te slaan
         if form.is_valid():
             form.save()
-            return redirect('details', pk)
+            return redirect('medewerkers')
 
     return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
 
@@ -628,15 +638,12 @@ def AanbiedingToevoegen(request):
                 medewerker.status = '1'
                 medewerker.save()
             elif aanbieding_status == '3':
-                medewerker.status = '1'
-                medewerker.save()
-            elif aanbieding_status == '4':
                 medewerker.status = '2'
                 medewerker.save()
-            elif aanbieding_status == '5':
+            elif aanbieding_status == '4':
                 medewerker.status = '3'
                 medewerker.save()
-            elif aanbieding_status == '6':
+            elif aanbieding_status == '5':
                 medewerker.status = '2'
                 medewerker.save()
                 aanbieding.save()
@@ -644,7 +651,7 @@ def AanbiedingToevoegen(request):
                     return redirect('aanbiedingen')
                 else:
                     return redirect('toevoegen_opdracht', aanbieding.pk)
-            elif aanbieding_status == '7':
+            elif aanbieding_status == '6':
                 medewerker.status = '3'
                 medewerker.save()
             else:
@@ -687,22 +694,19 @@ def AanbiedingUpdaten(request, pk):
                 medewerker.status = '1'
                 medewerker.save()
             elif aanbieding_status == '3':
-                medewerker.status = '1'
-                medewerker.save()
-            elif aanbieding_status == '4':
                 medewerker.status = '2'
                 medewerker.save()
-            elif aanbieding_status == '5':
+            elif aanbieding_status == '4':
                 medewerker.status = '3'
                 medewerker.save()
-            elif aanbieding_status == '6':
+            elif aanbieding_status == '5':
                 medewerker.status = '2'
                 medewerker.save()
                 if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
                     return redirect('aanbiedingen')
                 else:
                     return redirect('toevoegen_opdracht', aanbieding.pk)
-            elif aanbieding_status == '7':
+            elif aanbieding_status == '6':
                 medewerker.status = '3'
                 medewerker.save()
             else:
@@ -715,7 +719,7 @@ def AanbiedingUpdaten(request, pk):
 #    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2) | Q(status=3)) dit is de filter for de 3 statussen waardoor ze op deze pagina komen.
 @login_required(login_url='login')
 def AanbiedingenPage(request):
-    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2) | Q(status=3))
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2))
 
     context = {
         'aanbieding_list': aanbieding_list,
@@ -728,7 +732,7 @@ def AanbiedingenPage(request):
 #     aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=5)) dit is de filter for de overige 2 statussen waardoor ze op deze pagina komen.
 @login_required(login_url='login')
 def ArchiefAanbiedingenPage(request):
-    aanbieding_list = Aanbiedingen.objects.filter(Q(status=5) | Q(status=7))
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=6))
     context = {
         'aanbieding_list': aanbieding_list,
 
@@ -738,7 +742,7 @@ def ArchiefAanbiedingenPage(request):
 
 @login_required(login_url='login')
 def AanbiedingMetOpdracht(request):
-    aanbieding_list = Aanbiedingen.objects.filter(Q(status=4) | Q(status=6))
+    aanbieding_list = Aanbiedingen.objects.filter(Q(status=3) | Q(status=5))
     aanbieding_list.all()
     context = {
         'aanbieding_list': aanbieding_list,
@@ -845,7 +849,7 @@ def OpdrachtenUpdaten(request, pk):
             aanbieding = aanbieding_form.save()
             medewerker = aanbieding.medewerker
             if opdracht.status_opdracht == '2':
-                aanbieding.status = '7'
+                aanbieding.status = '6'
                 aanbieding.save()
                 medewerker.status = '3'
                 medewerker.save()

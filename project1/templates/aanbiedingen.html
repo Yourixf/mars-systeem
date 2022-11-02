@@ -17,8 +17,20 @@ td, th {
   padding: 8px;
 }
 
+#tarief {
+    max-width: 30px;
+}
+
+#registratie {
+    max-width: 90px;
+}
+
+#status {
+    max-width: 60px;
+}
+
 #deleteUpdate {
-    max-width: 99px;
+    max-width: 90px;
 }
 #deleteUpdate a {
     margin-bottom: 5px;
@@ -82,12 +94,11 @@ $(document).ready(function() {
         <tr>
             <th>Klantnaam</th>
             <th>Medewerker</th>
-            <th>Tarief</th>
-            <th>Registratiedatum</th>
-            <th>Laatste Update</th>
+            <th id="tarief">Tarief</th>
+            <th id="registratie">Registratiedatum</th>
             <th>Broker</th>
             <th>Fuctie aanbieding</th>
-            <th>Status</th>
+            <th id="status">Status</th>
             <th id="deleteUpdate">Update / Delete</th>
             <th id="detailOpdracht">Detail / Opdracht</th>
         </tr>
@@ -97,12 +108,11 @@ $(document).ready(function() {
                 <tr>
                     <td>{{ aanbiedingen.klant.klantnaam }}</td>
                     <td>{{ aanbiedingen.medewerker }}</td>
-                    <td>{{ aanbiedingen.tarief }}</td>
-                    <td>{{ aanbiedingen.registratie }}</td>
-                    <td>{{ aanbiedingen.laatste_update }}</td>
+                    <td id="tarief">{{ aanbiedingen.tarief }}</td>
+                    <td id="registratie">{{ aanbiedingen.registratie }}</td>
                     <td>{{ aanbiedingen.broker.broker_naam }}</td>
                     <td>{{ aanbiedingen.functie_aanbieding }}</td>
-                    <td>{{ aanbiedingen.get_status_display }}</td>
+                    <td id="status">{{ aanbiedingen.get_status_display }}</td>
 
 
                        <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" class="no-export" style="display: inline;">
