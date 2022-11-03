@@ -19,9 +19,9 @@
             <div style="width: 25%" class="center-block">
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form|crispy }}
-            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
+                {{ eindklant_form|crispy }}
+                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
             </form>
         </div>
     </div>

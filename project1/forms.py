@@ -228,7 +228,6 @@ class AanbiedingenForm(forms.ModelForm):
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
-    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
 
     class Meta:
         model = Aanbiedingen

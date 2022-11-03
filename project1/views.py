@@ -504,7 +504,11 @@ def EindklantToevoegen(request):
     klant_form = EindklantenForm(request.POST or None)
     vestiging_form = VestigingplaatsForm(request.POST or None)
 
-    context = {
+    context1 = {
+        'klant_form': klant_form,
+    }
+
+    context2 = {
         'klant_form': klant_form,
         'vestiging_form': vestiging_form,
     }
@@ -521,7 +525,7 @@ def EindklantToevoegen(request):
 
             return redirect('eindklanten')
     else:
-        return render(request, 'eindklant.toevoegen.html', context)
+        return render(request, 'eindklant.toevoegen.html', context1)
 
 
 # De updateview voor de Eindklanten.
@@ -529,17 +533,18 @@ def EindklantToevoegen(request):
 @login_required(login_url='login')
 def EindklantenUpdaten(request, pk):
     eindklant = Eindklanten.objects.get(id=pk)
-    form = EindklantenForm(request.POST or None, instance=eindklant)
+    eindklant_form = EindklantenForm(request.POST or None, instance=eindklant)
     # eindklanten = Eindklanten.objects.get(id=pk)
     context = {
-        'eindklant': eindklant
+        'eindklant': eindklant,
+        'eindklant_form': eindklant_form,
     }
     if request.method == 'POST':
         form = EindklantenForm(request.POST or None, instance=eindklant)
         if form.is_valid():
             form.save()
             return redirect('eindklanten')
-    return render(request, "update.eindklant.html", {'eindklant': eindklant, 'form': form})
+    return render(request, "update.eindklant.html", context)
 
 
 # De Delete functie voor de eindklanten.
@@ -627,9 +632,9 @@ def AanbiedingToevoegen(request):
         aanbieding_form = AanbiedingenForm(request.POST, request.FILES)
         # NO VALID FUNCTIE INDOUWEN
         if aanbieding_form.is_valid():
-            aanbieding = aanbieding_form.save()
+            aanbieding = aanbieding_form.save(commit=False)
             aanbieding_status = aanbieding.status
-            aanbieding.save()
+
             medewerker = aanbieding.medewerker
             if aanbieding_status == '1':
                 medewerker.status = '3'
@@ -646,16 +651,18 @@ def AanbiedingToevoegen(request):
             elif aanbieding_status == '5':
                 medewerker.status = '2'
                 medewerker.save()
-                aanbieding.save()
+
                 if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
                     return redirect('aanbiedingen')
                 else:
                     return redirect('toevoegen_opdracht', aanbieding.pk)
+                aanbieding.save()
             elif aanbieding_status == '6':
                 medewerker.status = '3'
                 medewerker.save()
             else:
                 aanbieding.save()
+            aanbieding.save()
             return redirect('aanbiedingen')
     else:
         return render(request, 'aanbiedingen.toevoegen.html', context)
@@ -674,7 +681,7 @@ def AanbiedingDelete(request, pk):
 @login_required(login_url='login')
 def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
-    aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
+    aanbieding_form = AanbiedingUpdatenForm(request.POST or None,instance=aanbieding)
 
     context = {
         'aanbieding': aanbieding,
@@ -682,7 +689,7 @@ def AanbiedingUpdaten(request, pk):
     }
 
     if request.method == 'POST':
-        aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
+        #aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
         if aanbieding_form.is_valid():
             aanbieding = aanbieding_form.save()
             aanbieding_status = aanbieding.status
@@ -705,6 +712,7 @@ def AanbiedingUpdaten(request, pk):
                 if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
                     return redirect('aanbiedingen')
                 else:
+                    aanbieding.save()
                     return redirect('toevoegen_opdracht', aanbieding.pk)
             elif aanbieding_status == '6':
                 medewerker.status = '3'
@@ -753,26 +761,27 @@ def AanbiedingMetOpdracht(request):
 
 @login_required(login_url='login')
 def OpdrachtToevoegen(request, pk):
-    aanbiedingID = Aanbiedingen.objects.get(id=pk)
-    aanbieding_tarief = aanbiedingID.tarief
-    aanbieding_betaal_korting = aanbiedingID.betaalkorting
+    aanbieding = Aanbiedingen.objects.get(id=pk)
+    aanbieding_tarief = aanbieding.tarief
+    aanbieding_betaal_korting = aanbieding.betaalkorting
 
-    opdracht_form = OpdrachtenToevoegenForm(initial={'tarief_opdracht':aanbieding_tarief, 'opdracht_betaalkorting': aanbieding_betaal_korting})
+    opdracht_form = OpdrachtenToevoegenForm(initial={'tarief_opdracht': aanbieding_tarief, 'opdracht_betaalkorting': aanbieding_betaal_korting})
 
     context = {
         'opdracht_form': opdracht_form,
+        'aanbieding': aanbieding,
     }
     # als de form is ingevuld en verstuurd word doet hij het volgende
     if request.method == 'POST':
         opdracht_form = OpdrachtenToevoegenForm(request.POST, request.FILES)
         if opdracht_form.is_valid():
             opdracht = opdracht_form.save()
-            opdracht.aanbieding = aanbiedingID
+            opdracht.aanbieding = aanbieding
             opdracht.status_opdracht = '1'
-            opdracht.opdracht_aangemaakt_door = aanbiedingID.aangemaakt_door
+            opdracht.opdracht_aangemaakt_door = aanbieding.aangemaakt_door
             opdracht.save()
-            aanbiedingID.status = '6'
-            aanbiedingID.save()
+            aanbieding.status = '6'
+            aanbieding.save()
 
             medewerker = opdracht.aanbieding.medewerker
             medewerker.status = '4'

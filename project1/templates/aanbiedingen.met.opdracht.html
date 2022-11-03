@@ -18,6 +18,18 @@ td, th {
   padding: 8px;
 }
 
+#registratieDatum {
+    max-width: 90px;
+}
+
+#updateDatum {
+    max-width: 90px;
+}
+
+#status {
+    max-width: 60px;
+}
+
 #deleteUpdate {
     max-width: 99px;
 }
@@ -82,12 +94,12 @@ $(document).ready(function() {
             <th>Klantnaam</th>
             <th>Medewerker</th>
             <th>Tarief</th>
-            <th>Registratiedatum</th>
-            <th>Laatste Update</th>
+            <th id="registratieDatum">Registratiedatum</th>
+            <th id="updateDatum">Laatste Update</th>
             <th>Broker</th>
             <th>Fuctie aanbieding</th>
             <th>Betaalkorting</th>
-            <th>Status</th>
+            <th id="status">Status</th>
             <th id="deleteUpdate">Update / Delete</th>
             <th id="detail">Details</th>
         </tr>
@@ -98,12 +110,12 @@ $(document).ready(function() {
                 <td>{{ aanbiedingen.klant.klantnaam }}</td>
                 <td>{{ aanbiedingen.medewerker }}</td>
                 <td>{{ aanbiedingen.tarief }}</td>
-                <td>{{ aanbiedingen.registratie }}</td>
-                <td>{{ aanbiedingen.laatste_update }}</td>
+                <td id="registratieDatum">{{ aanbiedingen.registratie }}</td>
+                <td id="updateDatum">{{ aanbiedingen.laatste_update }}</td>
                 <td>{{ aanbiedingen.broker.broker_naam }}</td>
                 <td>{{ aanbiedingen.functie_aanbieding }}</td>
                 <td>{{ aanbiedingen.betaalkorting }}</td>
-                <td>{{ aanbiedingen.get_status_display }}</td>
+                <td id="status">{{ aanbiedingen.get_status_display }}</td>
 
 
                 {% csrf_token %}
