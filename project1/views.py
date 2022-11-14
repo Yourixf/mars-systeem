@@ -14,9 +14,9 @@ from datetime import *
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, AanbiedingUpdatenForm, \
     OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
-    TaskItemUpdateForm, VestigingplaatsForm
+    TaskItemUpdateForm, VestigingplaatsForm, ContactpersoonForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
-    Opdrachten, Opmerkingen, Vestigingplaats, STATUS_OPDRACHT_CHOICES
+    Opdrachten, Opmerkingen, Vestigingplaats, Contactpersonen,  STATUS_OPDRACHT_CHOICES
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 # @login_required(login_url='login') is een ingebouwde Django functie ter beveiliging als de "User" niet is ingelogd kan die niet op die pagina komen.
@@ -26,24 +26,163 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
 
+@login_required(login_url='login')
+def ContactPersonenDelete(request, pk):
+    contactpersoon_pk = Contactpersonen.objects.get(id=pk)
+
+    contactpersoon_pk.broker_id = ''
+    contactpersoon_pk.save()
+
+    contactpersoon_pk.delete()
+
+    return redirect('brokers')
+
+@login_required(login_url='login')
+def ContactPersonenToevoegen(request, pk):
+    contactpersoon_form = ContactpersoonForm()
+    vorige_pagina = request.META['HTTP_REFERER']
+    if 'broker' in vorige_pagina:
+        request.session['vorige_pagina'] = 'broker'
+        broker_pk = Brokers.objects.get(id=pk)
+        context = {
+            'contactpersoon_form': contactpersoon_form,
+            'broker_pk': broker_pk
+        }
+    elif 'klant' in vorige_pagina:
+        request.session['vorige_pagina'] = 'klant'
+        eind_klant_pk = Eindklanten.objects.get(id=pk)
+        context = {
+            'contactpersoon_form': contactpersoon_form,
+            'eind_klant_pk': eind_klant_pk,
+        }
+    if request.method == 'POST':
+        previous_page = request.session.get('vorige_pagina')
+        contactpersoon_form = ContactpersoonForm(request.POST, request.FILES)
+        if contactpersoon_form.is_valid():
+            contactpersoon = contactpersoon_form.save()
+            if 'broker' in previous_page:
+                contactpersoon.broker_id = pk
+                broker_pk = Brokers.objects.get(id=pk)
+                broker_pk.contactpersoon_id = contactpersoon
+                broker_pk.save()
+                contactpersoon.save()
+                return redirect('brokers')
+            elif 'broker' in previous_page:
+                contactpersoon.klant_id = pk
+                klant_pk = Eindklanten.objects.get(id=pk)
+                klant_pk.contactpersoon_id = contactpersoon
+                klant_pk.save()
+                contactpersoon.save()
+                return redirect('eindklanten')
+    else:
+        return render(request, 'contactpersoon.toevoegen.html', context)
+
+
+@login_required(login_url='login')
+def ContactPersoonUpdaten(request, pk):
+    contactpersoon_pk = Contactpersonen.objects.get(id=pk)
+    contactpersoon_form = ContactpersoonForm(instance=contactpersoon_pk)
+
+    context = {
+        'contactpersoon_form': contactpersoon_form,
+        'contactpersoon_pk': contactpersoon_pk,
+    }
+
+    if request.method == 'POST':
+        contactpersoon_form = ContactpersoonForm(request.POST, request.FILES, instance=contactpersoon_pk)
+        if contactpersoon_form.is_valid():
+            contactpersoon = contactpersoon_form.save()
+            contactpersoon.save()
+            return redirect('brokers')
+
+    else:
+        return render(request, 'update.contactpersoon.html', context)
 
 @login_required(login_url='login')
 def VestigingToevoegen(request, pk):
-    eind_klant_pk = Eindklanten.objects.get(id=pk)
-    form = VestigingplaatsForm()
+    vestiging_form = VestigingplaatsForm()
 
-    context = {
-        'form': form,
-        'eind_klant_pk': eind_klant_pk.id,
-    }
+    vorige_pagina = request.META['HTTP_REFERER']
+
+    if 'broker' in vorige_pagina:
+        request.session['vorige_pagina'] = 'broker'
+
+        broker_pk = Brokers.objects.get(id=pk)
+
+        context = {
+            'vestiging_form': vestiging_form,
+            'broker_pk': broker_pk,
+
+        }
+    elif 'klant' in vorige_pagina:
+        request.session['vorige_pagina'] = 'klant'
+
+        eind_klant_pk = Eindklanten.objects.get(id=pk)
+
+        context = {
+            'vestiging_form': vestiging_form,
+            'eind_klant_pk': eind_klant_pk,
+        }
+
     if request.method == 'POST':
-        form = VestigingplaatsForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('eindklant_detail', pk)
+        previous_page = request.session.get('vorige_pagina')
+
+        vestiging_form = VestigingplaatsForm(request.POST, request.FILES)
+        if vestiging_form.is_valid():
+            vestiging = vestiging_form.save()
+
+            if 'broker' in previous_page:
+                vestiging.broker_id = pk
+                broker_pk = Brokers.objects.get(id=pk)
+                broker_pk.vestiging_id = vestiging
+                broker_pk.save()
+                vestiging.save()
+                return redirect('brokers')
+
+            elif 'klant' in previous_page:
+                vestiging.klant_id = pk
+                eind_klant_pk = Eindklanten.objects.get(id=pk)
+                eind_klant_pk.vestiging_id = vestiging
+                eind_klant_pk.save()
+                vestiging.save()
+                return redirect('eindklanten')
+
+
+
     else:
         return render(request, 'vestiging.toevoegen.html', context)
 
+
+@login_required(login_url='login')
+def VestigingUpdaten(request, pk):
+    vestiging_pk = Vestigingplaats.objects.get(id=pk)
+    vestiging_form = VestigingplaatsForm(instance=vestiging_pk)
+
+    context = {
+        'vestiging_form': vestiging_form,
+        'vestiging_pk': vestiging_pk,
+    }
+
+    if request.method == 'POST':
+        vestiging_form = VestigingplaatsForm(request.POST, request.FILES, instance=vestiging_pk)
+        if vestiging_form.is_valid():
+            vestiging = vestiging_form.save()
+            vestiging.save()
+            return redirect('eindklanten')
+
+    else:
+        return render(request, 'update.vestiging.html', context)
+
+
+
+
+
+@login_required(login_url='login')
+def VestigingDeleten(request, pk):
+    vestiging_pk = Vestigingplaats.objects.get(id=pk)
+    vestiging_pk.delete()
+
+    return redirect('eindklanten')
 
 # Dit is de "ListView" van opmerkingen in die template krijg je alle ingevoerde opmerkingen.
 # in de ListView,CreateView,UpdateView, DeleteView kan je geen @login_required(login_url='login') maar inplaats daarvan doe je tussen de haakjes
@@ -88,6 +227,10 @@ def EindklantDetail(request, pk):
     eindklant_pk = Eindklanten.objects.get(id=pk)
     # vestiging = Vestigingplaats.objects.get(id=pk)
 
+
+    vestiging_lijst = Vestigingplaats.objects.filter(Q(klant_id=eindklant_pk))
+
+
     # hier kijkt de code als ware of er een vestiging adres is
     try:
         # als er een vestiging adres is bij de klant dan is staat die info in 'vestiging'
@@ -99,6 +242,7 @@ def EindklantDetail(request, pk):
     context = {
         'eindklant_pk': eindklant_pk,
         'vestiging': vestiging,
+        'vestiging_lijst': vestiging_lijst,
 
     }
     return render(request, 'eindklanten.detail.html', context)
@@ -109,6 +253,8 @@ def EindklantDetail(request, pk):
 @login_required(login_url='login')
 def BrokerDetail(request, pk):
     broker = Brokers.objects.get(id=pk)
+    vestiging_lijst = Vestigingplaats.objects.filter(Q(broker_id=broker))
+    contactpersoon_lijst = Contactpersonen.objects.filter(Q(broker_id=broker))
 
     try:
         # als er een vestiging adres is bij de broker dan is staat die info in 'vestiging' variable
@@ -120,7 +266,9 @@ def BrokerDetail(request, pk):
     context = {
         # 'broker_list': broker_list,
         'broker': broker,
-        'vestiging': vestiging
+        'vestiging': vestiging,
+        'vestiging_lijst': vestiging_lijst,
+        'contactpersoon_lijst': contactpersoon_lijst
     }
     return render(request, 'broker.detail.html', context)
 
@@ -344,11 +492,8 @@ def ArchiefMedewerkers(request):
 @login_required(login_url='login')
 def MedewerkerAanbiedingOpdrachten(request, pk):
     medewerker = Medewerkers.objects.get(id=pk)
-
     aanbieding_list = Aanbiedingen.objects.filter(Q(medewerker=medewerker))
-
     opdracht_list = Opdrachten.objects.filter(Q(aanbieding__medewerker=medewerker))
-    # opdracht_list = Opdrachten.objects.filter(Q(aanbieding=medewerker))
 
     context = {
         'aanbieding_list': aanbieding_list,
@@ -487,7 +632,7 @@ def EindklantenPage(request):
 
     #    vestiging = Vestigingplaats.objects.get(klant_id=eindklanten_list)
 
-    vestiging = Vestigingplaats.objects.all()
+    vestiging = Vestigingplaats.objects.filter(klant_id=eindklant_pk)
 
     context = {
         'eindklanten_list': eindklanten_list,
@@ -502,30 +647,27 @@ def EindklantenPage(request):
 @login_required(login_url='login')
 def EindklantToevoegen(request):
     klant_form = EindklantenForm(request.POST or None)
-    vestiging_form = VestigingplaatsForm(request.POST or None)
 
-    context1 = {
+    context = {
         'klant_form': klant_form,
     }
 
-    context2 = {
-        'klant_form': klant_form,
-        'vestiging_form': vestiging_form,
-    }
-    if request.method == 'POST':
+    if request.method == 'POST' and 'vestigingtoevoegen' in request.POST:
+        if klant_form.is_valid():
+            klant = klant_form.save()
+            klant.save()
+
+            return redirect('vestiging_toevoegen', klant.pk)
+
+    elif request.method == 'POST' and 'vestigingtoevoegen' not in request:
         klant_form = EindklantenForm(request.POST, request.FILES)
-        vestiging_form = VestigingplaatsForm(request.POST, request.FILES)
 
         if klant_form.is_valid():
             klant = klant_form.save()
-            vestiging = vestiging_form.save()
             klant.save()
-            vestiging.klant = klant
-            vestiging.save()
-
             return redirect('eindklanten')
     else:
-        return render(request, 'eindklant.toevoegen.html', context1)
+        return render(request, 'eindklant.toevoegen.html', context)
 
 
 # De updateview voor de Eindklanten.
@@ -671,8 +813,16 @@ def AanbiedingToevoegen(request):
 # De Delete functie voor de Aanbiedingen.
 @login_required(login_url='login')
 def AanbiedingDelete(request, pk):
-    delete_aanbieding = Aanbiedingen.objects.get(id=pk)
-    delete_aanbieding.delete()
+    aanbieding = Aanbiedingen.objects.get(id=pk)
+
+    try:
+        opdracht = Opdrachten.objects.get(aanbieding_id=aanbieding)
+        #opdracht.aanbieding_id = ''
+        opdracht.delete()
+
+    except:
+        opdracht = ''
+    aanbieding.delete()
     return redirect('aanbiedingen')
 
 
@@ -681,7 +831,17 @@ def AanbiedingDelete(request, pk):
 @login_required(login_url='login')
 def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
-    aanbieding_form = AanbiedingUpdatenForm(request.POST or None,instance=aanbieding)
+    aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
+
+
+    if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
+        pizza=''
+    else:
+        if aanbieding.status == '5':
+            aanbieding.status = '1'
+
+
+            aanbieding.save()
 
     context = {
         'aanbieding': aanbieding,
@@ -780,15 +940,13 @@ def OpdrachtToevoegen(request, pk):
             opdracht.status_opdracht = '1'
             opdracht.opdracht_aangemaakt_door = aanbieding.aangemaakt_door
             opdracht.save()
-            aanbieding.status = '6'
+            aanbieding.status = '5'
             aanbieding.save()
 
             medewerker = opdracht.aanbieding.medewerker
-            medewerker.status = '4'
+            medewerker.status = '2'
             medewerker.save()
             opdracht.save()
-
-
 
             return redirect('lopende_opdrachten')
         # dit gebeurt als de form niet valid is
@@ -814,7 +972,7 @@ def lopendeOpdrachtenPage(request):
 @login_required(login_url='login')
 def aflopendeOpdrachtenPage(request):
     datum_nu = date.today()
-    eind_datum = datum_nu + timedelta(days=31)
+    eind_datum = datum_nu + timedelta(days=60)
     aflopendeOpdrachten = Opdrachten.objects.filter(Q(status_opdracht=1), einddatum__range=[datum_nu, eind_datum])
 
     context = {
@@ -881,9 +1039,16 @@ def OpdrachtenDetail(request, pk):
 @login_required(login_url='login')
 def OpdrachtDelete(request, pk):
     opdracht = Opdrachten.objects.get(id=pk)
-    aanbieding = opdracht.aanbieding
-    aanbieding.status = '1'
-    aanbieding.save()
+
+    try:
+        aanbieding = opdracht.aanbieding
+        aanbieding.status = '1'
+        medewerker = aanbieding.medewerker
+        medewerker.status = '3'
+        medewerker.save()
+        aanbieding.save()
+    except:
+        aanbieding = ''
     opdracht.delete()
 
     return redirect('lopende_opdrachten')

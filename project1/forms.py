@@ -87,6 +87,13 @@ class ContractenToevoegenForm(ModelForm):
                   'Onkostenvergoeding']
 
 
+class ContactpersoonForm(forms.ModelForm):
+    class Meta:
+        model = Contactpersonen
+        fields = '__all__'
+        exclude = ['klant', 'broker', 'vestiging']
+
+
 class VestigingplaatsForm(forms.ModelForm):
     soort_vestiging = forms.CharField(max_length=20, required=False)
     postcode = forms.CharField(max_length=10, required=False)
@@ -226,7 +233,7 @@ class AanbiedingenForm(forms.ModelForm):
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
-    tarief = forms.DecimalField(initial=00.00, required=False)
+    tarief = forms.DecimalField(initial=00.00, required=False, max_value=200)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
 
     class Meta:
@@ -267,14 +274,13 @@ class AanbiedingUpdatenForm(forms.ModelForm):
             'laatste_update': forms.DateInput(
                 attrs={'class': 'form-control',
                        'type': 'date'}),
-
         }
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
     tarief_opdracht = forms.FloatField(required=False)
     opdracht_betaalkorting = forms.FloatField(required=False)
-    aantal_uren = forms.IntegerField(required=False)
+    aantal_uren = forms.IntegerField(required=False, max_value=40)
     class Meta:
         model = Opdrachten
         fields = '__all__'

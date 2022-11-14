@@ -21,10 +21,8 @@
                 {% csrf_token %}
                 {{ opdracht_form|crispy }}
 
-                <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary btn-sm" role="button">Annuleer</a>
+                <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary" role="button">Annuleer</a>
                 <input type="hidden" name="aanbieding.id" value="{{ aanbieding.id }}" />
-
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 
                 <input class="btn btn-primary" type="submit" name="next">
             </form>

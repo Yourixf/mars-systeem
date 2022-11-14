@@ -194,6 +194,8 @@ class Eindklanten(models.Model):
     klantnaam = models.CharField(max_length=50, null=True, blank=True)
     telefoonnummer_klant = models.CharField(max_length=17, null=True, blank=True)
     portaal_klant = models.URLField(max_length=300, null=True, blank=True)
+    vestiging = models.ForeignKey("Vestigingplaats", on_delete=models.DO_NOTHING, blank=True)
+
 
     def get_absolut_url(self):
         return reverse('project1:eindklanten.detail', kwargs={'pk': self.pk})
@@ -205,12 +207,14 @@ class Eindklanten(models.Model):
 class Brokers(models.Model):
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     broker_naam = models.CharField(max_length=50, blank=True)
-    straat_broker = models.CharField(max_length=150, blank=True)
-    huisnummer_broker = models.CharField(max_length=20, blank=True)
-    postcode_broker = models.CharField(max_length=10, blank=True)
-    vestigingplaats_broker = models.CharField(max_length=150, blank=True)
+    #straat_broker = models.CharField(max_length=150, blank=True)
+    #huisnummer_broker = models.CharField(max_length=20, blank=True)
+    #postcode_broker = models.CharField(max_length=10, blank=True)
+    #vestigingplaats_broker = models.CharField(max_length=150, blank=True)
     telefoonnummer_broker = models.CharField(null=True, max_length=20, blank=True)
     portaal_broker = models.URLField(max_length=300, null=True, blank=True)
+    vestiging = models.ForeignKey("Vestigingplaats", on_delete=models.DO_NOTHING, blank=True)
+    contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:broker.detail', kwargs={'pk': self.pk})
@@ -229,6 +233,15 @@ class Vestigingplaats(models.Model):
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
 
 
+class Contactpersonen(models.Model):
+    naam = models.CharField(max_length=50, blank=True)
+    mail_adres = models.CharField(max_length=50, blank=True)
+    telefoonnummer = models.CharField(max_length=30, blank=True)
+    functie = models.CharField(max_length=50, blank=True)
+    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
+    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
+    vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True)
+
 class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     registratie = models.DateField(null=True, blank=True)
@@ -241,7 +254,7 @@ class Aanbiedingen(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
-    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=True)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False)
 
     def get_status_count(self):
         return Aanbiedingen.objects.all().filter(status='1').count()
@@ -260,3 +273,4 @@ class Opdrachten(models.Model):
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()
+

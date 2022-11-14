@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block title %}Leegloop Medewerkers{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Leegloop Medewerkers 4-Rest</h3><a href="{% url 'medewerker_toevoegen' %}" class="btn btn-success" role="button"><h5>Medewerker Toevoegen</h5></a></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Leegloop Medewerkers 4-Rest</h3></div>
 
 {% if medewerkers %}
 <style>
@@ -37,6 +37,9 @@ $(document).ready(function() {
       lengthChange: false,
       bInfo : false,
       order: [[ 0, "asc" ]],
+      "columnDefs": [
+          { "searchable": false, "targets": 5 }
+      ],
       dom: 'Bfrtip',
         buttons: [ {
             extend: 'excelHtml5',
@@ -86,11 +89,10 @@ $(document).ready(function() {
                              <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
                          </td>
                          <td id="deleteUpdate">
-                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
-                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-
                              <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                              <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
+                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
                          </td>
                          <td id="detail">
                              <a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>

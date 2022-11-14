@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Vestiging toevoegen{% endblock %}
+{% block title %}Contactpersoon updaten{% endblock %}
 {% block body %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
@@ -9,7 +9,7 @@
     <div class="form-group">
         <div class="card card-body">
             <hr>
-             <div style="text-align: center;" ><h3> Vestiging toevoegen </h3></div>
+             <div style="text-align: center;" ><h3> Contactpersoon updaten </h3></div>
             <hr>
         </div>
     </div>
@@ -19,7 +19,7 @@
             <div style="width: 25%" class="center-block">
                 <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ vestiging_form|crispy }}
+                    {{ contactpersoon_form|crispy }}
                 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
                 <input class="btn btn-primary" type="submit" name="Vestiging toevoegen">
                 </form>
@@ -27,3 +27,4 @@
         </div>
     </div>
 {% endblock %}
+

@@ -50,7 +50,6 @@ urlpatterns = [
     path(r'eindklant/delete/<str:id>/', views.EindklantDelete, name='eindklant_delete'),
     # zoekt naar de view Eindklanten Update
     path(r'eindklant/update/<str:pk>/', views.EindklantenUpdaten, name='eindklant_update'),
-
     # zoekt naar de view Broker Page
     path(r'brokers_page/', views.BrokersPage, name='brokers'),
     # zoekt naar de view Brokers toevoegen
@@ -99,6 +98,10 @@ urlpatterns = [
     path('opmerkingen/delete/<str:pk>/', views.OpmerkingenDeleteView.as_view(), name='delete_list'),
     # voor vestigingsadres
     path(r'vestiging/toevoegen/<str:pk>/', views.VestigingToevoegen, name='vestiging_toevoegen'),
+    #voor vestiging updaten
+    path(r'vestiging/updaten/<str:pk>/', views.VestigingUpdaten, name='vestiging_updaten'),
+    #voor vestiging deleten
+    path(r'vestiging/delete/<str:pk>/', views.VestigingDeleten, name='vestiging_delete'),
     #voor lopende opdrachten
     path(r'opdrachten/lopende', views.lopendeOpdrachtenPage, name='lopende_opdrachten'),
     #voor opdrachten die aflopen
@@ -119,7 +122,12 @@ urlpatterns = [
     path(r'archief/medewerkers', views.ArchiefMedewerkers, name='archief_medewerkers'),
     #voor medewerkers met aanbiedingen / opdrachten
     path(r'medewerker/aanbiedingen/opdrachten/<str:pk>', views.MedewerkerAanbiedingOpdrachten, name='opdracht_aanbieding_medewerkers'),
-
+    #voor contactpersonen
+    path(r'contactpersonen/toevoegen/<str:pk>/', views.ContactPersonenToevoegen, name='toevoegen.contactpersoon'),
+    #voor contactpesonen updaten
+    path(r'contactpersoon/updaten/<str:pk>/', views.ContactPersoonUpdaten, name='update_contactpersoon'),
+    #voor contactpersoon delete
+    path(r'contactpersoon/delete/<str:pk>/', views.ContactPersonenDelete, name='delete_contactpersoon'),
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.
     url(r'^download/<str:pk>/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

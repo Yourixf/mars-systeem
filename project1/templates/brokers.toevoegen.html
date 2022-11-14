@@ -21,8 +21,11 @@
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
-            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            <input class="btn btn-primary" type="submit" name="broker toevoegen">
+
+                <a href="{% url 'brokers' %}" class="btn btn-primary" role="button">Annuleer</a>
+                <input type="hidden" name="broker" value="" />
+
+                <input class="btn btn-primary" type="submit" name="broker toevoegen">
             </form>
             </div>
         </div>

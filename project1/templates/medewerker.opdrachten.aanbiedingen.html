@@ -35,7 +35,6 @@ td, th {
 
 #deleteUpdate {
     max-width: 100px;
-    min-width: 100px;
 }
 
 #deleteUpdate a {
@@ -101,18 +100,19 @@ $(document).ready(function() {
 
 <table id="basic-datatable1" class="table1" style="width:100%">
         <thead>
-        <tr>
-            <th>Klantnaam</th>
-            <th>Medewerker</th>
-            <th id="tarief">Tarief</th>
-            <th id="registratie">Registratiedatum</th>
-            <th id="updateDatum">Laatste Update</th>
-            <th>Broker</th>
-            <th>Fuctie aanbieding</th>
-            <th id="status">Status</th>
-            <th id="deleteUpdate">Update / Delete</th>
-            <th id="detail">Detail</th>
-        </tr>
+            <tr>
+                <th>Klantnaam</th>
+                <th>Medewerker</th>
+                <th id="tarief">Tarief</th>
+                <th id="registratie">Registratiedatum</th>
+                <th id="updateDatum">Laatste Update</th>
+                <th>Broker</th>
+                <th>Fuctie aanbieding</th>
+                <th id="status">Status</th>
+                <th id="deleteUpdate">Update / Delete</th>
+                <th id="detail">Detail</th>
+            </tr>
+        </thead>
 
         <tbody id="myTable">
             {% for aanbiedingen in aanbieding_list %}
@@ -200,6 +200,7 @@ $(document).ready(function() {
             <th>Einddatum</th>
             <th id="tarief">Tarief</th>
             <th>Broker</th>
+            <th id="status">Status</th>
             <th id="deleteUpdate">Update / Delete</th>
             <th id="detail">Detail</th>
         </tr>
@@ -214,6 +215,7 @@ $(document).ready(function() {
                     <td>{{ opdracht.einddatum }}</td>
                     <td>{{ opdracht.tarief_opdracht }}</td>
                     <td>{{ opdracht.aanbieding.broker }}</td>
+                    <td>{{ opdracht.aanbieding.get_status_display }}</td>
 
 
                     {% csrf_token %}

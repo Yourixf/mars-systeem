@@ -11,23 +11,86 @@ table {
   width: 100%;
 }
 
+#basic-datatable1_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#basic-datatable2_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
 }
+
+#deleteUpdate {
+    max-width: 105px;
+}
+
+#VestigingToevoegen {
+    margin-left: 45%;
+    margin-right: 20%;
+}
+
+#ContactpersoonToevoegen {
+    margin-left: 43.5%;
+    margin-right: 24%;
+}
+
+#telefoonnummer {
+    max-width: 85px;
+}
+
+#mailAdres {
+    max-width: 140px;
+    overflow: hidden;
+}
+
+#functie {
+    max-width: 100px;
+}
 </style>
 </head>
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable1").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
 
 <table>
     <tr>
         <th>Broker naam:</th><td>{{ broker.broker_naam }}</td>
         <th>Accountmanager:</th><td>{{ broker.get_accountmanager_display }}</td></tr>
-        <th>Vestiging soort</th><td>{{ vestiging.soort_vestiging }}</td>
-        <th>Postcode broker:</th><td>{{ vestiging.postcode }}</td><tr></tr>
-        <th>Vestigingplaats broker:</th> <td>{{ vestiging.plaats }}</td>
-        <th>Telefoonnummer broker:</th><td>{{ broker.telefoonnummer_broker }}</td><tr></tr>
-        <th>Portaal broker:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td>
+        <th>Telefoonnummer broker:</th><td>{{ broker.telefoonnummer_broker }}</td>
+        <th>Portaal broker:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td><tr></tr>
          </tr>
             <td>
                 <a href="{% url 'broker_update' broker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
@@ -35,8 +98,108 @@ td, th {
             </td>
         <tr>
 </table>
-<br>
-<br>
+
+<h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
+<a id="VestigingToevoegen" href="{% url 'vestiging_toevoegen' broker.id %}" class="btn btn-primary" role="button">Vestiging Toevoegen</a>
+
+
+<table id="basic-datatable1" class="table1">
+    <thead>
+        <tr>
+            <th>Soort vestiging</th>
+            <th>Postcode</th>
+            <th>Straatnaam</th>
+            <th>Huisnummer</th>
+            <th>Plaats</th>
+            <th id="deleteUpdate">Update / Delete</th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        {% for vestiging in vestiging_lijst %}
+            <tr>
+                <td>{{ vestiging.soort_vestiging }}</td>
+                <td>{{ vestiging.postcode }}</td>
+                <td>{{ vestiging.straatnaam }}</td>
+                <td>{{ vestiging.huisnummer }}</td>
+                <td>{{ vestiging.plaats }}</td>
+
+                <form action="{% url 'vestiging_delete' vestiging.pk %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                        <td id="deleteUpdate">
+                            <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                            <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                        </td>
+                    </form>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable2").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+<h3 style="text-align: center;">Contacpersonen</h3>
+<a id="ContactpersoonToevoegen" href="{% url 'toevoegen.contactpersoon' broker.id %}" class="btn btn-primary" role="button">Contactpersoon Toevoegen</a>
+
+
+<table id="basic-datatable2" class="table1">
+    <thead>
+        <tr>
+            <th>Naam</th>
+            <th id="mailAdres">Mail adres</th>
+            <th id="telefoonnummer">Telefoonnummer</th>
+            <th id="functie">Functie</th>
+            <th id="vestigingPlaats">Vestiging plaats</th>
+            <th id="deleteUpdate">Update / Delete</th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        {% for contactpersoon in contactpersoon_lijst %}
+            <tr>
+                <td>{{ contactpersoon.naam }}</td>
+                <td id="mailAdres">{{ contactpersoon.mail_adres }}</td>
+                <td id="telefoonnummer">{{ contactpersoon.telefoonnummer }}</td>
+                <td id="functie">{{ contactpersoon.functie }}</td>
+                <td id="vestigingPlaats">{{ contactpersoon.vestiging.plaats }}</td>
+
+                <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                        <td id="deleteUpdate">
+                            <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                            <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                        </td>
+                </form>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
 
 
 {% for posts in posts %}

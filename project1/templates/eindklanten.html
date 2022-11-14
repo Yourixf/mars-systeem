@@ -24,7 +24,7 @@ td, th {
 }
 
 #deleteUpdate {
-    max-width: 99px;
+    max-width: 105px;
 }
 
 #detail {
@@ -79,26 +79,25 @@ $(document).ready(function() {
                 <tr>
                     <td>{{ Eindklanten.klantnaam }}</td>
                     <td>{{ Eindklanten.get_accountmanager_display}}</td>
-
-                    <td></td>
+                    <td>{{ Eindklanten.vestiging.plaats }}</td>
                     <td>{{ Eindklanten.telefoonnummer_klant }}</td>
                     <td id="portaal"><a href="{{ Eindklanten.portaal_klant }}" target="_blank">{{Eindklanten.portaal_klant}}</a></td>
 
                     <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
                     {% csrf_token %}
                         <td id="deleteUpdate">
-                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
-                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
                             <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                             <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
                         </td>
                         <td id="detail">
                             <a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                             <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
                         </td>
                     </form>
-            {% endfor %}
                 </tr>
+            {% endfor %}
         </tbody>
 
 <script>
