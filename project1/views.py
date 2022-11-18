@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
+from django.template.defaultfilters import first
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
@@ -28,14 +29,54 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
 @login_required(login_url='login')
 def ContactPersonenDelete(request, pk):
-    contactpersoon_pk = Contactpersonen.objects.get(id=pk)
+    contactpersoon = Contactpersonen.objects.get(id=pk)
+    contactpersoon_form = ContactpersoonForm(request.POST or None, instance=contactpersoon)
 
-    contactpersoon_pk.broker_id = ''
-    contactpersoon_pk.save()
+    vorige_pagina = request.META['HTTP_REFERER']
 
-    contactpersoon_pk.delete()
+    if 'broker' in vorige_pagina:
+        contactpersoon = contactpersoon_form.save()
+        broker = contactpersoon.broker
+        broker.vestiging_id = ''
+        broker.save()
+        contactpersoon.save()
+        contactpersoon.delete()
 
-    return redirect('brokers')
+        if Contactpersonen.objects.filter(broker_id=broker).first():
+            cobo = Contactpersonen.objects.filter(broker_id=broker).first()
+            broker.contactpersoon_id = cobo
+            broker.save()
+        elif Contactpersonen.objects.filter(broker_id=broker).last():
+            cobo = Contactpersonen.objects.filter(broker_id=broker).last()
+            broker.contactpersoon_id = cobo
+            broker.save()
+        else:
+            cobo = ''
+            broker.contactpersoon_id = cobo
+            broker.save()
+        return redirect(vorige_pagina)
+    elif 'klant' in vorige_pagina:
+        contactpersoon = contactpersoon_form.save()
+        klant = contactpersoon.klant
+        klant.contactpersoon_id = ''
+        klant.save()
+        contactpersoon.save()
+        contactpersoon.delete()
+
+        if Contactpersonen.objects.filter(klant_id=klant).first():
+            cobo = Contactpersonen.objects.filter(klant_id=klant).first()
+            klant.contactpersoon_id = cobo
+            klant.save()
+        elif Contactpersonen.objects.filter(klant_id=klant).last():
+            cobo = Contactpersonen.objects.filter(klant_id=klant).last()
+            klant.contactpersoon_id = cobo
+            klant.save()
+        else:
+            cobo = ''
+            klant.contactpersoon_id = cobo
+            klant.save()
+        return redirect(vorige_pagina)
+
 
 @login_required(login_url='login')
 def ContactPersonenToevoegen(request, pk):
@@ -67,7 +108,7 @@ def ContactPersonenToevoegen(request, pk):
                 broker_pk.save()
                 contactpersoon.save()
                 return redirect('brokers')
-            elif 'broker' in previous_page:
+            elif 'klant' in previous_page:
                 contactpersoon.klant_id = pk
                 klant_pk = Eindklanten.objects.get(id=pk)
                 klant_pk.contactpersoon_id = contactpersoon
@@ -94,7 +135,6 @@ def ContactPersoonUpdaten(request, pk):
             contactpersoon = contactpersoon_form.save()
             contactpersoon.save()
             return redirect('brokers')
-
     else:
         return render(request, 'update.contactpersoon.html', context)
 
@@ -103,9 +143,17 @@ def VestigingToevoegen(request, pk):
     vestiging_form = VestigingplaatsForm()
 
     vorige_pagina = request.META['HTTP_REFERER']
+    test = request.META
+    volgende_pagina = request.META['PATH_INFO']
+
+    action = data.get('contactpersoon')
 
     if 'broker' in vorige_pagina:
         request.session['vorige_pagina'] = 'broker'
+
+        if 'vestiging' in volgende_pagina:
+            print('patat')
+
 
         broker_pk = Brokers.objects.get(id=pk)
 
@@ -146,9 +194,6 @@ def VestigingToevoegen(request, pk):
                 eind_klant_pk.save()
                 vestiging.save()
                 return redirect('eindklanten')
-
-
-
     else:
         return render(request, 'vestiging.toevoegen.html', context)
 
@@ -157,6 +202,14 @@ def VestigingToevoegen(request, pk):
 def VestigingUpdaten(request, pk):
     vestiging_pk = Vestigingplaats.objects.get(id=pk)
     vestiging_form = VestigingplaatsForm(instance=vestiging_pk)
+
+    vorige_pagina = request.META['HTTP_REFERER']
+    if 'broker' in vorige_pagina:
+        request.session['vorige_pagina'] = 'broker'
+    elif 'klant' in vorige_pagina:
+        request.session['vorige_pagina'] = 'klant'
+
+    previous_pagina = request.session.get('vorige_pagina')
 
     context = {
         'vestiging_form': vestiging_form,
@@ -168,21 +221,65 @@ def VestigingUpdaten(request, pk):
         if vestiging_form.is_valid():
             vestiging = vestiging_form.save()
             vestiging.save()
-            return redirect('eindklanten')
+            return redirect(previous_pagina)
 
     else:
         return render(request, 'update.vestiging.html', context)
 
 
 
-
-
 @login_required(login_url='login')
 def VestigingDeleten(request, pk):
-    vestiging_pk = Vestigingplaats.objects.get(id=pk)
-    vestiging_pk.delete()
+    vestiging = Vestigingplaats.objects.get(id=pk)
+    vestiging_form = VestigingplaatsForm(request.POST or None, instance=vestiging)
 
-    return redirect('eindklanten')
+    vorige_pagina = request.META['HTTP_REFERER']
+
+    if 'broker' in vorige_pagina:
+        vestiging = vestiging_form.save()
+        broker = vestiging.broker
+        broker.vestiging_id = ''
+
+        broker.save()
+        vestiging.save()
+        vestiging.delete()
+
+        if Vestigingplaats.objects.filter(broker_id=broker).first():
+            vebo = Vestigingplaats.objects.filter(broker_id=broker).first()
+            broker.vestiging_id = vebo
+            broker.save()
+        elif Vestigingplaats.objects.filter(broker_id=broker).last():
+            vebo = Vestigingplaats.objects.filter(broker_id=broker).last()
+            broker.vestiging_id = vebo
+            broker.save()
+        else:
+            vebo = ''
+            broker.vestiging_id = vebo
+            broker.save()
+        return redirect(vorige_pagina)
+
+    elif 'klant' in vorige_pagina:
+        vestiging = vestiging_form.save()
+        klant = vestiging.klant
+        klant.vestiging_id = ''
+
+        klant.save()
+        vestiging.save()
+        vestiging.delete()
+
+        if Vestigingplaats.objects.filter(klant_id=klant).first():
+            vebo = Vestigingplaats.objects.filter(klant_id=klant).first()
+            klant.vestiging_id = vebo
+            klant.save()
+        elif Vestigingplaats.objects.filter(klant_id=klant).last():
+            vebo = Vestigingplaats.objects.filter(klant_id=klant).last()
+            klant.vestiging_id = vebo
+            klant.save()
+        else:
+            vebo = ''
+            klant.vestiging_id = vebo
+            klant.save()
+        return redirect(vorige_pagina)
 
 # Dit is de "ListView" van opmerkingen in die template krijg je alle ingevoerde opmerkingen.
 # in de ListView,CreateView,UpdateView, DeleteView kan je geen @login_required(login_url='login') maar inplaats daarvan doe je tussen de haakjes
@@ -225,10 +322,8 @@ class OpmerkingenDeleteView(LoginRequiredMixin, DeleteView):
 @login_required(login_url='login')
 def EindklantDetail(request, pk):
     eindklant_pk = Eindklanten.objects.get(id=pk)
-    # vestiging = Vestigingplaats.objects.get(id=pk)
-
-
     vestiging_lijst = Vestigingplaats.objects.filter(Q(klant_id=eindklant_pk))
+    contactpersoon_lijst = Contactpersonen.objects.filter(Q(klant_id=eindklant_pk))
 
 
     # hier kijkt de code als ware of er een vestiging adres is
@@ -243,6 +338,7 @@ def EindklantDetail(request, pk):
         'eindklant_pk': eindklant_pk,
         'vestiging': vestiging,
         'vestiging_lijst': vestiging_lijst,
+        'contactpersoon_lijst': contactpersoon_lijst
 
     }
     return render(request, 'eindklanten.detail.html', context)
@@ -256,17 +352,9 @@ def BrokerDetail(request, pk):
     vestiging_lijst = Vestigingplaats.objects.filter(Q(broker_id=broker))
     contactpersoon_lijst = Contactpersonen.objects.filter(Q(broker_id=broker))
 
-    try:
-        # als er een vestiging adres is bij de broker dan is staat die info in 'vestiging' variable
-        vestiging = Vestigingplaats.objects.get(broker_id=broker)
-    except:
-        # als er geen vestiging adres is bij de broker dan is de 'vestiging' variable leeg
-        vestiging = ''
 
     context = {
-        # 'broker_list': broker_list,
         'broker': broker,
-        'vestiging': vestiging,
         'vestiging_lijst': vestiging_lijst,
         'contactpersoon_lijst': contactpersoon_lijst
     }
@@ -629,8 +717,6 @@ def EindklantenPage(request):
     eindklanten_list = Eindklanten.objects.all()
 
     eindklant_pk = Eindklanten.objects.filter()
-
-    #    vestiging = Vestigingplaats.objects.get(klant_id=eindklanten_list)
 
     vestiging = Vestigingplaats.objects.filter(klant_id=eindklant_pk)
 

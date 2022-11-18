@@ -17,12 +17,20 @@ td, th {
   padding: 8px;
 }
 
-#deleteUpdate {
-    max-width: 105px;
+#startDatum {
+    max-width: 90px;
 }
 
-#deleteUpdate a {
-    margin-bottom: 5px;
+#eindDatum {
+    max-width: 80px;
+}
+
+#tarief {
+    max-width: 30px;
+}
+
+#deleteUpdate {
+    max-width: 105px;
 }
 
 #detail {
@@ -81,9 +89,9 @@ $(document).ready(function() {
             <th>Klantnaam</th>
             <th>Medewerker</th>
             <th>Functie aanbieding</th>
-            <th>Startdatum</th>
-            <th>Einddatum</th>
-            <th>Tarief</th>
+            <th id="startDatum">Startdatum</th>
+            <th id="eindDatum">Einddatum</th>
+            <th id="tarief">Tarief</th>
             <th>Broker</th>
             <th id="deleteUpdate">Update / Delete</th>
             <th id="detail">Detail</th>
@@ -95,9 +103,9 @@ $(document).ready(function() {
                     <td>{{ opdracht.aanbieding.klant }}</td>
                     <td>{{ opdracht.aanbieding.medewerker }}</td>
                     <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
-                    <td>{{ opdracht.startdatum }}</td>
-                    <td>{{ opdracht.einddatum }}</td>
-                    <td>{{ opdracht.tarief_opdracht }}</td>
+                    <td id="startDatum">{{ opdracht.startdatum }}</td>
+                    <td id="eindDatum">{{ opdracht.einddatum }}</td>
+                    <td id="tarief">{{ opdracht.tarief_opdracht }}</td>
                     <td>{{ opdracht.aanbieding.broker }}</td>
 
 

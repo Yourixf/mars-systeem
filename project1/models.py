@@ -194,6 +194,7 @@ class Eindklanten(models.Model):
     klantnaam = models.CharField(max_length=50, null=True, blank=True)
     telefoonnummer_klant = models.CharField(max_length=17, null=True, blank=True)
     portaal_klant = models.URLField(max_length=300, null=True, blank=True)
+    contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
     vestiging = models.ForeignKey("Vestigingplaats", on_delete=models.DO_NOTHING, blank=True)
 
 
@@ -207,14 +208,11 @@ class Eindklanten(models.Model):
 class Brokers(models.Model):
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     broker_naam = models.CharField(max_length=50, blank=True)
-    #straat_broker = models.CharField(max_length=150, blank=True)
-    #huisnummer_broker = models.CharField(max_length=20, blank=True)
-    #postcode_broker = models.CharField(max_length=10, blank=True)
-    #vestigingplaats_broker = models.CharField(max_length=150, blank=True)
     telefoonnummer_broker = models.CharField(null=True, max_length=20, blank=True)
     portaal_broker = models.URLField(max_length=300, null=True, blank=True)
     vestiging = models.ForeignKey("Vestigingplaats", on_delete=models.DO_NOTHING, blank=True)
     contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
+    vestiging = models.ForeignKey("Vestigingplaats", on_delete=models.DO_NOTHING, blank=True)
 
     def get_absolut_url(self):
         return reverse('project1:broker.detail', kwargs={'pk': self.pk})

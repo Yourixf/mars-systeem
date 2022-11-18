@@ -132,6 +132,7 @@ class BrokersForm(forms.ModelForm):
         portaal_broker = forms.URLField(max_length=300)
         model = Brokers
         fields = '__all__'
+        exclude = ['vestiging']
 
 
 

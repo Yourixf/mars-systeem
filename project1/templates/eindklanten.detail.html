@@ -17,6 +17,12 @@ table {
     margin-right: auto;
 }
 
+#basic-datatable2_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
@@ -27,10 +33,34 @@ td, th {
     max-width: 105px;
 }
 
-#VestigingToevoegen {
-    margin-left: 45%;
-    margin-right: 20%;
-    margin-bottom: 1%;
+
+#vestiging {
+    text-align: center;
+}
+
+#contactpers {
+    text-align: center;
+}
+
+#telefoonnummer {
+    max-width: 85px;
+}
+
+#mailAdres {
+    max-width: 140px;
+    overflow: hidden;
+}
+
+#functie {
+    max-width: 100px;
+}
+
+#vestigingPlaats{
+    max-width: 100px;
+}
+
+#vestigToevoegen {
+    margin-bottom: 2px;
 }
 
 </style>
@@ -61,61 +91,128 @@ $(document).ready(function() {
   });
 </script>
 
-
-<table>
-    <tr>
-        <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
-        <th>4-Rest contactpersoon:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
-        <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td>
-        <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td></tr>
+<div id="detail">
+    <table>
         <tr>
-            <td>
-                <a href="{% url 'eindklant_update' eindklant_pk.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            </td>
-        </tr>
-</table>
-
-<h3 style="text-align: center; margin-top: 5%; margin-bottom: 2%;">Vestiging adressen</h3>
-<a id="VestigingToevoegen" href="{% url 'vestiging_toevoegen' eindklant_pk.id %}" class="btn btn-primary" role="button">Vestiging Toevoegen</a>
-
-
-<table id="basic-datatable1" class="table1">
-
-    <thead>
-        <tr>
-            <th>Soort vestiging</th>
-            <th>Postcode</th>
-            <th>Straatnaam</th>
-            <th>Huisnummer</th>
-            <th>Plaats</th>
-            <th id="deleteUpdate">Update / Delete</th>
-        </tr>
-    </thead>
-    <tbody id="myTable">
-        {% for vestiging in vestiging_lijst %}
+            <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
+            <th>4-Rest contactpersoon:</th><td>{{ eindklant_pk.get_accountmanager_display }}</td></tr>
+            <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td>
+            <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td></tr>
             <tr>
-                <td>{{ vestiging.soort_vestiging }}</td>
-                <td>{{ vestiging.postcode }}</td>
-                <td>{{ vestiging.straatnaam }}</td>
-                <td>{{ vestiging.huisnummer }}</td>
-                <td>{{ vestiging.plaats }}</td>
-
-                <form action="{% url 'vestiging_delete' vestiging.pk %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                        <td id="deleteUpdate">
-                            <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                            <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
-                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                        </td>
-                    </form>
+                <td>
+                    <a href="{% url 'eindklant_update' eindklant_pk.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                </td>
             </tr>
-        {% endfor %}
+    </table>
+</div>
 
-    </tbody>
-</table>
+<div id="vestiging">
+    <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
+    <a id="VestigingToevoegen" href="{% url 'vestiging_toevoegen' eindklant_pk.id %}" class="btn btn-primary" role="button">Vestiging Toevoegen</a>
+
+    <table id="basic-datatable1" class="table1">
+        <thead>
+            <tr>
+                <th>Soort vestiging</th>
+                <th>Postcode</th>
+                <th>Straatnaam</th>
+                <th>Huisnummer</th>
+                <th>Plaats</th>
+                <th id="deleteUpdate">Update / Delete</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {% for vestiging in vestiging_lijst %}
+                <tr>
+                    <td>{{ vestiging.soort_vestiging }}</td>
+                    <td>{{ vestiging.postcode }}</td>
+                    <td>{{ vestiging.straatnaam }}</td>
+                    <td>{{ vestiging.huisnummer }}</td>
+                    <td>{{ vestiging.plaats }}</td>
+
+                    <form action="{% url 'vestiging_delete' vestiging.pk %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                            <td id="deleteUpdate">
+                                <a href="{% url 'vestiging_updaten' vestiging.id %}"  class="btn btn-primary btn-sm" role="button">Update</a>
+                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                            </td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable2").DataTable({
+      pageLength: 4,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      "columnDefs": [
+          { "searchable": false, "targets": 5 }
+      ],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+<div id="contactpers">
+    <h3 style="text-align: center;">Contactpersonen</h3>
+    <a id="ContactpersoonToevoegen" href="{% url 'toevoegen.contactpersoon' eindklant_pk.id %}" class="btn btn-primary" role="button">Contactpersoon Toevoegen</a>
 
 
+    <table id="basic-datatable2" class="table1">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th id="mailAdres">Mail adres</th>
+                <th id="telefoonnummer">Telefoonnummer</th>
+                <th id="functie">Functie</th>
+                <th id="vestigingPlaats">Vestiging plaats</th>
+                <th id="deleteUpdate">Update / Delete</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {% for contactpersoon in contactpersoon_lijst %}
+                <tr>
+                    <td>{{ contactpersoon.naam }}</td>
+                    <td id="mailAdres">{{ contactpersoon.mail_adres }}</td>
+                    <td id="telefoonnummer">{{ contactpersoon.telefoonnummer }}</td>
+                    <td id="functie">{{ contactpersoon.functie }}</td>
+                    <td id="vestigingPlaats">{{ contactpersoon.vestiging.plaats }}</td>
+
+                    <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                            <td id="deleteUpdate">
+                                <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'vestiging_toevoegen' contactpersoon.id %}" class="btn btn-primary btn-sm" role="button">Vestiging Toevoegen</a>
+                                <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                            </td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 	<h1 class="title">{{ eindklant_pk.opmerking_title }}</h1>
 
