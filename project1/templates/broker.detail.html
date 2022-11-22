@@ -34,7 +34,7 @@ td, th {
 }
 
 #deleteUpdate {
-    max-width: 105px;
+    max-width: 110px;
 }
 
 #vestiging {
@@ -76,7 +76,7 @@ $(document).ready(function() {
             exportOptions: {
                     columns: [ 0, 1, 2, 3, 4]
                 },
-            title: 'Medewerker aanbiedingen' +
+            title: 'Broker Detail' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
@@ -160,7 +160,7 @@ $(document).ready(function() {
             exportOptions: {
                     columns: [ 0, 1, 2, 3, 4]
                 },
-            title: 'Medewerker aanbiedingen' +
+            title: 'Broker detail' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
@@ -186,7 +186,7 @@ $(document).ready(function() {
                 <th id="telefoonnummer">Telefoonnummer</th>
                 <th id="functie">Functie</th>
                 <th id="vestigingPlaats">Vestiging plaats</th>
-                <th id="deleteUpdate">Update / Delete</th>
+                <th id="deleteUpdate">Actie knoppen</th>
             </tr>
         </thead>
         <tbody id="myTable">
@@ -201,9 +201,11 @@ $(document).ready(function() {
                     <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">
                         {% csrf_token %}
                             <td id="deleteUpdate">
-                                <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
-                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
+                                <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
+                                <a href="{% url 'detail_contactpersonen' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button">Detail</a>
+                                <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
                                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                                <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'toevoegen_ContactVestiging' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button" style="margin-top: 1px">Vestiging Toevoegen</a>
                             </td>
                     </form>
                 </tr>

@@ -15,7 +15,7 @@ from datetime import *
 from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, AanbiedingUpdatenForm, \
     OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
-    TaskItemUpdateForm, VestigingplaatsForm, ContactpersoonForm
+    TaskItemUpdateForm, VestigingplaatsForm, ContactpersoonForm, ContactVestigingForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
     Opdrachten, Opmerkingen, Vestigingplaats, Contactpersonen,  STATUS_OPDRACHT_CHOICES
 
@@ -26,6 +26,92 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
 
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
+@login_required(login_url='login')
+def ContactpersoonDetailPage(request, pk):
+    contactpersoon = Contactpersonen.objects.get(id=pk)
+    vestiging_lijst = Vestigingplaats.objects.filter(Q(contactpersoon_id=contactpersoon))
+
+    context = {
+        'contactpersoon': contactpersoon,
+        'vestiging_lijst': vestiging_lijst,
+    }
+    return render(request, 'contactpersoon.detail.html', context)
+
+@login_required(login_url='login')
+def ContactVestigingDeleten(request, pk):
+    vorige_pagina = request.META['HTTP_REFERER']
+    vestiging = Vestigingplaats.objects.get(id=pk)
+
+    contactpersoon = vestiging.contactpersoon
+    contactpersoon.vestiging_id = ''
+    contactpersoon.save()
+
+    vestiging.contactpersoon_id = ''
+    vestiging.save()
+
+
+
+
+    return redirect(vorige_pagina)
+
+@login_required(login_url='login')
+def ContactVestigingToevoegen(request, pk):
+    vorige_pagina = request.META['HTTP_REFERER']
+    test = request.META['HTTP_REFERER']
+
+    if 'broker' in vorige_pagina:
+        request.session['vorige_pagina'] = 'broker'
+        contactpersoon = Contactpersonen.objects.get(id=pk)
+        broker = contactpersoon.broker
+        vestiging_lijst = Vestigingplaats.objects.filter(broker_id=broker)
+
+        context = {
+            'contactpersoon': contactpersoon,
+            'broker': broker,
+            'vestiging_lijst': vestiging_lijst,
+        }
+        request.session['test'] = contactpersoon.id
+
+    elif 'klant' in vorige_pagina:
+        request.session['vorige_pagina'] = 'klant'
+        contactpersoon = Contactpersonen.objects.get(id=pk)
+        eindklant = contactpersoon.klant
+        vestiging_lijst = Vestigingplaats.objects.filter(klant_id=eindklant.id)
+
+        context = {
+            'contactpersoon':contactpersoon,
+            'eindklant': eindklant,
+            'vestiging_lijst': vestiging_lijst,
+        }
+        request.session['test'] = contactpersoon.id
+
+    if request.method == 'POST':
+        previous_page = request.session.get('vorige_pagina')
+        contactpersoon_id = request.session.get('test')
+        if 'broker' in previous_page:
+            contactpersoon = Contactpersonen.objects.get(id=contactpersoon_id)
+            contactpersoon.vestiging_id = pk
+            contactpersoon.save()
+
+            vestiging = contactpersoon.vestiging
+            vestiging.contactpersoon_id = contactpersoon_id
+            vestiging.save()
+            return redirect('brokers')
+        elif 'klant' in previous_page:
+            contactpersoon = Contactpersonen.objects.get(id=contactpersoon_id)
+            contactpersoon.vestiging_id = pk
+            contactpersoon.save()
+
+            vestiging = contactpersoon.vestiging
+            vestiging.contactpersoon_id = contactpersoon_id
+            vestiging.save()
+
+            return redirect('eindklanten')
+
+    else:
+        return render(request, 'contact.vestiging.toevoegen.html', context)
+
+
 
 @login_required(login_url='login')
 def ContactPersonenDelete(request, pk):
@@ -143,10 +229,8 @@ def VestigingToevoegen(request, pk):
     vestiging_form = VestigingplaatsForm()
 
     vorige_pagina = request.META['HTTP_REFERER']
-    test = request.META
     volgende_pagina = request.META['PATH_INFO']
 
-    action = data.get('contactpersoon')
 
     if 'broker' in vorige_pagina:
         request.session['vorige_pagina'] = 'broker'

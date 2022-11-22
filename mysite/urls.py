@@ -128,6 +128,16 @@ urlpatterns = [
     path(r'contactpersoon/updaten/<str:pk>/', views.ContactPersoonUpdaten, name='update_contactpersoon'),
     #voor contactpersoon delete
     path(r'contactpersoon/delete/<str:pk>/', views.ContactPersonenDelete, name='delete_contactpersoon'),
+    #voor vestiging van contactpersonen
+    path(r'contactpersoon/vestiging/toevoegen/<str:pk>/', views.ContactVestigingToevoegen, name='toevoegen_ContactVestiging'),
+    #vcoor contactpersoon vestiging deleten
+    path(r'contactpersoon/vestiging/deleten/<str:pk>/', views.ContactVestigingDeleten, name='delete_contact_vestiging'),
+    #voor contactpersoon detail
+    path(r'contactpersoon/detail/<str:pk>', views.ContactpersoonDetailPage, name='detail_contactpersonen'),
+
+
+
+
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.
     url(r'^download/<str:pk>/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

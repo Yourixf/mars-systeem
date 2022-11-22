@@ -229,6 +229,8 @@ class Vestigingplaats(models.Model):
     plaats = models.CharField(max_length=20, blank=True)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
+    contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
+
 
 
 class Contactpersonen(models.Model):

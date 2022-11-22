@@ -94,6 +94,14 @@ class ContactpersoonForm(forms.ModelForm):
         exclude = ['klant', 'broker', 'vestiging']
 
 
+class ContactVestigingForm(forms.ModelForm):
+
+    class Meta:
+        model = Vestigingplaats
+        fields = '__all__'
+        exclude = ['klant', 'broker', 'contactpersoon']
+
+
 class VestigingplaatsForm(forms.ModelForm):
     soort_vestiging = forms.CharField(max_length=20, required=False)
     postcode = forms.CharField(max_length=10, required=False)
