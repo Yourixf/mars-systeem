@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Contactpersoon vestiging toevoegen{% endblock %}
+{% block body %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#basic-datatable1_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#huisnummer {
+    max-width: 70px;
+}
+
+#selecteer {
+    max-width: 40px;
+}
+
+#terug {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+</style>
+</head>
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable1").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+<div class="row">
+    <div class="form-group">
+        <div class="card card-body">
+            <hr>
+             <div style="text-align: center;" ><h3> Contactpersoon vestiging toevoegen </h3></div>
+            <hr>
+        </div>
+    </div>
+</div>
+<div id="terug">
+    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+</div>
+<table id="basic-datatable1" class="table1">
+    <thead>
+        <tr>
+            <th>Soort vestiging</th>
+            <th>Postcode</th>
+            <th>Straatnaam</th>
+            <th id="huisnummer">Huisnummer</th>
+            <th>Plaats</th>
+            <th id="selecteer">Selecteer</th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        {% for vestiging in vestiging_lijst %}
+            <tr>
+                <td>{{ vestiging.soort_vestiging }}</td>
+                <td>{{ vestiging.postcode }}</td>
+                <td>{{ vestiging.straatnaam }}</td>
+                <td>{{ vestiging.huisnummer }}</td>
+                <td>{{ vestiging.plaats }}</td>
+                <form action="{% url 'toevoegen_ContactVestiging' vestiging.id %}" method="post">
+                    {% csrf_token %}
+                    <td id="selecteer">
+                        <button type="submit" class="no-export btn btn-danger">Selecteer</button>
+                    </td>
+                </form>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+
+
+
+{% endblock %}
