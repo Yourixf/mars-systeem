@@ -38,6 +38,11 @@ td, th {
     text-align: center;
 }
 
+#opmerkingen {
+    max-width: 125px;
+    overflow-wrap: break-word;
+    overflow: clip;
+}
 #contactpers {
     text-align: center;
 }
@@ -98,6 +103,7 @@ $(document).ready(function() {
             <th>Mail adres:</th><td>{{ contactpersoon.mail_adres }}</td></tr>
             <th>Telefoonnummer:</th><td>{{ contactpersoon.telefoonnummer }}</td>
             <th>Functie:</th><td>{{ contactpersoon.functie }}</td></tr>
+            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ contactpersoon.opmerkingen }}</td>
             <tr>
                 <td>
                     <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary" role="button">Update</a>

@@ -138,11 +138,11 @@ class Medewerkers(models.Model):
     geboortedatum = models.DateField(null=True, blank=True)
     foto_medewerker = models.FileField(upload_to='images/', default='userimg.png')  # de default foto voor de medewerkers.
     cv = models.FileField(upload_to='static/', null=True, blank=True)  # upload to upload het naar de static files
-    title_cv = models.CharField(max_length=50, null=True, blank=True)
+    beschrijving = models.CharField(max_length=50, null=True, blank=True)
     feedback = models.FileField(upload_to='static/', null=True, blank=True)
-    title_feedback = models.CharField(max_length=50, null=True, blank=True)
+    soort_document = models.CharField(max_length=50, null=True, blank=True)
     documenten = models.FileField(upload_to='static/', null=True, blank=True)
-    title_documenten = models.CharField(max_length=50, null=True, blank=True)
+    titel_documenten = models.CharField(max_length=50, null=True, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
@@ -249,6 +249,7 @@ class Contactpersonen(models.Model):
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
     vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True)
+    opmerkingen = models.CharField(max_length=300, blank=True)
 
 class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)

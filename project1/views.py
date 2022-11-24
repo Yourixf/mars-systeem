@@ -574,16 +574,17 @@ def Feedback_Upload(request, pk):
 @login_required(login_url='login')
 def Documenten_Upload(request, pk):
     medewerker_pk = Medewerkers.objects.get(id=pk)
-    form = DocumentenUploadForm(instance=medewerker_pk)
-    context = {'form': form,
-               'medewerker_pk': medewerker_pk,
-               'file': request.POST.get('documenten', 'title_documenten')
-               }
+    documenten_form = DocumentenUploadForm(instance=medewerker_pk)
+    context = {
+        'documenten_form': documenten_form,
+        'medewerker_pk': medewerker_pk,
+        'file': request.POST.get('documenten')
+    }
 
     if request.method == 'POST':
-        form = DocumentenUploadForm(request.POST, request.FILES, instance=medewerker_pk)
-        if form.is_valid():
-            form.save()
+        documenten_form = DocumentenUploadForm(request.POST, request.FILES, instance=medewerker_pk)
+        if documenten_form.is_valid():
+            documenten_form.save()
             return redirect('medewerkers')
     else:
         return render(request, 'documenten.upload.html', context)

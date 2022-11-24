@@ -13,13 +13,13 @@ table {
 }
 
 #basic-datatable1_wrapper {
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
 
 #basic-datatable2_wrapper {
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -30,46 +30,62 @@ td, th {
   padding: 8px;
 }
 
-
-
-
 #vestiging {
     text-align: center;
-    overflow-wrap: break-word;
 }
 
 #contactpers {
     text-align: center;
 }
 
+#opmerking {
+    white-space: nowrap;
+    white-space: pre;
+    max-width: 140px;
+    overflow: scroll;
+}
+
 #telefoonnummer {
-    max-width: 85px;
+    max-width: 75px;
+}
+
+#contactpersNaam {
+    max-width: 70px;
 }
 
 #mailAdres {
     max-width: 140px;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 #functie {
     max-width: 100px;
 }
 
+#vestigingPlaatsHeader {
+    max-width: 130px;
+}
+
 #vestigingPlaats{
-    max-width: 100px;
+    white-space: nowrap;
+    max-width: 130px;
+    overflow: scroll;
+}
+
+#contactpersNaam {
+    max-width: 80px;
 }
 
 #vestigToevoegen {
     margin-bottom: 2px;
 }
-#opmerking {
-    overflow: hidden;
-    height: 10vh;
-    max-width: 100px;
-}
 
 #deleteUpdate {
     max-width: 105px;
+}
+
+#actieKnoppen {
+    max-width: 115px;
 }
 
 </style>
@@ -100,7 +116,7 @@ $(document).ready(function() {
   });
 </script>
 
-<div id="detail">
+<section id="detail">
     <table>
         <tr>
             <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
@@ -114,9 +130,9 @@ $(document).ready(function() {
                 </td>
             </tr>
     </table>
-</div>
+</section>
 
-<div id="vestiging">
+<section id="vestiging">
     <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
     <a id="VestigingToevoegen" href="{% url 'vestiging_toevoegen' eindklant_pk.id %}" class="btn btn-primary" role="button">Vestiging Toevoegen</a>
 
@@ -128,7 +144,7 @@ $(document).ready(function() {
                 <th>Straatnaam</th>
                 <th>Huisnummer</th>
                 <th>Plaats</th>
-                <th id="opmerking">Opmerkingen</th>
+                <th>Opmerkingen</th>
                 <th id="deleteUpdate">Update / Delete</th>
             </tr>
         </thead>
@@ -154,7 +170,7 @@ $(document).ready(function() {
             {% endfor %}
         </tbody>
     </table>
-</div>
+</section>
 
 <script>
 $(document).ready(function() {
@@ -185,7 +201,7 @@ $(document).ready(function() {
   });
 </script>
 
-<div id="contactpers">
+<section id="contactpers">
     <h3 style="text-align: center;">Contactpersonen</h3>
     <a id="ContactpersoonToevoegen" href="{% url 'toevoegen.contactpersoon' eindklant_pk.id %}" class="btn btn-primary" role="button">Contactpersoon Toevoegen</a>
 
@@ -193,18 +209,18 @@ $(document).ready(function() {
     <table id="basic-datatable2" class="table1">
         <thead>
             <tr>
-                <th>Naam</th>
-                <th id="mailAdres">Mail adres</th>
+                <th id="contactpersNaam">Naam</th>
+                <th>Mail adres</th>
                 <th id="telefoonnummer">Telefoonnummer</th>
                 <th id="functie">Functie</th>
-                <th id="vestigingPlaats">Vestiging en plaats</th>
-                <th id="deleteUpdate">Actie knoppen</th>
+                <th id="vestigingPlaatsHeader">Vestiging en plaats</th>
+                <th id="actieKnoppen">Actie knoppen</th>
             </tr>
         </thead>
         <tbody id="myTable">
             {% for contactpersoon in contactpersoon_lijst %}
                 <tr>
-                    <td>{{ contactpersoon.naam }}</td>
+                    <td id="contactpersNaam">{{ contactpersoon.naam }}</td>
                     <td id="mailAdres">{{ contactpersoon.mail_adres }}</td>
                     <td id="telefoonnummer">{{ contactpersoon.telefoonnummer }}</td>
                     <td id="functie">{{ contactpersoon.functie }}</td>
@@ -212,7 +228,7 @@ $(document).ready(function() {
 
                     <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">
                         {% csrf_token %}
-                            <td id="deleteUpdate">
+                            <td id="actieKnoppen">
                                 <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
                                 <a href="{% url 'detail_contactpersonen' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button">Detail</a>
                                 <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
@@ -224,7 +240,7 @@ $(document).ready(function() {
             {% endfor %}
         </tbody>
     </table>
-</div>
+</section>
 
 	<h1 class="title">{{ eindklant_pk.opmerking_title }}</h1>
 

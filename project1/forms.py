@@ -88,6 +88,8 @@ class ContractenToevoegenForm(ModelForm):
 
 
 class ContactpersoonForm(forms.ModelForm):
+    opmerkingen = forms.CharField(widget=forms.Textarea ,max_length=300, required=False)
+
     class Meta:
         model = Contactpersonen
         fields = '__all__'
@@ -110,7 +112,7 @@ class VestigingplaatsForm(forms.ModelForm):
     plaats = forms.CharField(max_length=20, required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
-    opmerkingen = forms.CharField(max_length=300, required=False)
+    opmerkingen = forms.CharField(widget=forms.Textarea ,max_length=300, required=False)
 
     class Meta:
         model = Vestigingplaats
@@ -327,19 +329,21 @@ class OpdrachtenToevoegenForm(forms.ModelForm):
 class CvUploadForm(ModelForm):
     class Meta:
         model = Medewerkers
-        fields = ['title_cv', 'cv']
+        fields = ['cv']
 
 # Dit is de Form om Feedback's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class FeedbackUploadForm(ModelForm):
     class Meta:
         model = Medewerkers
-        fields = ['title_feedback', 'feedback']
+        fields = ['feedback']
 
 # Dit is de Form om Documenten toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
 class DocumentenUploadForm(ModelForm):
+    titel_documenten = forms.CharField(max_length=50, required=False)
+    beschrijving = forms.CharField(widget=forms.Textarea, max_length=30, required=False)
     class Meta:
         model = Medewerkers
-        fields = ['title_documenten', 'documenten']
+        fields = ['titel_documenten', 'soort_document','documenten']
 
 
 class TaskItemCreateForm(forms.ModelForm):
