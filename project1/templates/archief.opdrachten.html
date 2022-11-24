@@ -30,7 +30,7 @@ td, th {
 }
 
 #deleteUpdate {
-    max-width: 99px;
+    max-width: 30px;
 }
 
 #detail {
@@ -93,7 +93,7 @@ $(document).ready(function() {
             <th id="eindDatum">Einddatum</th>
             <th id="tarief">Tarief</th>
             <th>Broker</th>
-            <th id="deleteUpdate">Update / Delete</th>
+            <th id="deleteUpdate">Update</th>
             <th id="detail">Detail</th>
         </tr>
 
@@ -110,12 +110,11 @@ $(document).ready(function() {
 
 
                     {% csrf_token %}
-                        <form action="{% url 'delete_opdracht' opdracht.pk %}">
+                        <form>
                             <td id="deleteUpdate">
                                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
-                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
+
                             </td>
                             <td id="detail">
                                 <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>

@@ -84,9 +84,9 @@ STATUS_OPDRACHT_CHOICES = (
     ('2', 'Afgelopen'),
 )
 
-EIGENWERKNEMER_CHOICES = (
-    ("1", "Zzper"),
-    ("2", "Eigenwerknemer"),
+INHUUR_CHOICES = (
+    ("1", "Ja"),
+    ("2", "Nee"),
 
 )
 OPLEIDINGNIVEAU_CHOICES = (
@@ -111,6 +111,14 @@ BV_CHOICES = (
     ('5', 'Extern')
 )
 
+BURGERLIJKE_STAAT_CHOICES = (
+    ('1', ''),
+    ('2', ''),
+    ('3', ''),
+    ('4', ''),
+
+)
+
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
     tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
@@ -124,10 +132,10 @@ class Medewerkers(models.Model):
     icenummer = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=150, blank=True)
     tariefindicatie = models.FloatField(max_length=20, blank=True)
-    zzper_eigenwerknemer = models.CharField(choices=EIGENWERKNEMER_CHOICES, max_length=50, blank=True)
-    opleidings_niveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES,max_length=50, blank=True)
+    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
+    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES,max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(max_length=100, blank=True)
-    geboorte_datum = models.DateField(null=True, blank=True)
+    geboortedatum = models.DateField(null=True, blank=True)
     foto_medewerker = models.FileField(upload_to='images/', default='userimg.png')  # de default foto voor de medewerkers.
     cv = models.FileField(upload_to='static/', null=True, blank=True)  # upload to upload het naar de static files
     title_cv = models.CharField(max_length=50, null=True, blank=True)
@@ -222,7 +230,7 @@ class Brokers(models.Model):
 
 
 class Vestigingplaats(models.Model):
-    soort_vestiging = models.CharField(max_length=20, blank=True)
+    vestiging = models.CharField(max_length=20, blank=True)
     postcode = models.CharField(max_length=10, blank=True)
     straatnaam = models.CharField(max_length=30, blank=True)
     huisnummer = models.IntegerField(blank=True)
@@ -230,7 +238,7 @@ class Vestigingplaats(models.Model):
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
     contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
-
+    opmerkingen = models.CharField(max_length=300, blank=True)
 
 
 class Contactpersonen(models.Model):

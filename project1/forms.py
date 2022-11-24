@@ -103,18 +103,19 @@ class ContactVestigingForm(forms.ModelForm):
 
 
 class VestigingplaatsForm(forms.ModelForm):
-    soort_vestiging = forms.CharField(max_length=20, required=False)
+    vestiging = forms.CharField(max_length=20, required=False)
     postcode = forms.CharField(max_length=10, required=False)
     straatnaam = forms.CharField(max_length=30, required=False)
     huisnummer = forms.IntegerField(required=False)
     plaats = forms.CharField(max_length=20, required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
+    opmerkingen = forms.CharField(max_length=300, required=False)
 
     class Meta:
         model = Vestigingplaats
         fields = '__all__'
-        exclude = ['klant', 'broker']
+        exclude = ['klant', 'broker', 'contactpersoon']
 
 
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.

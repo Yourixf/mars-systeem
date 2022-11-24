@@ -57,6 +57,15 @@ td, th {
 #functie {
     max-width: 100px;
 }
+
+#vestigingPlaats{
+    max-width: 100px;
+}
+
+#vestigToevoegen {
+    margin-bottom: 2px;
+}
+
 </style>
 </head>
 
@@ -113,7 +122,7 @@ $(document).ready(function() {
     <table id="basic-datatable1" class="table1">
         <thead>
             <tr>
-                <th>Soort vestiging</th>
+                <th>Vestiging</th>
                 <th>Postcode</th>
                 <th>Straatnaam</th>
                 <th id="huisnummer">Huisnummer</th>
@@ -124,7 +133,7 @@ $(document).ready(function() {
         <tbody id="myTable">
             {% for vestiging in vestiging_lijst %}
                 <tr>
-                    <td>{{ vestiging.soort_vestiging }}</td>
+                    <td>{{ vestiging.vestiging }}</td>
                     <td>{{ vestiging.postcode }}</td>
                     <td>{{ vestiging.straatnaam }}</td>
                     <td>{{ vestiging.huisnummer }}</td>
@@ -185,7 +194,7 @@ $(document).ready(function() {
                 <th id="mailAdres">Mail adres</th>
                 <th id="telefoonnummer">Telefoonnummer</th>
                 <th id="functie">Functie</th>
-                <th id="vestigingPlaats">Vestiging plaats</th>
+                <th id="vestigingPlaats">Vestiging en plaats</th>
                 <th id="deleteUpdate">Actie knoppen</th>
             </tr>
         </thead>

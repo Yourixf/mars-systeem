@@ -122,9 +122,17 @@ def ContactPersonenDelete(request, pk):
 
     if 'broker' in vorige_pagina:
         contactpersoon = contactpersoon_form.save()
-        broker = contactpersoon.broker
-        broker.vestiging_id = ''
-        broker.save()
+        try:
+            broker = contactpersoon.broker
+            broker.contactpersoon_id = ''
+            vestiging = contactpersoon.vestiging
+            vestiging.contactpersoon_id = ''
+            vestiging.save()
+            broker.save()
+        except:
+            broker = ''
+        contactpersoon.vestiging_id = ''
+        contactpersoon.broker_id = ''
         contactpersoon.save()
         contactpersoon.delete()
 
@@ -143,9 +151,18 @@ def ContactPersonenDelete(request, pk):
         return redirect(vorige_pagina)
     elif 'klant' in vorige_pagina:
         contactpersoon = contactpersoon_form.save()
-        klant = contactpersoon.klant
-        klant.contactpersoon_id = ''
-        klant.save()
+        try:
+            klant = contactpersoon.klant
+            vestiging = contactpersoon.vestiging
+
+            klant.contactpersoon_id = ''
+            vestiging.contactpersoon_id = ''
+            vestiging.save()
+            klant.save()
+        except:
+            klant = ''
+        contactpersoon.vestiging_id = ''
+        contactpersoon.klant_id = ''
         contactpersoon.save()
         contactpersoon.delete()
 
@@ -210,17 +227,28 @@ def ContactPersoonUpdaten(request, pk):
     contactpersoon_pk = Contactpersonen.objects.get(id=pk)
     contactpersoon_form = ContactpersoonForm(instance=contactpersoon_pk)
 
+    vorige_pagina = request.META['HTTP_REFERER']
+    if 'broker' in vorige_pagina:
+        request.session['vorige_pagina'] = 'broker'
+    elif 'klant' in vorige_pagina:
+        request.session['vorige_pagina'] = 'klant'
+
     context = {
         'contactpersoon_form': contactpersoon_form,
         'contactpersoon_pk': contactpersoon_pk,
     }
 
     if request.method == 'POST':
+        previous_page = request.session.get('vorige_pagina')
         contactpersoon_form = ContactpersoonForm(request.POST, request.FILES, instance=contactpersoon_pk)
         if contactpersoon_form.is_valid():
             contactpersoon = contactpersoon_form.save()
             contactpersoon.save()
-            return redirect('brokers')
+
+            if 'broker' in previous_page:
+                return redirect('brokers')
+            elif 'klant' in previous_page:
+                return redirect('eindklanten')
     else:
         return render(request, 'update.contactpersoon.html', context)
 
@@ -305,7 +333,10 @@ def VestigingUpdaten(request, pk):
         if vestiging_form.is_valid():
             vestiging = vestiging_form.save()
             vestiging.save()
-            return redirect(previous_pagina)
+            if 'broker' in previous_pagina:
+                return redirect('brokers')
+            elif 'klant' in previous_pagina:
+                return redirect('eindklanten')
 
     else:
         return render(request, 'update.vestiging.html', context)
@@ -1219,6 +1250,14 @@ def OpdrachtDelete(request, pk):
         aanbieding.save()
     except:
         aanbieding = ''
-    opdracht.delete()
 
-    return redirect('lopende_opdrachten')
+    if opdracht.status_opdracht == '1':
+        opdracht.status_opdracht = '2'
+        opdracht.save()
+        return redirect('lopende_opdrachten')
+    elif opdracht.status_opdracht == '2':
+        opdracht.delete()
+        return redirect('archief_opdrachten')
+    else:
+        return redirect('lopende_opdrachten')
+

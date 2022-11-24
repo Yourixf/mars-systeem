@@ -100,7 +100,7 @@ $(document).ready(function() {
             <th>Functie:</th><td>{{ contactpersoon.functie }}</td></tr>
             <tr>
                 <td>
-                    <a href="{% url 'update_contactpersoon' contactpersoon %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                    <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary" role="button">Update</a>
                     <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
                 </td>
             </tr>
@@ -113,7 +113,7 @@ $(document).ready(function() {
     <table id="basic-datatable1" class="table1">
         <thead>
             <tr>
-                <th>Soort vestiging</th>
+                <th>Vestiging</th>
                 <th>Postcode</th>
                 <th>Straatnaam</th>
                 <th>Huisnummer</th>
@@ -124,7 +124,7 @@ $(document).ready(function() {
         <tbody id="myTable">
             {% for vestiging in vestiging_lijst %}
                 <tr>
-                    <td>{{ vestiging.soort_vestiging }}</td>
+                    <td>{{ vestiging.vestiging }}</td>
                     <td>{{ vestiging.postcode }}</td>
                     <td>{{ vestiging.straatnaam }}</td>
                     <td>{{ vestiging.huisnummer }}</td>
