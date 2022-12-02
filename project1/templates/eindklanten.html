@@ -66,7 +66,7 @@ $(document).ready(function() {
             <thead>
             <tr>
                 <th>Klantnaam:</th>
-                <th>4-Rest contactpersoon:</th>
+                <th>Contactpersoon:</th>
                 <th>Vestigingplaats:</th>
                 <th>Telefoonnummer klant:</th>
                 <th id="portaal">Portaal klant:</th>
@@ -78,7 +78,7 @@ $(document).ready(function() {
                 {% for Eindklanten in eindklanten_list %}
                     <tr>
                         <td>{{ Eindklanten.klantnaam }}</td>
-                        <td>{{ Eindklanten.get_accountmanager_display}}</td>
+                        <td>{{ Eindklanten.contactpersoon.naam }}</td>
                         <td>{{ Eindklanten.vestiging.plaats }}</td>
                         <td>{{ Eindklanten.telefoonnummer_klant }}</td>
                         <td id="portaal"><a href="{{ Eindklanten.portaal_klant }}" target="_blank">{{Eindklanten.portaal_klant}}</a></td>

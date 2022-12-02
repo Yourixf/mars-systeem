@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}Vestiging/datails{% endblock %}
+
+{% block body %}
+<html lang="">
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#basic-datatable1_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#basic-datatable2_wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr {
+    max-width: 10px;
+}
+
+#label {
+    max-width: 10px;
+}
+
+#deleteUpdate {
+    max-width: 105px;
+}
+
+
+#vestiging {
+    text-align: center;
+}
+
+#opmerkingen {
+    max-width: 125px;
+    overflow-wrap: break-word;
+    overflow: clip;
+}
+#contactpers {
+    text-align: center;
+}
+
+#telefoonnummer {
+    max-width: 85px;
+}
+
+#mailAdres {
+    max-width: 140px;
+    overflow: hidden;
+}
+
+#functie {
+    max-width: 100px;
+}
+
+#vestigingPlaats{
+    max-width: 100px;
+}
+
+#vestigToevoegen {
+    margin-bottom: 2px;
+}
+
+</style>
+</head>
+<script>
+$(document).ready(function() {
+    $("#basic-datatable1").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+<div id="detail">
+    <table>
+        <tr>
+            <th>Vestiging:</th><td>{{ vestiging.vestiging }}</td>
+            <th>Postcode:</th><td>{{ vestiging.postcode }}</td></tr>
+            <th>Straatnaam:</th><td>{{ vestiging.straatnaam }}</td>
+            <th>Huisnummer:</th><td>{{ vestiging.huisnummer }}</td></tr>
+            <th>Plaats:</th><td>{{ vestiging.plaats }}</td>
+            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ vestiging.opmerkingen }}</td>
+            <tr>
+                <td>
+                    <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn btn-primary" role="button">Update</a>
+                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                </td>
+            </tr>
+    </table>
+</div>
+
+
+	<h1 class="title">{{ eindklant_pk.opmerking_title }}</h1>
+
+	<small> {{ eindklant_pk.opmerking_date_added }}</small>
+
+	<p><strong>{{ eindklant_pk.opmerking_intro }}</strong></p>
+
+	<p>{{ eindklant_pk.opmerking_body }}</p>
+
+
+
+
+</html>
+
+{% endblock %}
+

@@ -12,12 +12,12 @@ from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from mysite import settings
 from project1 import forms
 from datetime import *
-from .forms import FotoForm, MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
+from .forms import MedewerkersForm, ContractenToevoegenForm, EindklantenForm, \
     BrokersForm, CertificatenToevoegenForm, AanbiedingenForm, AanbiedingUpdatenForm, \
-    OpdrachtenForm, OpdrachtenToevoegenForm, CvUploadForm, DocumentenUploadForm, FeedbackUploadForm, TaskItemCreateForm, \
-    TaskItemUpdateForm, VestigingplaatsForm, ContactpersoonForm, ContactVestigingForm
+    OpdrachtenForm, OpdrachtenToevoegenForm, DocumentenForm, TaskItemCreateForm, \
+    TaskItemUpdateForm, VestigingplaatsForm, ContactpersoonForm, ContactVestigingForm, DocumentenUpdatenForm
 from .models import Medewerkers, Contracten, Certificaten, Eindklanten, Brokers, Aanbiedingen, \
-    Opdrachten, Opmerkingen, Vestigingplaats, Contactpersonen,  STATUS_OPDRACHT_CHOICES
+    Opdrachten, Opmerkingen, Vestigingplaats, Contactpersonen, Documenten ,  STATUS_OPDRACHT_CHOICES
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 # @login_required(login_url='login') is een ingebouwde Django functie ter beveiliging als de "User" niet is ingelogd kan die niet op die pagina komen.
@@ -262,13 +262,7 @@ def VestigingToevoegen(request, pk):
 
     if 'broker' in vorige_pagina:
         request.session['vorige_pagina'] = 'broker'
-
-        if 'vestiging' in volgende_pagina:
-            print('patat')
-
-
         broker_pk = Brokers.objects.get(id=pk)
-
         context = {
             'vestiging_form': vestiging_form,
             'broker_pk': broker_pk,
@@ -276,9 +270,7 @@ def VestigingToevoegen(request, pk):
         }
     elif 'klant' in vorige_pagina:
         request.session['vorige_pagina'] = 'klant'
-
         eind_klant_pk = Eindklanten.objects.get(id=pk)
-
         context = {
             'vestiging_form': vestiging_form,
             'eind_klant_pk': eind_klant_pk,
@@ -342,6 +334,15 @@ def VestigingUpdaten(request, pk):
         return render(request, 'update.vestiging.html', context)
 
 
+@login_required(login_url='login')
+def VestigingDetailPage(request, pk):
+    vestiging = Vestigingplaats.objects.get(id=pk)
+
+    context = {
+        'vestiging':vestiging,
+    }
+
+    return render(request, 'vestiging.detail.html', context)
 
 @login_required(login_url='login')
 def VestigingDeleten(request, pk):
@@ -480,8 +481,10 @@ def BrokerDetail(request, pk):
 @login_required(login_url='login')
 def MedewerkerDetail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
+    documenten_lijst = Documenten.objects.filter(medewerker_id=pk)
     context = {
         'medewerkers': medewerkers,
+        'documenten_lijst': documenten_lijst,
     }
     return render(request, 'medewerker.detail.html', context)
 
@@ -508,22 +511,7 @@ def AanbiedingenDetail(request, pk):
 #        form = CvUploadForm(request.POST, request.FILES, instance=medewerker_pk)
 #        if form.is_valid():
 #            form.save()
-@login_required(login_url='login')
-def Cv_Upload(request, pk):
-    medewerker_pk = Medewerkers.objects.get(id=pk)
-    form = CvUploadForm(instance=medewerker_pk)
-    context = {'form': form,
-               'medewerker_pk': medewerker_pk,
-               'file': request.POST.get('cv')
-               }
 
-    if request.method == 'POST':
-        form = CvUploadForm(request.POST, request.FILES, instance=medewerker_pk)
-        if form.is_valid():
-            form.save()
-            return redirect('medewerkers')
-    else:
-        return render(request, 'cv.upload.html', context)
 
 
 # Dit is het pad dat Django volgt als een gebruiker de cv of dergelijke wilt downloaden.
@@ -545,22 +533,7 @@ def download(request, path):
 #    form = FeedbackUploadForm(request.POST, request.FILES, instance=medewerker_pk)
 #    if form.is_valid():
 #        form.save()
-@login_required(login_url='login')
-def Feedback_Upload(request, pk):
-    medewerker_pk = Medewerkers.objects.get(id=pk)
-    form = FeedbackUploadForm(instance=medewerker_pk)
-    context = {'form': form,
-               'medewerker_pk': medewerker_pk,
-               'file': request.POST.get('feedback', 'title_feedback')
-               }
 
-    if request.method == 'POST':
-        form = FeedbackUploadForm(request.POST, request.FILES, instance=medewerker_pk)
-        if form.is_valid():
-            form.save()
-            return redirect('medewerkers')
-    else:
-        return render(request, 'feedback.upload.html', context)
 
 
 # Voor medewerkers heb zijn er 3 upload download opties de cv, feedback documenten en overige documenten. Deze functie's
@@ -574,29 +547,71 @@ def Feedback_Upload(request, pk):
 @login_required(login_url='login')
 def Documenten_Upload(request, pk):
     medewerker_pk = Medewerkers.objects.get(id=pk)
-    documenten_form = DocumentenUploadForm(instance=medewerker_pk)
+    documenten_form = DocumentenForm(instance=medewerker_pk)
+    #file = request.POST.get('documenten')
     context = {
-        'documenten_form': documenten_form,
         'medewerker_pk': medewerker_pk,
-        'file': request.POST.get('documenten')
+        'documenten_form': documenten_form,
+        #'file': file,
     }
 
     if request.method == 'POST':
-        documenten_form = DocumentenUploadForm(request.POST, request.FILES, instance=medewerker_pk)
+        documenten_form = DocumentenForm(request.POST, request.FILES)
         if documenten_form.is_valid():
-            documenten_form.save()
-            return redirect('medewerkers')
+            document = documenten_form.save()
+            document.save()
+            document.medewerker_id = pk
+            document.save()
+
+            return redirect('details', medewerker_pk.id)
     else:
         return render(request, 'documenten.upload.html', context)
+
+
+@login_required(login_url='login')
+def DocumentenDelete(request, pk):
+    document = Documenten.objects.get(id=pk)
+    medewerker = document.medewerker_id
+    document.medewerker_id = ''
+    document_path = document.document
+
+    try:
+        file_path = os.path.join(settings.MEDIA_ROOT, str(document_path))
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    except:
+        file = ''
+
+    document.save()
+    document.delete()
+
+    return redirect('details', medewerker)
+
+@login_required(login_url='login')
+def DocumentenUpdate(request, pk):
+    document = Documenten.objects.get(id=pk)
+    document_form = DocumentenUpdatenForm(instance=document)
+
+    context = {
+        'document':document,
+        'document_form':document_form,
+    }
+
+    if request.method == 'POST':
+        document_form = DocumentenUpdatenForm(request.POST, request.FILES, instance=document)
+        if document_form.is_valid():
+            document = document_form.save()
+            document.save()
+            return redirect('medewerkers')
+
+    return render(request, 'documenten.update.html', context)
+
 
 
 # Haalt de gegevens van de CreateUserForm uit de forms.py en met de POST method is de mode waarbij een form kan worden ingevuld.
 # Met de if request.method == 'POST': checkt django of het klopt dat het een form is die wordt ingevuld.
 # dan komt if form.is_valid(): form.save() is de functie dat django checkt of de form 'valid' is en dan slaat die de form op.
 # daarna een succes bericht ( messages.success(request, 'account is gemaakt voor ' + user) en daarna stuurt die je terug naar de login pagina.
-
-login_required(login_url='login')
-
 
 def registerPage(request):
     form = forms.CreateUserForm()
@@ -664,8 +679,7 @@ def Index(request):
 # Dit is de Medewerkers pagina  medewerkers = Medewerkers.objects.all() haalt allemedewerkers op.
 @login_required(login_url='login')
 def MedewerkersPage(request):
-    medewerkers = Medewerkers.objects.filter(Q(status='1') | Q(status='2') | Q(status='3'))
-
+    medewerkers = Medewerkers.objects.all()
     context = {
         'medewerkers': medewerkers,
     }
@@ -712,15 +726,15 @@ def MedewerkerAanbiedingOpdrachten(request, pk):
 # De Medewerkerstoevoegen form uit de Forms.py
 @login_required(login_url='login')
 def MedewerkersToevoegen(request):
-    form = MedewerkersForm(request.POST or None)
+    medewerker_form = MedewerkersForm(request.POST or None)
 
     context = {
-        'form': form
+        'medewerker_form': medewerker_form
     }
     if request.method == 'POST':
-        form = MedewerkersForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        medewerker_form = MedewerkersForm(request.POST, request.FILES)
+        if medewerker_form.is_valid():
+            medewerker_form.save()
             return redirect('medewerkers')
     else:
         return render(request, 'medewerker.toevoegen.html', context)
@@ -762,20 +776,6 @@ def MedewerkerDelete(request, pk):
 # Met de if request.method == 'POST': checkt django of het klopt dat het een form is die wordt ingevuld.
 # dan komt if form.is_valid(): form.save() is de functie dat django checkt of de form 'valid' is en dan slaat die de form op.
 # Als allesd goed is gegaan gaat die naar de template van de medewerkers.
-@login_required(login_url='login')
-def Foto_Toevoegen(request, pk):
-    medewerker_pk = Medewerkers.objects.get(id=pk)
-    form = FotoForm(instance=medewerker_pk)
-    context = {'form': form,
-               'medewerker_pk': medewerker_pk}
-
-    if request.method == 'POST':
-        form = FotoForm(request.POST, request.FILES, instance=medewerker_pk)
-        if form.is_valid():
-            form.save()
-            return redirect('medewerkers')
-    else:
-        return render(request, 'foto.medewerker.form.html', context)
 
 
 # Dit is de detail pagina van de certificaten en contracten.
@@ -831,15 +831,15 @@ class ContractenUpdate(LoginRequiredMixin, UpdateView):
 @login_required(login_url='login')
 def EindklantenPage(request):
     eindklanten_list = Eindklanten.objects.all()
-
     eindklant_pk = Eindklanten.objects.filter()
-
     vestiging = Vestigingplaats.objects.filter(klant_id=eindklant_pk)
+    contactpersoon = Contactpersonen.objects.filter(klant_id=eindklant_pk)
 
     context = {
         'eindklanten_list': eindklanten_list,
         'vestiging': vestiging,
         'eindklant_pk': eindklant_pk,
+        'contactpersoon': contactpersoon
     }
 
     return render(request, 'eindklanten.html', context)
@@ -935,15 +935,20 @@ def BrokerDelete(request, id):
 @login_required(login_url='login')
 def BrokerUpdaten(request, pk):
     broker = Brokers.objects.get(id=pk)
-    form = BrokersForm(request.POST or None, instance=broker)
+    broker_form = BrokersForm(request.POST or None, instance=broker)
+
+    context = {
+        'broker': broker,
+        'broker_form': broker_form,
+    }
 
     if request.method == 'POST':
-        form = BrokersForm(request.POST or None, instance=broker)
-        if form.is_valid():
-            form.save()
+        broker_form = BrokersForm(request.POST or None, instance=broker)
+        if  broker_form.is_valid():
+            broker_form.save()
             return redirect('brokers')
 
-    return render(request, "update.broker.html", {'broker': broker, 'form': form})
+    return render(request, "update.broker.html", context)
 
 
 # De Certificaten toevoegen form CertificatenToevoegenForm uit de forms.py
@@ -1035,7 +1040,6 @@ def AanbiedingUpdaten(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
     aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
 
-
     if Opdrachten.objects.filter(aanbieding=aanbieding).exists():
         pizza=''
     else:
@@ -1084,7 +1088,6 @@ def AanbiedingUpdaten(request, pk):
             return redirect('aanbiedingen')
     return render(request, "aanbieding.update.html", context)
 
-
 # Dit is de openstaande aanbiedingen deze zijn gefilterd op status Open, Geselecteerd, of Intake. Dan komen ze bij mee open aanbiedingen te staan op deze pagina.
 #    aanbieding_list = Aanbiedingen.objects.filter(Q(status=1) | Q(status=2) | Q(status=3)) dit is de filter for de 3 statussen waardoor ze op deze pagina komen.
 @login_required(login_url='login')
@@ -1109,7 +1112,6 @@ def ArchiefAanbiedingenPage(request):
     }
     return render(request, 'aanbiedingen.archief.html', context)
 
-
 @login_required(login_url='login')
 def AanbiedingMetOpdracht(request):
     aanbieding_list = Aanbiedingen.objects.filter(Q(status=3) | Q(status=5))
@@ -1119,7 +1121,6 @@ def AanbiedingMetOpdracht(request):
     }
 
     return render(request, 'aanbiedingen.met.opdracht.html', context)
-
 
 @login_required(login_url='login')
 def OpdrachtToevoegen(request, pk):
@@ -1159,7 +1160,6 @@ def OpdrachtToevoegen(request, pk):
     else:
         return render(request, 'opdracht.toevoegen.html', context)
 
-
 @login_required(login_url='login')
 def lopendeOpdrachtenPage(request):
     lopendeOpdrachtenList = Opdrachten.objects.filter(Q(status_opdracht=1))
@@ -1169,7 +1169,6 @@ def lopendeOpdrachtenPage(request):
     }
 
     return render(request, 'lopende.opdrachten.html', context)
-
 
 @login_required(login_url='login')
 def aflopendeOpdrachtenPage(request):
@@ -1183,7 +1182,6 @@ def aflopendeOpdrachtenPage(request):
 
     return render(request, 'aflopende.opdrachten.html', context)
 
-
 @login_required(login_url='login')
 def archiefOpdrachtenPage(request):
     opdrachtenLijst = Opdrachten.objects.filter(Q(status_opdracht=2))
@@ -1193,7 +1191,6 @@ def archiefOpdrachtenPage(request):
     }
 
     return render(request, 'archief.opdrachten.html', context)
-
 
 @login_required(login_url='login')
 def OpdrachtenUpdaten(request, pk):
@@ -1223,6 +1220,23 @@ def OpdrachtenUpdaten(request, pk):
                 medewerker.status = '3'
                 medewerker.save()
 
+            if aanbieding.status == '1':
+                medewerker.status = '3'
+                medewerker.save()
+            elif aanbieding.status == '2':
+                medewerker.status = '1'
+                medewerker.save()
+            elif aanbieding.status == '3':
+                medewerker.status = '2'
+                medewerker.save()
+            elif aanbieding.status == '4':
+                medewerker.status = '3'
+                medewerker.save()
+            elif aanbieding.status == '5':
+                medewerker.status = '2'
+                medewerker.save()
+            elif aanbieding.status == '6':
+                medewerker.status = '3'
             return redirect('lopende_opdrachten')
     return render(request, 'opdracht.update.html', context)
 
@@ -1261,4 +1275,3 @@ def OpdrachtDelete(request, pk):
         return redirect('archief_opdrachten')
     else:
         return redirect('lopende_opdrachten')
-

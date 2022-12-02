@@ -20,40 +20,31 @@ td, th {
     padding: 8px;
 }
 
+#basic-datatable1_wrapper {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-.btnn {
-    border:none;
-    margin: 20px;
-    padding: 40px;
-    width: 27%;
-    font-family: "montserrat", sans-serif;
-    text-transform: uppercase;
-    border-radius: 10px;
-    background-size: 100%;
-    color: black;
+#documentToevoegen {
+    text-align: center;
+}
 
+#documentBeschrijving {
+    max-width: 200px;
 }
-.btn1{
-    padding: 41px;
-    background-color: forestgreen;
-}
-.btn2{
-    padding: 41px;
-    background-color: forestgreen;
-}
-.btn3{
-    background-color: forestgreen;
-}
-.btn4{
-    background-color: forestgreen;
-    margin: 20px;
-    width: 89%;
+
+#document {
+    text-align: center;
 }
 
 #medeName{
     text-align: center;
 }
 
+#actieKnoppen {
+    max-width: 170px;
+}
 
 </style>
 {#        <link rel="stylesheet" href=#}
@@ -66,41 +57,103 @@ td, th {
 
 <h3 id="medeName">{{ medewerkers }}<a> - </a>{{ medewerkers.pk }}</h3>
 <br>
-
-<body>
-{#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
-<table>
-    <tr>
-        <th>Naam</th><td>{{ medewerkers }}</td>
-        <th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td></tr>
-        <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
-        <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
-        <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-        <th>Opleiding niveau</th><td>{{ medewerkers.opleidingsniveau }}</td></tr>
-        <th>Postcode</th> <td>{{ medewerkers.postcode }}</td>
-        <th>Mobiel nummer</th><td>{{ medewerkers.telefoonnummer }}</td></tr>
-        <th>Burgerlijke staat</th><td>{{ medewerkers.burgerlijkse_staat }}</td>
-        <th>ICE nummer</th><td>{{ medewerkers.icenummer }}</td><tr>
-        <th>Geboortedatum</th><td>{{ medewerkers.geboortedatum }}</td>
-        <th>Email</th><td>{{ medewerkers.email }}</td><tr>
-        <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
-        <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
-        <th>BV</th><td>{{ medewerkers.get_bv_display }}</td>
-        </tr>
-            <td>
-                <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            </td>
+<section>
+    {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
+    <table>
         <tr>
-</tr>
-</table>
-<br>
+            <th>Naam</th><td>{{ medewerkers }}</td>
+            <th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td></tr>
+            <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
+            <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
+            <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
+            <th>Opleiding niveau</th><td>{{ medewerkers.opleidingsniveau }}</td></tr>
+            <th>Postcode</th> <td>{{ medewerkers.postcode }}</td>
+            <th>Mobiel nummer</th><td>{{ medewerkers.telefoonnummer }}</td></tr>
+            <th>Burgerlijke staat</th><td>{{ medewerkers.get_burgerlijkse_staat_display }}</td>
+            <th>ICE nummer</th><td>{{ medewerkers.icenummer }}</td><tr>
+            <th>Geboortedatum</th><td>{{ medewerkers.geboortedatum }}</td>
+            <th>Email</th><td>{{ medewerkers.email }}</td><tr>
+            <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
+            <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
+            <th>BV</th><td>{{ medewerkers.get_bv_display }}</td>
+            </tr>
+                <td id="actieKnoppen">
+                    <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
+                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 
+                </td>
+            <tr>
+        </tr>
+    </table>
+    <br>
+</section>
+
+<script>
+$(document).ready(function() {
+    $("#basic-datatable1").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+            exportOptions: {
+                    columns: [ 0, 1, 2, 3]
+                },
+            title: 'Medewerker aanbiedingen' +
+                '' +
+                ' Export',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                $('row c[r^="C"]', sheet).attr( 'c', '2' );
+            }
+        } ]
+    });
+  });
+</script>
+
+<section id="document">
+    <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Documenten</h3>
+    <button class="btn btn-primary"><a href="{% url 'documenten_upload' medewerkers.pk %}" style="color:white">Documenten toevoegen</a></button><br>
+
+    <table id="basic-datatable1" class="table1">
+        <thead>
+            <tr>
+                <th id="naamDocument">Naam document</th>
+                <th id="soortDocument">Soort document</th>
+                <th id="beschrijving">Beschrijving</th>
+                <th id="actieKnoppen">Actie knoppen</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {% for document in documenten_lijst %}
+                <tr>
+                    <td>{{ document.naam_document }}</td>
+                    <td>{{ document.soort_document }}</td>
+                    <td id="documentBeschrijving">{{ document.beschrijving }}</td>
+
+                    <form action="{% url 'document_delete' document.pk %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                            <td id="deleteUpdate">
+                                {% if document.document %}
+                                    <a href="{{ document.document.url }}"  class="btn btn-primary btn-sm" role="button">Download</a>
+                                {% endif %}
+                                <a href="{% url 'documenten_update' document.id %}"  class="btn btn-primary btn-sm" role="button">Update</a>
+                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je dit document wilt verijderen?')">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp Delete </button>
+                            </td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
 
 <br>
 <div class="container">
 
-<button class="btnn btn3"><a href="{% url 'documenten_upload' medewerkers.pk %}" style="color:white">Documenten Upload / download</a></button><br>
 
 
 

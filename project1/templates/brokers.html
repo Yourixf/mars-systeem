@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Brokers {% endblock %}
+{% block title %}Tussenpartijen {% endblock %}
 {% block body %}
-<div style="text-align: center;"><h3>Brokers 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn btn-success"  role="button"><h5>Broker Toevoegen</h5></a></div>
+<div style="text-align: center;"><h3>Tussenpartijen 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn btn-success"  role="button"><h5>Tussenpartijen Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
     <style>
@@ -71,11 +71,11 @@ $(document).ready(function() {
 
         <thead>
         <tr>
-            <th>Broker naam:</th>
+            <th>Tussenpartij naam:</th>
             <th>4-Rest contactpersoon:</th>
             <th>Vestigingplaats:</th>
-            <th id="telNummer">Telefoonnummer broker:</th>
-            <th id="portaal">Portaal broker:</th>
+            <th id="telNummer">Telefoonnummer tussenpartij:</th>
+            <th id="portaal">Portaal tussenpartij:</th>
             <th id="deleteUpdate" class="no-export">Update / Delete</th>
             <th id="detail" class="no-export">Detail</th>
         </tr>

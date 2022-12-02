@@ -25,7 +25,7 @@ td, th {
         <th>Medewerker</th><td>{{ aanbieding.medewerker}}</td><tr></tr>
         <th>Tarief</th><td>{{ aanbieding.tarief }}</td>
         <th>Registratiedatum</th><td>{{ aanbieding.registratie }}</td><tr></tr>
-        <th>Functie</th> <td>{{ aanbieding.get_functie_display }}</td>
+        <th>Functie</th> <td>{{ aanbieding.functie }}</td>
         <th>Fuctie aanbieding</th><td>{{ aanbieding.functie_aanbieding }}</td><tr></tr>
         <th>4-Rest contactpersoon</th><td>{{ aanbieding.get_accountmanager_display }}</td>
         <th>Laatste Update</th><td>{{ aanbieding.laatste_update }}</td><tr></tr>
@@ -34,7 +34,7 @@ td, th {
         <th>Broker</th><td>{{ aanbieding.broker.broker_naam }}</td>
         <tr>
             <td>
-                <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary" role="button">Update</a>
 
                 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
             </td>

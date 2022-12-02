@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Broker update {% endblock %}
+{% block title %}Tussenpartij update {% endblock %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -9,7 +9,7 @@
     <div class="form-group">
         <div class="card card-body">
             <hr>
-            <div style="text-align: center;"><h3> Broker {{ brokers.broker_naam }} update </h3></div>
+            <div style="text-align: center;"><h3> Tussenpartij {{ brokers.broker_naam }} update </h3></div>
             <hr>
         </div>
     </div>
@@ -19,9 +19,9 @@
             <div style="width: 25%" class="center-block">
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form|crispy }}
-            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
+                {{ broker_form|crispy }}
+                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
             </form>
         </div>
     </div>

@@ -89,6 +89,7 @@ INHUUR_CHOICES = (
     ("2", "Nee"),
 
 )
+
 OPLEIDINGNIVEAU_CHOICES = (
     ("1", "Middelbaar beroepsonderwijs (MBO)"),
     ("2", "Hoger beroepsonderwijs (HBO)"),
@@ -112,48 +113,57 @@ BV_CHOICES = (
 )
 
 BURGERLIJKE_STAAT_CHOICES = (
-    ('1', ''),
-    ('2', ''),
-    ('3', ''),
-    ('4', ''),
-
+    ('1', 'Ongehuwd'),
+    ('2', 'Gehuwd'),
+    ('3', 'Samenwonend'),
 )
+
+class Documenten(models.Model):
+    naam_document = models.CharField(max_length=20, blank=True)
+    soort_document = models.CharField(max_length=50, blank=True)
+    beschrijving = models.CharField(max_length=600, blank=True)
+    document = models.FileField(upload_to='static/', null=True, blank=True)
+    medewerker = models.ForeignKey("Medewerkers", on_delete=models.DO_NOTHING, blank=True)
 
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
     tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     achternaam = models.CharField(max_length=100, blank=True)
-    bnsnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     huisnummer = models.CharField(max_length=20, blank=True)
     straat = models.CharField(max_length=150, blank=True)
     woonplaats = models.CharField(max_length=150, blank=True)
     postcode = models.CharField(max_length=10, blank=True)
-    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     icenummer = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=150, blank=True)
-    tariefindicatie = models.FloatField(max_length=20, blank=True)
     inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
-    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES,max_length=50, blank=True)
-    burgerlijkse_staat = models.CharField(max_length=100, blank=True)
+    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
+    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    bnsnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     geboortedatum = models.DateField(null=True, blank=True)
-    foto_medewerker = models.FileField(upload_to='images/', default='userimg.png')  # de default foto voor de medewerkers.
-    cv = models.FileField(upload_to='static/', null=True, blank=True)  # upload to upload het naar de static files
-    beschrijving = models.CharField(max_length=50, null=True, blank=True)
     feedback = models.FileField(upload_to='static/', null=True, blank=True)
-    soort_document = models.CharField(max_length=50, null=True, blank=True)
-    documenten = models.FileField(upload_to='static/', null=True, blank=True)
-    titel_documenten = models.CharField(max_length=50, null=True, blank=True)
+    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
+    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
+
+    #document = models.ForeignKey("Documenten",upload_to='static/', null=True, blank=True)
+
 
     def get_absolut_url(self):
         return reverse('project1:detail', kwargs={
             'pk': self.pk})  # dit is voor de details dat elke medewerker zijn eigen detail pagina krijgt met pk
 
-    def __str__(self):
-        return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam  # de Self voegt deze 3 variabele bij elkaar die je samen kan ophalen.
 
+
+    def __str__(self):
+        try:
+            return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam  # de Self voegt deze 3 variabele bij elkaar die je samen kan ophalen.
+        except:
+            pizza = ''
+
+    def get_status_count(self):
+        return Medewerkers.objects.all().filter(status='1').count()
 
 class Opmerkingen(models.Model):
     DEFAULT = 'DEFAULT'
@@ -255,7 +265,7 @@ class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     registratie = models.DateField(null=True, blank=True)
     laatste_update = models.DateField(null=True, blank=True)
-    functie = models.CharField(max_length=50, choices=FUNCTIE_CHOICES)
+    functie = models.CharField(max_length=50)
     functie_aanbieding = models.CharField(max_length=50)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)

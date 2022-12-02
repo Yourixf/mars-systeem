@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Broker/datails{% endblock %}
+{% block title %}Tussenpartij/datails{% endblock %}
 
 {% block body %}
 <html lang="">
@@ -29,12 +29,20 @@ td, th {
   padding: 8px;
 }
 
+#tabelVestiging {
+    max-width: 80px;
+}
+
+#postcode {
+    max-width: 65px;
+}
+
 #huisnummer {
     max-width: 70px;
 }
 
 #deleteUpdate {
-    max-width: 110px;
+    max-width: 105px;
 }
 
 #vestiging {
@@ -122,10 +130,10 @@ $(document).ready(function() {
 <div id="detail">
     <table>
         <tr>
-            <th>Broker naam:</th><td>{{ broker.broker_naam }}</td>
-            <th>Accountmanager:</th><td>{{ broker.get_accountmanager_display }}</td></tr>
-            <th>Telefoonnummer broker:</th><td>{{ broker.telefoonnummer_broker }}</td>
-            <th>Portaal broker:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td><tr></tr>
+            <th>Tussenpartij naam:</th><td>{{ broker.broker_naam }}</td>
+            <th>4-Rest contactpersoon:</th><td>{{ broker.get_accountmanager_display }}</td></tr>
+            <th>Telefoonnummer tussenpartij:</th><td>{{ broker.telefoonnummer_broker }}</td>
+            <th>Portaal tussenpartij:</th><td><a href="{{ broker.portaal_broker }}" target="_blank">{{broker.portaal_broker}}</a></td><tr></tr>
              </tr>
                 <td>
                     <a href="{% url 'broker_update' broker.id %}" class="btn btn-primary" role="button">Update</a>
@@ -143,13 +151,12 @@ $(document).ready(function() {
     <table id="basic-datatable1" class="table1">
         <thead>
             <tr>
-                <th>Vestiging</th>
-                <th>Postcode</th>
+                <th id="tabelVestiging">Vestiging</th>
+                <th id="postcode">Postcode</th>
                 <th>Straatnaam</th>
                 <th id="huisnummer">Huisnummer</th>
                 <th>Plaats</th>
-                <th>Opmerkingen</th>
-                <th id="deleteUpdate">Update / Delete</th>
+                <th id="deleteUpdate">Actie knoppen</th>
             </tr>
         </thead>
         <tbody id="myTable">
@@ -160,14 +167,16 @@ $(document).ready(function() {
                     <td>{{ vestiging.straatnaam }}</td>
                     <td>{{ vestiging.huisnummer }}</td>
                     <td>{{ vestiging.plaats }}</td>
-                    <td id="opmerking">{{ vestiging.opmerkingen }}</td>
 
                     <form action="{% url 'vestiging_delete' vestiging.id %}" method="post" style="display: inline;">
                         {% csrf_token %}
                             <td id="deleteUpdate">
                                 <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <a href="{% url 'detail_vestiging' vestiging.id %}" class="btn btn-primary btn-sm" role="button">Detail</a>
                                 <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
                                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+
+
                             </td>
                     </form>
                 </tr>

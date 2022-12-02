@@ -8,7 +8,7 @@ from django.forms.fields import DateField
 # Haalt de models uit models.py
 from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Aanbiedingen, \
     Opmerkingen
-
+from django.forms.widgets import *
 from .models import *
 
 # Dit is de forms.py template van Django hier kan je persoonlijke forms maken door middel van de in de class forms.Form te gebruiken kan je gepersonaliseerde forms maken.
@@ -25,12 +25,6 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-
-# Een form voor alleen de  "foto_medewerker" variabele uit de Mederwerkers Model.
-class FotoForm(ModelForm):
-    class Meta:
-        model = Medewerkers
-        fields = ['foto_medewerker']
 
 
 # Een keuze gebruiker een keuze laten maken door de de jou aangemaakte keuze's maak je zoals hier onder.
@@ -61,10 +55,10 @@ class MedewerkersForm(forms.ModelForm):
     class Meta:
         model = Medewerkers
         fields = '__all__'
-        exclude = ('document', "cv", 'title_cv', 'feedback', 'title_feedback', 'documenten', 'title_documenten', 'foto_medewerker')
+        exclude = ('feedback', 'document', )
 
         widgets = {
-            'geboorte_datum': forms.DateInput(
+            'geboortedatum': forms.DateInput(
                 attrs={'class': 'form-control',
                        'type':'date'}),
         }
@@ -144,6 +138,12 @@ class BrokersForm(forms.ModelForm):
         model = Brokers
         fields = '__all__'
         exclude = ['vestiging']
+        labels = {
+            "accountmanager": "4-Rest contactpersoon",
+            "broker_naam": "Tussenpartij naam",
+            "telefoonnummer_broker": "Telefoonnummer tussenpartij",
+            "portaal_broker": "Portaal tussenpartij"
+        }
 
 
 
@@ -240,10 +240,14 @@ STATUS_AANBIEDING_CHOICES = (
 )
 
 class AanbiedingenForm(forms.ModelForm):
-    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
+    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    registratie = forms.DateField(required=False)
+    laatste_update = forms.DateField(required=False)
+    functie = forms.ChoiceField(required=False)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
+    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False, max_value=200)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
@@ -265,7 +269,7 @@ class AanbiedingUpdatenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     #registratie = forms.CharField(required=False)
     #laatste_update = forms.CharField(required=False)
-    functie = forms.ChoiceField(required=False, choices=FUNCTIE_CHOICES)
+    functie = forms.CharField(required=False)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
@@ -290,9 +294,9 @@ class AanbiedingUpdatenForm(forms.ModelForm):
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = forms.ChoiceField(choices=STATUS_OPDRACHT_CHOICES, required=False)
-    tarief_opdracht = forms.FloatField(required=False)
-    opdracht_betaalkorting = forms.FloatField(required=False)
-    aantal_uren = forms.IntegerField(required=False, max_value=40)
+    tarief_opdracht = forms.FloatField(min_value=0, required=False)
+    opdracht_betaalkorting = forms.FloatField(min_value=0, required=False)
+    aantal_uren = forms.IntegerField(required=False, min_value=0, max_value=40)
     class Meta:
         model = Opdrachten
         fields = '__all__'
@@ -310,7 +314,9 @@ class OpdrachtenForm(forms.ModelForm):
         }
 class OpdrachtenToevoegenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING)
-    tarief_opdracht = forms.FloatField(required=False)
+    tarief_opdracht = forms.FloatField(min_value=0, required=False)
+    opdracht_betaalkorting = forms.FloatField(min_value=0, required=False)
+    aantal_uren = forms.IntegerField(required=False, min_value=0, max_value=40, initial=0)
     class Meta:
         model = Opdrachten
         fields = '__all__'
@@ -325,25 +331,25 @@ class OpdrachtenToevoegenForm(forms.ModelForm):
                        'type': 'date'})
         }
 
-# Dit is de Form om Cv's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
-class CvUploadForm(ModelForm):
-    class Meta:
-        model = Medewerkers
-        fields = ['cv']
 
-# Dit is de Form om Feedback's toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
-class FeedbackUploadForm(ModelForm):
-    class Meta:
-        model = Medewerkers
-        fields = ['feedback']
 
 # Dit is de Form om Documenten toe te voegen deze heb ik in de url en de instellingen laten verwijzen naar de static>images>static (onderaan het project).
-class DocumentenUploadForm(ModelForm):
-    titel_documenten = forms.CharField(max_length=50, required=False)
-    beschrijving = forms.CharField(widget=forms.Textarea, max_length=30, required=False)
+
+
+class DocumentenForm(ModelForm):
+    beschrijving = forms.CharField(widget=forms.Textarea, max_length=600, required=False)
+    document = forms.FileField(required=True)
     class Meta:
-        model = Medewerkers
-        fields = ['titel_documenten', 'soort_document','documenten']
+        model = Documenten
+        fields = ['naam_document', 'soort_document', 'beschrijving', 'document']
+
+
+class DocumentenUpdatenForm(ModelForm):
+    beschrijving = forms.CharField(widget=forms.Textarea, max_length=600, required=False)
+
+    class Meta:
+        model = Documenten
+        fields = ['naam_document', 'soort_document', 'beschrijving']
 
 
 class TaskItemCreateForm(forms.ModelForm):

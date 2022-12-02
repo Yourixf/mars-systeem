@@ -20,7 +20,7 @@
             <div style="width: 25%" class="center-block">
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form|crispy }}
+                {{ medewerker_form|crispy }}
 
                 <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Annuleer</a>
                 <input type="hidden" name="medewerker" value="" />

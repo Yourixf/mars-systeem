@@ -31,8 +31,6 @@ urlpatterns = [
     path('contracten.detail/<str:pk>/', views.Contractendetail, name='contracten.detail'),
     # zoekt naar de admin page
     path(r'admin/', admin.site.urls),
-    # zoekt naar view Foto toevoegen
-    path(r'foto_toevoegen/<str:pk>/', views.Foto_Toevoegen, name='foto_toevoegen'),
     # zoekt naar view Medewerker toevoegen
     path(r'medewerker/toevoegen/', views.MedewerkersToevoegen, name='medewerker_toevoegen'),
     # zoekt naar view Medewerkers delete
@@ -58,12 +56,6 @@ urlpatterns = [
     path(r'broker/delete/<str:id>/', views.BrokerDelete, name='broker_delete'),
     # zoekt naar de view Broker update
     path(r'broker/update/<str:pk>/', views.BrokerUpdaten, name='broker_update'),
-    # zoekt naar de view contract update
-    path(r'contract/update/<str:pk>/', views.ContractenUpdate.as_view(), name='contract_update'),
-    # zoekt naar de view certificaten
-    path(r'certificaten/toevoegen/<str:pk>/', views.CertificatenToevoegen, name='certificaten_toevoegen'),
-    # zoekt naar de view contact delete
-    path(r'contract/delete/<str:id>/', views.ContractenDelete, name='contract_delete'),
     # zoekt naar de view aanbieding page
     path(r'aanbiedingen_page/', views.AanbiedingenPage, name='aanbiedingen'),
     # zoekt naar de view aanbieding toevoegen
@@ -80,12 +72,12 @@ urlpatterns = [
     path(r'broker/<str:pk>/', views.BrokerDetail, name='broker_detail'),
     # zoekt naar de view eindklant detail
     path(r'eindklant/<str:pk>/', views.EindklantDetail, name='eindklant_detail'),
-    # zoekt naar de view upload cv
-    path(r'upload/cv/<str:pk>/', views.Cv_Upload, name='cv_upload'),
-    # zoekt naar de view feedback upload
-    path(r'upload/feedback/<str:pk>/', views.Feedback_Upload, name='feedback_upload'),
     # zoekt naar de view documenten upload
     path(r'upload/documenten/<str:pk>/', views.Documenten_Upload, name='documenten_upload'),
+    #voor documenten deleten
+    path(r'document/delete/<str:pk>/', views.DocumentenDelete, name='document_delete'),
+    #voor documenten update
+    path(r'document/update/<str:pk>/', views.DocumentenUpdate, name='documenten_update'),
     # zoekt naar de view aanbiedingen detail
     path(r'aanbiedingen/<str:pk>/', views.AanbiedingenDetail, name='aanbieding_detail'),
     # zoekt naar de view TodoItemCreateView
@@ -130,8 +122,10 @@ urlpatterns = [
     path(r'contactpersoon/delete/<str:pk>/', views.ContactPersonenDelete, name='delete_contactpersoon'),
     #voor vestiging van contactpersonen
     path(r'contactpersoon/vestiging/toevoegen/<str:pk>/', views.ContactVestigingToevoegen, name='toevoegen_ContactVestiging'),
-    #vcoor contactpersoon vestiging deleten
+    #voor contactpersoon vestiging deleten
     path(r'contactpersoon/vestiging/deleten/<str:pk>/', views.ContactVestigingDeleten, name='delete_contact_vestiging'),
+    #voor vestiging detail pagina
+    path(r'vestiging/detail/<str:pk>', views.VestigingDetailPage, name='detail_vestiging'),
     #voor contactpersoon detail
     path(r'contactpersoon/detail/<str:pk>', views.ContactpersoonDetailPage, name='detail_contactpersonen'),
 
