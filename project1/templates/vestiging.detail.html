@@ -107,16 +107,21 @@ $(document).ready(function() {
 <div id="detail">
     <table>
         <tr>
-            <th>Vestiging:</th><td>{{ vestiging.vestiging }}</td>
-            <th>Postcode:</th><td>{{ vestiging.postcode }}</td></tr>
-            <th>Straatnaam:</th><td>{{ vestiging.straatnaam }}</td>
-            <th>Huisnummer:</th><td>{{ vestiging.huisnummer }}</td></tr>
-            <th>Plaats:</th><td>{{ vestiging.plaats }}</td>
-            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ vestiging.opmerkingen }}</td>
+            <th>Vestiging:</th><td>{{ vestiging_pk.vestiging }}</td>
+            <th>Postcode:</th><td>{{ vestiging_pk.postcode }}</td></tr>
+            <th>Straatnaam:</th><td>{{ vestiging_pk.straatnaam }}</td>
+            <th>Huisnummer:</th><td>{{ vestiging_pk.huisnummer }}</td></tr>
+            <th>Plaats:</th><td>{{ vestiging_pk.plaats }}</td>
+            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ vestiging_pk.opmerkingen }}</td>
             <tr>
                 <td>
-                    <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn btn-primary" role="button">Update</a>
-                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                    <a href="{% url 'vestiging_updaten' vestiging_pk.id %}" class="btn btn-primary" role="button">Update</a>
+                    {% if eind_klant_pk %}
+                        <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
+                    {% endif %}
+                    {% if broker_pk %}
+                        <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
+                    {% endif %}
                 </td>
             </tr>
     </table>

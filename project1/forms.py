@@ -55,7 +55,6 @@ class MedewerkersForm(forms.ModelForm):
     class Meta:
         model = Medewerkers
         fields = '__all__'
-        exclude = ('feedback', 'document', )
 
         widgets = {
             'geboortedatum': forms.DateInput(
@@ -87,7 +86,7 @@ class ContactpersoonForm(forms.ModelForm):
     class Meta:
         model = Contactpersonen
         fields = '__all__'
-        exclude = ['klant', 'broker', 'vestiging']
+        exclude = ['klant', 'vestiging']
 
 
 class ContactVestigingForm(forms.ModelForm):
@@ -104,8 +103,7 @@ class VestigingplaatsForm(forms.ModelForm):
     straatnaam = forms.CharField(max_length=30, required=False)
     huisnummer = forms.IntegerField(required=False)
     plaats = forms.CharField(max_length=20, required=False)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING)
-    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING)
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
     opmerkingen = forms.CharField(widget=forms.Textarea ,max_length=300, required=False)
 
     class Meta:
@@ -113,6 +111,31 @@ class VestigingplaatsForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['klant', 'broker', 'contactpersoon']
 
+
+# VOOR  NIEUWE KLANTEN TABEL ( EINDKLANTEN EN BROKER SAMENGEVOEGD)
+class KlantenToevoegenForm(forms.ModelForm):
+
+    class Meta:
+        model = Klanten
+        soort = forms.CharField(max_length=15, required=False)
+        portaal_broker = forms.URLField(max_length=300)
+        fields = '__all__'
+        exclude = ['contactpersoon', 'vestiging', 'soort']
+        labels = {
+            "accountmanager": "4-Rest contactpersoon",
+
+        }
+
+class KlantenUpdatenForm(forms.ModelForm):
+    class Meta:
+        model = Klanten
+        portaal_broker = forms.URLField(max_length=300)
+        fields = '__all__'
+        exclude = ['contactpersoon', 'vestiging', 'soort']
+        labels = {
+            "accountmanager": "4-Rest contactpersoon",
+
+        }
 
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
@@ -137,7 +160,7 @@ class BrokersForm(forms.ModelForm):
         portaal_broker = forms.URLField(max_length=300)
         model = Brokers
         fields = '__all__'
-        exclude = ['vestiging']
+        exclude = ['vestiging', 'contactpersoon']
         labels = {
             "accountmanager": "4-Rest contactpersoon",
             "broker_naam": "Tussenpartij naam",

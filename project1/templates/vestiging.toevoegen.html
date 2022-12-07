@@ -19,8 +19,14 @@
                 <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ vestiging_form|crispy }}
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-                <input class="btn btn-primary" type="submit" name="Vestiging toevoegen">
+
+                    {% if eind_klant_pk %}
+                        <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
+                    {% endif %}
+                    {% if broker_pk %}
+                        <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
+                    {% endif %}
+                    <input class="btn btn-primary" type="submit" name="Vestiging toevoegen">
                 </form>
             </div>
         </div>

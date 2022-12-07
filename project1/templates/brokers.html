@@ -83,11 +83,11 @@ $(document).ready(function() {
         <tbody id="myTable">
             {% for Brokers in brokers_list %}
                 <tr>
-                    <td>{{ Brokers.broker_naam }}</td>
+                    <td>{{ Brokers.naam }}</td>
                     <td>{{ Brokers.get_accountmanager_display }}</td>
                     <td>{{ Brokers.vestiging.plaats }}</td>
-                    <td id="telNummer">{{ Brokers.telefoonnummer_broker }}</td>
-                    <td id="portaal"><a href="{{ Brokers.portaal_broker }}" target="_blank">{{Brokers.portaal_broker}}</a></td>
+                    <td id="telNummer">{{ Brokers.telefoonnummer }}</td>
+                    <td id="portaal"><a href="{{ Brokers.portaal }}" target="_blank">{{Brokers.portaal}}</a></td>
 
                     <form action="{% url 'broker_delete' Brokers.id %}" method="post" class="no-export" style="display: inline;">
                         {% csrf_token %}

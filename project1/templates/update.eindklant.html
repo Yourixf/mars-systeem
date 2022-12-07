@@ -20,8 +20,8 @@
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ eindklant_form|crispy }}
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-                <input class="btn btn-primary" type="submit" value="update" name="eindklant-update">
+                <a href="{% url 'eindklant_detail' eindklant.pk %}" class="btn btn-primary" role="button">Annuleer</a>
+                <input class="btn btn-primary" type="submit" value="Update" name="eindklant-update">
             </form>
         </div>
     </div>

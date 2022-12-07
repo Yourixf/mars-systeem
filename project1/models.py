@@ -118,6 +118,12 @@ BURGERLIJKE_STAAT_CHOICES = (
     ('3', 'Samenwonend'),
 )
 
+KLANT_SOORT_CHOICES = (
+    ('1', 'Eindklant'),
+    ('2', 'Tussenpartij'),
+)
+
+
 class Documenten(models.Model):
     naam_document = models.CharField(max_length=20, blank=True)
     soort_document = models.CharField(max_length=50, blank=True)
@@ -140,7 +146,6 @@ class Medewerkers(models.Model):
     burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
     bnsnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     geboortedatum = models.DateField(null=True, blank=True)
-    feedback = models.FileField(upload_to='static/', null=True, blank=True)
     telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
@@ -207,6 +212,15 @@ class Certificaten(models.Model):
     naam_instituut = models.CharField(max_length=100)
 
 
+# VOOR  NIEUWE KLANTEN TABEL ( EINDKLANTEN EN BROKER SAMENGEVOEGD)
+class Klanten(models.Model):
+    accountmanager = models.CharField(max_length=15, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
+    naam = models.CharField(max_length=50, null=True, blank=True)
+    telefoonnummer = models.CharField(max_length=17, null=True, blank=True)
+    portaal = models.URLField(max_length=300, null=True, blank=True)
+    soort = models.CharField(max_length=15, null=True, blank=True)
+
+
 class Eindklanten(models.Model):
     accountmanager = models.CharField(max_length=5, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
     klantnaam = models.CharField(max_length=50, null=True, blank=True)
@@ -245,9 +259,7 @@ class Vestigingplaats(models.Model):
     straatnaam = models.CharField(max_length=30, blank=True)
     huisnummer = models.IntegerField(blank=True)
     plaats = models.CharField(max_length=20, blank=True)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
-    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
-    contactpersoon = models.ForeignKey("Contactpersonen", on_delete=models.DO_NOTHING, blank=True)
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True)
     opmerkingen = models.CharField(max_length=300, blank=True)
 
 
@@ -256,8 +268,7 @@ class Contactpersonen(models.Model):
     mail_adres = models.CharField(max_length=50, blank=True)
     telefoonnummer = models.CharField(max_length=30, blank=True)
     functie = models.CharField(max_length=50, blank=True)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
-    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True)
     vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True)
     opmerkingen = models.CharField(max_length=300, blank=True)
 

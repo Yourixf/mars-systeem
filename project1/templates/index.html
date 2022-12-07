@@ -7,20 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- scripts voor pagination -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-
-     <!-- scripts voor export -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
 <style>
 * {
   box-sizing: border-box;
@@ -41,10 +27,9 @@ body {
 
 /* Style the counter cards */
 .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
-  background-color: #8ba011;
+  background-color: #3CB64A;
   color: white;
 
 }
@@ -53,7 +38,7 @@ body {
 .card-title {
     color: black;
 }
-#aantal-klanten {
+#total-orders {
     padding-bottom: 40px;
     background-color: #3CB64A;
     width:33%;
@@ -62,13 +47,13 @@ body {
 }
 
 
-#aantal-medewerkers {
+#orders-delivered{
     padding-bottom: 40px;
     background-color: #3CB64A;
     width:33%;
     float: right;
 }
-#aantal-open-aanbiedingen{
+#orders-pending{
     padding-bottom: 40px;
     background-color: #3CB64A;
     width:33%;
@@ -81,7 +66,7 @@ body {
  <div class="col">
 	<div class="col">
 		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="aantal-klanten">
+			<div class="card text-center text-white  mb-3" id="total-orders">
                <div class="bi bi-cash-coin fa-2x">
 			  		<h5 class="card-title">Aantal (eind) klanten</h5>
 			  	</div>
@@ -94,7 +79,7 @@ body {
 </div>
 <div class="col">
 		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="aantal-medewerkers">
+			<div class="card text-center text-white  mb-3" id="orders-delivered">
 			  	<div class="bi bi-person-circle fa-2x">
 			  		<h5 class="card-title">Aantal medewerkers</h5>
 			  	</div>
@@ -107,7 +92,7 @@ body {
 	</div>
 	<div class="col">
 		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="aantal-open-aanbiedingen">
+			<div class="card text-center text-white  mb-3" id="orders-pending">
 			  	<div class="bi bi-envelope-open fa-2x">
 			  		<h5 class="card-title">Aantal open aanbiedingen</h5>
 			  	</div>

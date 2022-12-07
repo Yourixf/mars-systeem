@@ -20,9 +20,7 @@
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ document_form|crispy }}
-
-                <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Annuleer</a>
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                <a href="{% url 'details' document.medewerker.id %}" class="btn btn-primary" role="button">Annuleer</a>
                 <input class="btn btn-primary" type="submit" name="Document updaten">
                 <!--input class="btn btn-primary" type="submit" name="vestigingtoevoegen" value="Vesting adres toevoegen"/ -->
             </form>

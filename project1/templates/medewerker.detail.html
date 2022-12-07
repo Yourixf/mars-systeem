@@ -79,7 +79,8 @@ td, th {
             </tr>
                 <td id="actieKnoppen">
                     <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
-                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                    <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Terug</a>
+
 
                 </td>
             <tr>
@@ -116,7 +117,7 @@ $(document).ready(function() {
 
 <section id="document">
     <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Documenten</h3>
-    <button class="btn btn-primary"><a href="{% url 'documenten_upload' medewerkers.pk %}" style="color:white">Documenten toevoegen</a></button><br>
+    <a href="{% url 'documenten_upload' medewerkers.pk %}"  class="btn btn-primary" style="color:white">Documenten toevoegen</a><br>
 
     <table id="basic-datatable1" class="table1">
         <thead>

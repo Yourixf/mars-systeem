@@ -21,7 +21,7 @@
                 {% csrf_token %}
                 {{ documenten_form|crispy }}
 
-                <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Annuleer</a>
+                <a href="{% url 'details' medewerker_pk.pk %}" class="btn btn-primary" role="button">Annuleer</a>
                 <input type="hidden" value=""/>
                 <input class="btn btn-primary" type="submit" name="Document toevoegen">
                 <!--input class="btn btn-primary" type="submit" name="vestigingtoevoegen" value="Vesting adres toevoegen"/ -->

@@ -131,13 +131,13 @@ $(document).ready(function() {
 <section id="detail">
     <table>
         <tr>
-            <th>Eindklant naam:</th><td>{{ eindklant_pk.klantnaam }}</td>
-            <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer_klant }}</td></tr>
-            <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal_klant }}" target="_blank">{{eindklant_pk.portaal_klant}}</a></td>
+            <th>Eindklant naam:</th><td>{{ eindklant_pk.naam }}</td>
+            <th>Telefoonnummer eindklant:</th><td>{{ eindklant_pk.telefoonnummer }}</td></tr>
+            <th>Portaal eindklant:</th><td><a href="{{ eindklant_pk.portaal }}" target="_blank">{{eindklant_pk.portaal}}</a></td>
             <tr>
                 <td>
                     <a href="{% url 'eindklant_update' eindklant_pk.id %}" class="btn btn-primary" role="button">Update</a>
-                    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                    <a href="{% url 'eindklanten' %}" class="btn btn-primary" role="button">Terug</a>
                 </td>
             </tr>
     </table>
@@ -243,7 +243,9 @@ $(document).ready(function() {
                                 <a href="{% url 'detail_contactpersonen' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button">Detail</a>
                                 <button type="submit" class="no-export btn btn-danger btn-xs" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
                                 <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                                <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'toevoegen_ContactVestiging' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button" style="margin-top: 1px">Vestiging Toevoegen</a>
+                                {% if not contactpersoon.vestiging %}
+                                    <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'toevoegen_ContactVestiging' contactpersoon.id %}" class="btn btn-primary btn-xs" role="button" style="margin-top: 1px">Vestiging Toevoegen</a>
+                                {% endif %}
                             </td>
                     </form>
                 </tr>
