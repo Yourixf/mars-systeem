@@ -21,8 +21,8 @@
                 {% csrf_token %}
                 {{ opdracht_form|crispy }}
                 {{ aanbieding_form|crispy }}
-            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
+                <a href="{% url 'detail_opdracht' opdracht.pk %}" class="btn btn-primary" role="button">Terug</a>
+                <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
             </form>
         </div>
     </div>

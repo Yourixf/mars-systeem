@@ -323,6 +323,7 @@ class OpdrachtenForm(forms.ModelForm):
     class Meta:
         model = Opdrachten
         fields = '__all__'
+        exclude = ['aanbieding']
 
         widgets = {
             'startdatum': forms.DateInput(

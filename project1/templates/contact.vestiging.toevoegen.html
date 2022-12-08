@@ -33,8 +33,7 @@ td, th {
 }
 
 #terug {
-    margin-left: auto;
-    margin-right: auto;
+    text-align: center;
 }
 
 </style>
@@ -76,7 +75,16 @@ $(document).ready(function() {
     </div>
 </div>
 <div id="terug">
-    <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+    {% if eind_klant_pk %}
+        <div style="align-content: center">
+            <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
+        </div>
+    {% endif %}
+    {% if broker_pk %}
+        <div style="align-content: center">
+            <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
+        </div>
+    {% endif %}
 </div>
 <table id="basic-datatable1" class="table1">
     <thead>

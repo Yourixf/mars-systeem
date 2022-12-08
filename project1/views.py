@@ -66,12 +66,12 @@ def ContactVestigingToevoegen(request, pk):
     if 'broker' in vorige_pagina:
         request.session['vorige_pagina'] = 'broker'
         contactpersoon = Contactpersonen.objects.get(id=pk)
-        broker = contactpersoon.klant
-        vestiging_lijst = Vestigingplaats.objects.filter(klant_id=broker)
+        broker_pk = contactpersoon.klant
+        vestiging_lijst = Vestigingplaats.objects.filter(klant_id=broker_pk)
 
         context = {
             'contactpersoon': contactpersoon,
-            'broker': broker,
+            'broker_pk': broker_pk,
             'vestiging_lijst': vestiging_lijst,
         }
         request.session['test'] = contactpersoon.id
@@ -79,12 +79,12 @@ def ContactVestigingToevoegen(request, pk):
     elif 'klant' in vorige_pagina:
         request.session['vorige_pagina'] = 'klant'
         contactpersoon = Contactpersonen.objects.get(id=pk)
-        eindklant = contactpersoon.klant
-        vestiging_lijst = Vestigingplaats.objects.filter(klant_id=eindklant.id)
+        eind_klant_pk = contactpersoon.klant
+        vestiging_lijst = Vestigingplaats.objects.filter(klant_id=eind_klant_pk)
 
         context = {
             'contactpersoon':contactpersoon,
-            'eindklant': eindklant,
+            'eind_klant_pk': eind_klant_pk,
             'vestiging_lijst': vestiging_lijst,
         }
         request.session['test'] = contactpersoon.id
@@ -699,7 +699,7 @@ def MedewerkersUpdaten(request, pk):
         # form.save() om de nieuwe data op te slaan
         if form.is_valid():
             form.save()
-            return redirect('medewerkers')
+            return redirect('details', medewerker.pk)
 
     return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
 

@@ -20,8 +20,8 @@
             <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
-            <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
-            <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
+                <a href="{% url 'details' medewerker.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
+                <input class="btn btn-primary" type="submit" value="update" name="medewerker-update">
             </form>
         </div>
     </div>

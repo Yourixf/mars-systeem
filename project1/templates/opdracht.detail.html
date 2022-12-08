@@ -37,12 +37,9 @@ td, th {
         <tr>
             <td>
                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary" role="button">Update</a>
-                <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
+                <a href="{% url 'lopende_opdrachten' %}" class="btn btn-primary" role="button">Terug</a>
             </td>
         </tr>
-
 </table>
-
 </html>
-
 {% endblock %}
