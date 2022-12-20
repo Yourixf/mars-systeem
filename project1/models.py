@@ -29,47 +29,7 @@ ACCOUNTMANAGER_CHOICES = (
     ('3', 'Coen Berkhout jr'),
     ('4', 'Jessica Berkhout'),
 )
-FUNCTIE_CHOICES = (
-    ('1', '.NET Developer'), ('3', ' 3D - tekenaar'), ('4', ' Android Developer '), ('5', ' App Developer'),
-    ('6', 'Applicatie Specialist'), ('7', ' Applicatiebeheerder'), ('8', 'Applicatieontwerper'),
-    ('9', 'Applicatieontwerper'),
-    ('10', 'Applicatieontwikkelaar'), ('11', 'Application Designer'), ('12', 'Assistent filiaalmanager '),
-    ('13', 'Backend Developer'),
-    ('14', 'Beleidsmedewerker Informatiebeveiliging'), ('15', 'Business Analist'), ('16', 'Business Architect '),
-    ('17', 'Citrix Specialist'),
-    ('18', 'Commercieel Directeur'), ('19', 'Content Manager'), ('20', 'Contractmanager '),
-    ('21', 'Data - analist'),
-    ('22', 'Database Administrator'), ('23', 'Directeur ICT'), ('24', 'Directeur IT '), ('25', 'Embedded Engineer'),
-    ('26', 'Filiaalmanager'), ('27', 'Functioneel Beheerder'), ('28', 'Hacker '), ('29', 'Hardware Engineer'),
-    ('30', 'Helpdeskmedewerker'), ('31', ' HTML Specialist'), ('32', 'Applicatieontwerper'),
-    ('33', 'ICT Specialist'), ('34', ' ICT Supportmedewerker'), ('35', 'Informatieanalist'),
-    ('36', 'Informatiemanager'),
-    ('37', 'Infrastructuur Ontwerper'), ('38', ' Infrastructuur Specialist'), ('39', 'iOS Developer'),
-    ('40', 'Architect'),
-    ('41', 'IT Auditor'), ('42', ' IT Trainee'), ('43', 'JAVA Developer'), ('44', 'Junior Pega Developer'),
-    ('45', 'Leraar Informatica'), ('46', ' Management Consultant'), ('47', 'Netwerk Engineer'),
-    ('48', 'Netwerkbeheerder'),
-    ('49', 'Netwerkmanager'), ('50', ' Netwerkspecialist'), ('51', 'Operations Manager'), ('52', 'PHP Developer'),
-    ('53', 'PHP Programmeur'), ('54', ' PLC Engineer'), ('55', 'PLC Programmeur'), ('56', 'Procesmanager'),
-    ('57', 'Processpecialist'), ('58', ' Programmeur'), ('59', 'Projectcontroller'), ('60', 'Projectmanager IT'),
-    ('61', 'ApplicatieSpecialist'), ('62', ' Applicatiebeheerder'), ('63', 'Applicatieontwerper'),
-    ('64', 'Requirements Analist'),
-    ('65', 'Sales Analist'), ('66', ' Sales Manager'), ('67', 'Scrum Master'), ('68', 'SEO specialist'),
-    ('69', 'Service Analist'), ('70', ' Service Co�rdinator'), ('71', 'Servicedesk Medewerker'),
-    ('71', 'Shopmanager'),
-    ('72', 'Software designer'), ('73', ' Software Engineer'), ('74', 'Software tester'),
-    ('75', 'Supportmedewerker'),
-    ('76', 'Systeemarchitect'), ('77', ' Systeembeheerder'), ('78', 'Systeemontwerper'),
-    ('79', 'Systeemontwikkelaar'),
-    ('80', 'Systeemoperator'), ('81', ' Systeemspecialist'), ('82', 'System Engineer'),
-    ('83', 'Technical support engineer'),
-    ('84', 'Technisch adviseur'), ('85', ' Technisch Ontwerper'), ('86', 'Telecom Engineer'),
-    ('87', 'Telecommunicatiemanager'),
-    ('88', 'Test Engineer'), ('89', ' Testanalist'), ('90', 'Testconsultant'), ('91', 'Tester'),
-    ('92', 'Testmanager'), ('93', ' Webdeveloper'), ('94', 'Webmaster'), ('95', 'Servicemanager'),
-    ('96', 'Packager'),
 
-)
 STATUS_AANBIEDING_CHOICES = (
     ('1', 'Open'),
     ('2', 'Intake'),
@@ -130,6 +90,18 @@ class Documenten(models.Model):
     beschrijving = models.CharField(max_length=600, blank=True)
     document = models.FileField(upload_to='static/', null=True, blank=True)
     medewerker = models.ForeignKey("Medewerkers", on_delete=models.DO_NOTHING, blank=True)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
+class Documenten_History(models.Model):
+    document = models.ForeignKey("Documenten", on_delete=models.DO_NOTHING, blank=True)
+    update_id = models.IntegerField(null=True, blank=True)
+    naam_document = models.CharField(max_length=20, blank=True)
+    soort_document = models.CharField(max_length=50, blank=True)
+    beschrijving = models.CharField(max_length=600, blank=True)
+    document_path = models.FileField(upload_to='static/', null=True, blank=True)
+    medewerker = models.ForeignKey("Medewerkers", on_delete=models.DO_NOTHING, blank=True)
+    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    
 
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
@@ -151,6 +123,7 @@ class Medewerkers(models.Model):
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
     #document = models.ForeignKey("Documenten",upload_to='static/', null=True, blank=True)
 
@@ -219,6 +192,19 @@ class Klanten(models.Model):
     telefoonnummer = models.CharField(max_length=17, null=True, blank=True)
     portaal = models.URLField(max_length=300, null=True, blank=True)
     soort = models.CharField(max_length=15, null=True, blank=True)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
+
+class Klanten_History(models.Model):
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True, null=True)
+    update_id = models.IntegerField(blank=True)
+    accountmanager = models.CharField(max_length=15, choices=ACCOUNTMANAGER_CHOICES, null=True, blank=True)
+    naam = models.CharField(max_length=50, null=True, blank=True)
+    telefoonnummer = models.CharField(max_length=17, null=True, blank=True)
+    portaal = models.URLField(max_length=300, null=True, blank=True)
+    soort = models.CharField(max_length=15, null=True, blank=True)
+    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
 
 
 class Eindklanten(models.Model):
@@ -261,6 +247,7 @@ class Vestigingplaats(models.Model):
     plaats = models.CharField(max_length=20, blank=True)
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True)
     opmerkingen = models.CharField(max_length=300, blank=True)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
 class Contactpersonen(models.Model):
@@ -271,6 +258,21 @@ class Contactpersonen(models.Model):
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True)
     vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True)
     opmerkingen = models.CharField(max_length=300, blank=True)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
+
+class Contactpersonen_History(models.Model):
+    contactpersoon = models.ForeignKey(Contactpersonen, on_delete=models.DO_NOTHING, blank=True)
+    update_id = models.IntegerField(blank=True)
+    naam = models.CharField(max_length=50, blank=True)
+    mail_adres = models.CharField(max_length=50, blank=True)
+    telefoonnummer = models.CharField(max_length=30, blank=True)
+    functie = models.CharField(max_length=50, blank=True)
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True, null=True)
+    vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True, null=True)
+    opmerkingen = models.CharField(max_length=300, blank=True)
+    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
 
 class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
@@ -278,16 +280,37 @@ class Aanbiedingen(models.Model):
     laatste_update = models.DateField(null=True, blank=True)
     functie = models.CharField(max_length=50)
     functie_aanbieding = models.CharField(max_length=50)
-    klant = models.ForeignKey(Eindklanten, on_delete=models.DO_NOTHING, blank=True)
-    broker = models.ForeignKey(Brokers, on_delete=models.DO_NOTHING, blank=True)
+    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True)
+    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True)
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES)
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
 
     def get_status_count(self):
         return Aanbiedingen.objects.all().filter(status='1').count()
+
+
+class Aanbiedingen_History(models.Model):
+    aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
+    update_id = models.IntegerField(null=True, blank=True)
+    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+    registratie = models.DateField(null=True, blank=True)
+    laatste_update = models.DateField(null=True, blank=True)
+    functie = models.CharField(max_length=50)
+    functie_aanbieding = models.CharField(max_length=50)
+    klant = models.ForeignKey(Klanten, related_name='klant_history', on_delete=models.DO_NOTHING, blank=True)
+    broker = models.ForeignKey(Klanten, related_name='broker_history', on_delete=models.DO_NOTHING, blank=True)
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+    status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES)
+    tarief = models.FloatField(max_length=14, default=True, null=True)
+    betaalkorting = models.FloatField(max_length=14, default=True, null=True)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False)
+    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
 
 
 class Opdrachten(models.Model):
@@ -300,6 +323,8 @@ class Opdrachten(models.Model):
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     date_created = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+
 
     def get_status_count(self):
         return Opdrachten.objects.all().filter(status='1').count()
