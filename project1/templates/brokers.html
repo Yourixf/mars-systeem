@@ -73,7 +73,7 @@ $(document).ready(function() {
         <tr>
             <th>Tussenpartij naam:</th>
             <th>4-Rest contactpersoon:</th>
-            <th>Vestigingplaats:</th>
+            <th>Email adres factuur:</th>
             <th id="telNummer">Telefoonnummer tussenpartij:</th>
             <th id="portaal">Portaal tussenpartij:</th>
             <th id="deleteUpdate" class="no-export">Update / Delete</th>
@@ -81,24 +81,25 @@ $(document).ready(function() {
         </tr>
 
         <tbody id="myTable">
-            {% for Brokers in brokers_list %}
+            {% for broker in brokers_list %}
                 <tr>
-                    <td>{{ Brokers.naam }}</td>
-                    <td>{{ Brokers.get_accountmanager_display }}</td>
-                    <td>{{ Brokers.vestiging.plaats }}</td>
-                    <td id="telNummer">{{ Brokers.telefoonnummer }}</td>
-                    <td id="portaal"><a href="{{ Brokers.portaal }}" target="_blank">{{Brokers.portaal}}</a></td>
+                    <td>{{ broker.naam }}</td>
+                    <td>{{ broker.get_accountmanager_display }}</td>
+                    <td>{{ broker.factuuremail }}</td>
 
-                    <form action="{% url 'broker_delete' Brokers.id %}" method="post" class="no-export" style="display: inline;">
+                    <td id="telNummer">{{ broker.telefoonnummer }}</td>
+                    <td id="portaal"><a href="{{ broker.portaal }}" target="_blank">{{broker.portaal}}</a></td>
+
+                    <form action="{% url 'broker_delete' broker.id %}" method="post" class="no-export" style="display: inline;">
                         {% csrf_token %}
                         <td id="deleteUpdate">
-                            <a href="{% url 'broker_update' Brokers.id %}" class="no-export btn btn-primary btn-sm" role="button">Update</a>
+                            <a href="{% url 'broker_update' broker.id %}" class="no-export btn btn-primary btn-sm" role="button">Update</a>
                             <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
                             <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de broker wilt verijderen?')">
                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
                         </td>
                         <td id="detail">
-                            <a href="{% url 'broker_detail' Brokers.id %}"  class="no-export btn btn-success btn-sm" role="button">View Details</a>
+                            <a href="{% url 'broker_detail' broker.id %}"  class="no-export btn btn-success btn-sm" role="button">View Details</a>
                             <input type="hidden" name="medewerker_id" value="{{ brokers_list.id }}" />
                         </td>
                     </form>

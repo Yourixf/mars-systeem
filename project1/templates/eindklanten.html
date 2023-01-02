@@ -19,7 +19,7 @@ td, th {
 }
 
 #portaal {
-    max-width: 300px;
+    max-width: 250px;
     overflow: hidden;
 }
 
@@ -66,8 +66,7 @@ $(document).ready(function() {
             <thead>
             <tr>
                 <th>Klantnaam:</th>
-                <th>Contactpersoon:</th>
-                <th>Vestigingplaats:</th>
+                <th>Email adres factuur:</th>
                 <th>Telefoonnummer klant:</th>
                 <th id="portaal">Portaal klant:</th>
                 <th id="deleteUpdate">Update / Delete</th>
@@ -78,8 +77,7 @@ $(document).ready(function() {
                 {% for Eindklanten in eindklanten_list %}
                     <tr>
                         <td>{{ Eindklanten.naam }}</td>
-                        <td>{{ Eindklanten.naam }}</td>
-                        <td>{{ Eindklanten.plaats }}</td>
+                        <td>{{ Eindklanten.factuuremail }}</td>
                         <td>{{ Eindklanten.telefoonnummer }}</td>
                         <td id="portaal"><a href="{{ Eindklanten.portaal }}" target="_blank">{{Eindklanten.portaal}}</a></td>
 

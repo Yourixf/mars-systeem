@@ -113,6 +113,16 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Wijzigingen <span class="glyphicon"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'contract_history_page' %}">Contract wijzigingen</a></li>
+                        <li><a href="{% url 'factuur_history_page' %}">Factuur wijzigingen</a></li>
+                        <li><a href="{% url 'inhuur_history_page' %}">Inhuur wijzigingen</a></li>
+                    </ul>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                       <a href="{% url 'logout' %}">

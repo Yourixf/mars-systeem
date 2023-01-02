@@ -128,9 +128,13 @@ urlpatterns = [
     path(r'vestiging/detail/<str:pk>', views.VestigingDetailPage, name='detail_vestiging'),
     #voor contactpersoon detail
     path(r'contactpersoon/detail/<str:pk>', views.ContactpersoonDetailPage, name='detail_contactpersonen'),
-
-
-
+    #voor contract history pagina
+    path(r'contract/wijzigingen/', views.ContractHistoryPage, name='contract_history_page'),
+    #voor factuur history pagina
+    path(r'factuur/wijzigingen/', views.FactuurHistoryPage, name='factuur_history_page'),
+    #voor Inhuur history pagina
+    path(r'inhuur/wijzigingen/', views.InhuurHistoryPage, name='inhuur_history_page'),
+    path(r'factuur/wijzigingen/details/', views.FactuurHistoryDetailPage, name='factuur_history_detail'),
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

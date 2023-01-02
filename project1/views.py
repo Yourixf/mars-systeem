@@ -14,14 +14,59 @@ from project1 import forms
 from datetime import *
 from .forms import  *
 from .models import *
+from django.db.models import *
+from itertools import chain
 
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 # @login_required(login_url='login') is een ingebouwde Django functie ter beveiliging als de "User" niet is ingelogd kan die niet op die pagina komen.
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
-
-
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
+
+
+@login_required(login_url='login')
+def FactuurHistoryDetailPage(request):
+
+    context = {
+
+    }
+
+    return render(request, 'factuur.history.detail.html', context)
+
+
+@login_required(login_url='login')
+def ContractHistoryPage(request):
+
+    context = {
+        '':''
+    }
+
+    return render(request, 'contract.history.html', context)
+
+@login_required(login_url='login')
+def FactuurHistoryPage(request):
+
+
+
+
+    context = {
+        '':''
+    }
+
+    return render(request, 'factuur.history.html', context)
+
+@login_required(login_url='login')
+def InhuurHistoryPage(request):
+
+
+    context = {
+        '':''
+    }
+
+    return render(request, 'inhuur.history.html', context)
+
+
+
 @login_required(login_url='login')
 def ContactpersoonDetailPage(request, pk):
     contactpersoon = Contactpersonen.objects.get(id=pk)
@@ -182,7 +227,7 @@ def ContactPersonenToevoegen(request, pk):
 @login_required(login_url='login')
 def ContactPersoonUpdaten(request, pk):
     contactpersoon_pk = Contactpersonen.objects.get(id=pk)
-    contactpersoon_form = ContactpersoonForm(instance=contactpersoon_pk)
+    contactpersoon_form = ContactpersoonUpdatenForm(instance=contactpersoon_pk)
 
     vorige_pagina = request.META['HTTP_REFERER']
     if 'broker' in vorige_pagina:
@@ -202,47 +247,46 @@ def ContactPersoonUpdaten(request, pk):
             'eind_klant_pk': eind_klant_pk,
         }
 
-
     if request.method == 'POST':
         previous_page = request.session.get('vorige_pagina')
-        contactpersoon_form = ContactpersoonForm(request.POST, request.FILES, instance=contactpersoon_pk)
+        contactpersoon_form = ContactpersoonUpdatenForm(request.POST, request.FILES, instance=contactpersoon_pk)
         if contactpersoon_form.is_valid():
-            contactpersoon = contactpersoon_form.save()
 
-            if Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon.pk):
-                contactpersonen_lijst = Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon.pk)
+            if Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon_pk.pk):
+                contactpersonen_lijst = Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon_pk.pk)
                 laatste_contactpersoon = contactpersonen_lijst.latest('id')
                 laatste_update_nmr = laatste_contactpersoon.update_id
                 update_nmr = laatste_update_nmr + 1
-            elif not Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon.pk):
+            elif not Contactpersonen_History.objects.filter(contactpersoon_id=contactpersoon_pk.pk):
                 update_nmr = 1
 
-            if contactpersoon.klant_id:
-                contactKlant = contactpersoon.klant
-            elif not contactpersoon.klant_id:
+            if contactpersoon_pk.klant:
+                contactKlant_id = contactpersoon_pk.klant_id
+                contactKlant = Klanten.objects.get(id=contactKlant_id)
+            elif not contactpersoon_pk.klant_id:
                 contactKlant = None
 
-            if contactpersoon.vestiging_id:
-                contactVestiging = contactpersoon.vestiging
-            elif not contactpersoon.vestiging_id:
+            if contactpersoon_pk.vestiging_id:
+                contactVestiging_id = contactpersoon_pk.vestiging_id
+                contactVestiging = Vestigingplaats.objects.get(id=contactVestiging_id)
+            elif not contactpersoon_pk.vestiging_id:
                 contactVestiging = None
 
-
             contactpersoon_history = Contactpersonen_History(
-                contactpersoon=contactpersoon,
+                contactpersoon=contactpersoon_pk,
                 update_id=update_nmr,
-                naam=contactpersoon.naam,
-                mail_adres=contactpersoon.mail_adres,
-                telefoonnummer=contactpersoon.telefoonnummer,
-                functie=contactpersoon.functie,
+                naam=contactpersoon_form.initial.get('naam'),
+                mail_adres=contactpersoon_form.initial.get('mail_adres'),
+                telefoonnummer=contactpersoon_form.initial.get('telefoonnummer'),
+                functie=contactpersoon_form.initial.get('functie'),
                 klant=contactKlant,
                 vestiging=contactVestiging,
-                opmerkingen=contactpersoon.opmerkingen,
+                opmerkingen=contactpersoon_form.initial.get('opmerkingen'),
             )
 
-            contactpersoon.begindatum = dateformat.format(timezone.now(), 'o-m-d')
-
             contactpersoon_history.save()
+            contactpersoon = contactpersoon_form.save()
+            contactpersoon.begindatum = dateformat.format(timezone.now(), 'o-m-d')
             contactpersoon.save()
 
             if 'broker' in previous_page:
@@ -328,8 +372,38 @@ def VestigingUpdaten(request, pk):
     if request.method == 'POST':
         vestiging_form = VestigingplaatsForm(request.POST, request.FILES, instance=vestiging_pk)
         if vestiging_form.is_valid():
-            vestiging = vestiging_form.save()
-            vestiging.save()
+
+            if Vestigingplaats_History.objects.filter(Q(vestig_id=vestiging_pk.pk)):
+                vestiging = Vestigingplaats_History.objects.filter(Q(vestig_id=vestiging_pk.pk))
+                laatste_vestiging = vestiging.latest('id')
+                laatste_update_nmr = laatste_vestiging.update_id
+                update_nmr = laatste_update_nmr + 1
+            elif not Vestigingplaats_History.objects.filter(Q(vestig_id=vestiging_pk.pk)):
+                update_nmr = 1
+
+            if vestiging_pk.klant:
+                vestigingKlant_id = vestiging_pk.klant_id
+                vestigingKlant = Klanten.objects.get(id=vestigingKlant_id)
+            elif not vestiging_pk.klant:
+                vestigingKlant = None
+
+            History_record = Vestigingplaats_History(
+                vestig=vestiging_pk,
+                update_id=update_nmr,
+                postcode=vestiging_form.initial.get('postcode'),
+                straatnaam=vestiging_form.initial.get('straatnaam'),
+                huisnummer=vestiging_form.initial.get('huisnummer'),
+                plaats=vestiging_form.initial.get('plaats'),
+                vestiging=vestiging_form.initial.get('vestiging'),
+                klant=vestigingKlant,
+                opmerkingen=vestiging_form.initial.get('opmerkingen')
+            )
+
+            History_record.save()
+            vestiging_form = vestiging_form.save()
+            vestiging_form.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            vestiging_form.save()
+
             if 'broker' in previous_pagina:
                 return redirect('brokers')
             elif 'klant' in previous_pagina:
@@ -573,25 +647,37 @@ def DocumentenUpdate(request, pk):
     if request.method == 'POST':
         document_form = DocumentenUpdatenForm(request.POST, request.FILES, instance=document)
         if document_form.is_valid():
-            originele_document = document_form.save()
-            if Documenten_History.objects.filter(Q(document_id=originele_document.pk)):
-                Docu = Documenten_History.objects.filter(Q(document_id=originele_document.pk))
+
+            if Documenten_History.objects.filter(Q(document_id=document.pk)):
+                Docu = Documenten_History.objects.filter(Q(document_id=document.pk))
                 laatste_docu = Docu.latest('id')
                 laatste_update_nmr = laatste_docu.update_id
                 update_nmr = laatste_update_nmr + 1
-            elif not Documenten_History.objects.filter(Q(document_id=originele_document.pk)):
+            elif not Documenten_History.objects.filter(Q(document_id=document.pk)):
                 update_nmr = 1
-            test1 = Documenten_History(
-                document=originele_document,
-                naam_document=originele_document.naam_document,
-                soort_document=originele_document.soort_document,
-                beschrijving=originele_document.beschrijving,
-                document_path=originele_document.document,
-                medewerker=originele_document.medewerker,
-                update_id=update_nmr)
+
+            if document.medewerker_id:
+                documentMedewerker_id = document.medewerker_id
+                documentMedewerker = Medewerkers.objects.get(id=documentMedewerker_id)
+            elif not document.medewerker_id:
+                documentMedewerker = None
+
+
+            history_record = Documenten_History(
+                document=document,
+                naam_document=document_form.initial.get('naam_document'),
+                update_id=update_nmr,
+                soort_document=document_form.initial.get('soort_document'),
+                beschrijving=document_form.initial.get('beschrijving'),
+                document_path=document_form.initial.get('document_path'),
+                medewerker=documentMedewerker
+                )
+
+            originele_document = document_form.save()
+
             originele_document.begindatum = dateformat.format(timezone.now(), 'o-m-d')
             originele_document.save()
-            test1.save()
+            history_record.save()
             return redirect('medewerkers')
 
     return render(request, 'documenten.update.html', context)
@@ -744,10 +830,46 @@ def MedewerkersUpdaten(request, pk):
     form = MedewerkersForm(request.POST or None, instance=medewerker)
 
     if request.method == 'POST':
-        form = MedewerkersForm(request.POST or None, instance=medewerker)
+        medewerker_form = MedewerkersForm(request.POST or None, instance=medewerker)
         # form.save() om de nieuwe data op te slaan
-        if form.is_valid():
-            form.save()
+        if medewerker_form.is_valid():
+
+            if Medewerkers_History.objects.filter(medewerker_id=medewerker.pk):
+                mede = Medewerkers_History.objects.filter(medewerker_id=medewerker.pk)
+                laatste_mede = mede.latest('id')
+                laatste_update_nmr = laatste_mede.update_id
+                update_nmr = laatste_update_nmr + 1
+            elif not Medewerkers_History.objects.filter(medewerker_id=medewerker.pk):
+                update_nmr = 1
+
+            History_record = Medewerkers_History(
+                medewerker=medewerker,
+                update_id=update_nmr,
+                voornaam=medewerker_form.initial.get('voornaam'),
+                tussenvoegsel=medewerker_form.initial.get('tussenvoegsel'),
+                achternaam=medewerker_form.initial.get('achternaam'),
+                huisnummer=medewerker_form.initial.get('huisnummer'),
+                straat=medewerker_form.initial.get('straat'),
+                woonplaats=medewerker_form.initial.get('woonplaats'),
+                postcode=medewerker_form.initial.get('postcode'),
+                icenummer=medewerker_form.initial.get('icenummer'),
+                email=medewerker_form.initial.get('email'),
+                inhuur=medewerker_form.initial.get('inhuur'),
+                opleidingsniveau=medewerker_form.initial.get('opleidingsniveau'),
+                burgerlijkse_staat=medewerker_form.initial.get('burgelijkse_staat'),
+                bnsnummer=medewerker_form.initial.get('bnsnummer'),
+                geboortedatum=medewerker_form.initial.get('geboortedatum'),
+                telefoonnummer=medewerker_form.initial.get('telefoonnummer'),
+                tariefindicatie=medewerker_form.initial.get('tariefindicatie'),
+                lease_auto=medewerker_form.initial.get('lease_auto'),
+                status=medewerker_form.initial.get('status'),
+                bv=medewerker_form.initial.get('bv')
+            )
+
+            orginele_medewerker_form = medewerker_form.save()
+            orginele_medewerker_form.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            History_record.save()
+            orginele_medewerker_form.save()
             return redirect('details', medewerker.pk)
 
     return render(request, "update.medewerker.html", {'medewerker': medewerker, 'form': form})
@@ -880,26 +1002,29 @@ def EindklantenUpdaten(request, pk):
     if request.method == 'POST':
         eindklant_form = KlantenUpdatenForm(request.POST or None, instance=eindklant)
         if eindklant_form.is_valid():
-            originele_eindklant = eindklant_form.save()
 
-            if Klanten_History.objects.filter(Q(klant_id=originele_eindklant.pk)):
-                klant = Klanten_History.objects.filter(Q(klant_id=originele_eindklant.pk))
+            if Klanten_History.objects.filter(Q(klant_id=eindklant.pk)):
+                klant = Klanten_History.objects.filter(Q(klant_id=eindklant.pk))
                 laatste_klant = klant.latest('id')
                 laatste_update_nmr = laatste_klant.update_id
                 update_nmr = laatste_update_nmr + 1
-            elif not Klanten_History.objects.filter(Q(klant_id=originele_eindklant.pk)):
+            elif not Klanten_History.objects.filter(Q(klant_id=eindklant.pk)):
                 update_nmr = 1
 
 
+            initi = eindklant_form.initial
+
             History_Record = Klanten_History(
-                klant=originele_eindklant,
+                klant=eindklant,
                 update_id=update_nmr,
-                accountmanager=originele_eindklant.accountmanager,
-                naam=originele_eindklant.naam,
-                telefoonnummer=originele_eindklant.telefoonnummer,
-                portaal=originele_eindklant.portaal,
-                soort=originele_eindklant.soort
+                accountmanager=eindklant_form.initial.get('accountmanager'),
+                naam=eindklant_form.initial.get('naam'),
+                telefoonnummer=eindklant_form.initial.get('telefoonnummer'),
+                portaal=eindklant_form.initial.get('portaal'),
+                soort=eindklant_form.initial.get('soort')
             )
+
+            originele_eindklant = eindklant_form.save()
 
             originele_eindklant.begindatum = dateformat.format(timezone.now(), 'o-m-d')
 
@@ -951,6 +1076,7 @@ def EindklantDetail(request, pk):
 def BrokersPage(request):
     brokers_list = Klanten.objects.filter(Q(soort='2'))
 
+
     context = {
         'brokers_list':brokers_list,
     }
@@ -1000,8 +1126,31 @@ def BrokerUpdaten(request, pk):
 
     if request.method == 'POST':
         broker_form = KlantenUpdatenForm(request.POST or None, instance=broker)
-        if  broker_form.is_valid():
-            broker_form.save()
+        if broker_form.is_valid():
+
+            if Klanten_History.objects.filter(Q(klant_id= broker.pk)):
+                klant = Klanten_History.objects.filter(Q(klant_id=broker.pk))
+                laatste_klant = klant.latest('id')
+                laatste_update_nmr = laatste_klant.update_id
+                update_nmr = laatste_update_nmr + 1
+            elif not Klanten_History.objects.filter(Q(klant_id=broker.pk)):
+                update_nmr = 1
+
+            History_Record = Klanten_History(
+                klant=broker,
+                update_id=update_nmr,
+                accountmanager=broker_form.initial.get('accountmanager'),
+                naam=broker_form.initial.get('naam'),
+                telefoonnummer=broker_form.initial.get('telefoonnummer'),
+                portaal=broker_form.initial.get('portaal'),
+                soort=broker_form.initial.get('soort')
+            )
+
+            History_Record.save()
+
+            broker = broker_form.save()
+            broker.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            broker.save()
             return redirect('brokers')
 
     return render(request, "update.broker.html", context)
@@ -1051,7 +1200,7 @@ def AanbiedingToevoegen(request):
         'aanbieding_form': aanbieding_form
     }
     if request.method == 'POST':
-        aanbieding_form = AanbiedingenForm(request.POST, request.FILES)
+       # aanbieding_form = AanbiedingenForm(request.POST, request.FILES)
         # NO VALID FUNCTIE INDOUWEN
         if aanbieding_form.is_valid():
             aanbieding = aanbieding_form.save(commit=False)
@@ -1086,6 +1235,7 @@ def AanbiedingToevoegen(request):
                 aanbieding.save()
             aanbieding.save()
             return redirect('aanbiedingen')
+        return redirect('index')
     else:
         return render(request, 'aanbiedingen.toevoegen.html', context)
 
@@ -1128,8 +1278,8 @@ def AanbiedingUpdaten(request, pk):
     }
 
     if request.method == 'POST':
+
         if aanbieding_form.is_valid():
-            aanbieding = aanbieding_form.save()
 
             if Aanbiedingen_History.objects.filter(Q(aanbieding_id=aanbieding.pk)):
                 aanbiedingen = Aanbiedingen_History.objects.filter(Q(aanbieding_id=aanbieding.pk))
@@ -1140,42 +1290,46 @@ def AanbiedingUpdaten(request, pk):
                 update_nmr = 1
 
             if aanbieding.klant_id:
-                aanbiedingKlant = aanbieding.klant
+                aanbiedingKlant_id = aanbieding.klant_id
+                aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
             elif not aanbieding.klant_id:
                 aanbiedingKlant = None
 
             if aanbieding.broker_id:
-                aanbiedingBroker = aanbieding.broker
+                aanbiedingBroker_id = aanbieding.broker_id
+                aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
             elif not aanbieding.broker_id:
                 aanbiedingBroker = None
 
             if aanbieding.medewerker_id:
-                aanbiedingMedewerker = aanbieding.medewerker
+                aanbiedingMedewerker_id = aanbieding.medewerker_id
+                aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
             elif not aanbieding.medewerker_id:
                 aanbiedingMedewerker = None
-
 
             history_record = Aanbiedingen_History(
                 aanbieding=aanbieding,
                 update_id=update_nmr,
-                aangemaakt_door=aanbieding.aangemaakt_door,
-                registratie=aanbieding.registratie,
-                laatste_update=aanbieding.laatste_update,
-                functie=aanbieding.functie,
-                functie_aanbieding=aanbieding.functie_aanbieding,
+                aangemaakt_door=aanbieding_form.initial.get('aangemaakt_door'),
+                registratie=aanbieding_form.initial.get('registratie'),
+                laatste_update=aanbieding_form.initial.get('laatste_update'),
+                functie=aanbieding_form.initial.get('functie'),
+                functie_aanbieding=aanbieding_form.initial.get('functie_aanbieding'),
                 klant=aanbiedingKlant,
                 broker=aanbiedingBroker,
-                accountmanager=aanbieding.accountmanager,
-                status=aanbieding.status,
-                tarief=aanbieding.tarief,
-                betaalkorting=aanbieding.betaalkorting,
+                accountmanager=aanbieding_form.initial.get('accountmanager'),
+                status=aanbieding_form.initial.get('status'),
+                tarief=aanbieding_form.initial.get('tarief'),
+                betaalkorting=aanbieding_form.initial.get('betaalkorting'),
                 medewerker=aanbiedingMedewerker
             )
 
-            aanbieding.begindatum = dateformat.format(timezone.now(), 'o-m-d')
-            aanbieding.save()
             history_record.save()
 
+            aanbieding = aanbieding_form.save()
+
+            aanbieding.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            aanbieding.save()
 
             aanbieding_status = aanbieding.status
             medewerker = aanbieding.medewerker
@@ -1330,8 +1484,93 @@ def OpdrachtenUpdaten(request, pk):
         opdracht_form = OpdrachtenForm(request.POST or None, instance=opdracht)
         aanbieding_form = AanbiedingUpdatenForm(request.POST or None, instance=aanbieding)
         if opdracht_form.is_valid() and aanbieding_form.is_valid():
+
+            # Voor oprachten history functie
+            if Opdrachten_History.objects.filter(Q(opdracht_id=opdracht.pk)):
+                opdr = Opdrachten_History.objects.filter(Q(opdracht_id=opdracht.pk))
+                laatste_opdr = opdr.latest('id')
+                laatste_update_nmr = laatste_opdr.update_id
+                update_nmr = laatste_update_nmr + 1
+            if not Opdrachten_History.objects.filter(Q(opdracht_id=opdracht.pk)):
+                update_nmr = 1
+
+
+            if opdracht.aanbieding:
+                opdrachtAanbieding_id = opdracht.aanbieding_id
+                opdrachtAanbieding = Aanbiedingen.objects.get(id=opdrachtAanbieding_id)
+            elif not opdracht.aanbieding:
+                opdrachtAanbieding = None
+
+
+            Opdracht_history_record = Opdrachten_History(
+                opdracht=opdracht,
+                update_id=update_nmr,
+                aanbieding=opdrachtAanbieding,
+                status_opdracht=opdracht_form.initial.get('status_opdracht'),
+                startdatum=opdracht_form.initial.get('startdatum'),
+                einddatum=opdracht_form.initial.get('einddatum'),
+                tarief_opdracht=opdracht_form.initial.get('tarief_opdracht'),
+                opdracht_betaalkorting=opdracht_form.initial.get('opdracht_betaalkorting'),
+                aantal_uren=opdracht_form.initial.get('aantal_uren'),
+                opdracht_aangemaakt_door=opdracht_form.initial.get('opdracht_aangemaakt_door'),
+                date_created=opdracht_form.initial.get('date_created')
+            )
+
+            Opdracht_history_record.save()
             opdracht = opdracht_form.save()
+            opdracht.begindatum= dateformat.format(timezone.now(), 'o-m-d')
+            opdracht.save()
+
+            # Voor aanbiedingen history functie
+            if Aanbiedingen_History.objects.filter(Q(aanbieding_id=aanbieding.pk)):
+                aanbiedingen = Aanbiedingen_History.objects.filter(Q(aanbieding_id=aanbieding.pk))
+                laatste_aanbieding = aanbiedingen.latest('id')
+                laatste_update_nmr = laatste_aanbieding.update_id
+                update_nmr = laatste_update_nmr + 1
+            elif not Aanbiedingen_History.objects.filter(Q(aanbieding_id=aanbieding.pk)):
+                update_nmr = 1
+
+            if aanbieding.klant_id:
+                aanbiedingKlant_id = aanbieding.klant_id
+                aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
+            elif not aanbieding.klant_id:
+                aanbiedingKlant = None
+
+            if aanbieding.broker_id:
+                aanbiedingBroker_id = aanbieding.broker_id
+                aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
+            elif not aanbieding.broker_id:
+                aanbiedingBroker = None
+
+            if aanbieding.medewerker_id:
+                aanbiedingMedewerker_id = aanbieding.medewerker_id
+                aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
+            elif not aanbieding.medewerker_id:
+                aanbiedingMedewerker = None
+
+            history_record = Aanbiedingen_History(
+                aanbieding=aanbieding,
+                update_id=update_nmr,
+                aangemaakt_door=aanbieding_form.initial.get('aangemaakt_door'),
+                registratie=aanbieding_form.initial.get('registratie'),
+                laatste_update=aanbieding_form.initial.get('laatste_update'),
+                functie=aanbieding_form.initial.get('functie'),
+                functie_aanbieding=aanbieding_form.initial.get('functie_aanbieding'),
+                klant=aanbiedingKlant,
+                broker=aanbiedingBroker,
+                accountmanager=aanbieding_form.initial.get('accountmanager'),
+                status=aanbieding_form.initial.get('status'),
+                tarief=aanbieding_form.initial.get('tarief'),
+                betaalkorting=aanbieding_form.initial.get('betaalkorting'),
+                medewerker=aanbiedingMedewerker
+            )
+
+            history_record.save()
+
             aanbieding = aanbieding_form.save()
+            aanbieding.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            aanbieding.save()
+
             medewerker = aanbieding.medewerker
             if opdracht.status_opdracht == '2':
                 aanbieding.status = '6'

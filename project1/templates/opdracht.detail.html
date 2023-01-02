@@ -21,7 +21,7 @@ td, th {
 
 <table>
     <tr>
-        <th>Klantnaam</th><td>{{ opdracht.aanbieding.klant }}</td>
+        <th>Klantnaam</th><td>{{ opdracht.aanbieding.klant.naam }}</td>
         <th>Medewerker</th><td>{{ opdracht.aanbieding.medewerker }}</td><tr></tr>
         <th>Tarief</th><td>{{ opdracht.tarief_opdracht }}</td>
         <th>Registratiedatum</th><td>{{ opdracht.date_created }}</td><tr></tr>
@@ -33,7 +33,7 @@ td, th {
         <th>Eind datum</th><td>{{ opdracht.einddatum }}</td><tr></tr>
         <th>Aantal uur</th><td>{{ opdracht.aantal_uren }}</td>
         <th>Aangemaakt door</th><td>{{ opdracht.get_opdracht_aangemaakt_door_display }}</td><tr></tr>
-        <th>Broker</th><td>{{ opdracht.aanbieding.broker }}</td>
+        <th>Broker</th><td>{{ opdracht.aanbieding.broker.naam }}</td>
         <tr>
             <td>
                 <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary" role="button">Update</a>

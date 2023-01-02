@@ -82,12 +82,21 @@ class ContractenToevoegenForm(ModelForm):
 
 
 class ContactpersoonForm(forms.ModelForm):
-    opmerkingen = forms.CharField(widget=forms.Textarea ,max_length=300, required=False)
+    opmerkingen = forms.CharField(widget=forms.Textarea, max_length=300, required=False)
+    #klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True)
+    #vestiging = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True)
+    #begindatum = forms.DateField(required=False)
+    class Meta:
+        model = Contactpersonen
+        fields = ['naam', 'mail_adres', 'telefoonnummer', 'functie']
+        #exclude = ['klant', 'vestiging', 'begindatum']
 
+
+class ContactpersoonUpdatenForm(forms.ModelForm):
     class Meta:
         model = Contactpersonen
         fields = '__all__'
-        exclude = ['klant', 'vestiging']
+        exclude = ['begindatum', 'klant', 'vestiging']
 
 
 class ContactVestigingForm(forms.ModelForm):
@@ -99,7 +108,7 @@ class ContactVestigingForm(forms.ModelForm):
 
 
 class VestigingplaatsForm(forms.ModelForm):
-    vestiging = forms.CharField(max_length=20, required=False)
+    #vestiging = forms.CharField(max_length=20, required=False)
     postcode = forms.CharField(max_length=10, required=False)
     straatnaam = forms.CharField(max_length=30, required=False)
     huisnummer = forms.IntegerField(required=False)
@@ -124,17 +133,25 @@ class KlantenToevoegenForm(forms.ModelForm):
         exclude = ['contactpersoon', 'vestiging', 'soort', 'begindatum']
         labels = {
             "accountmanager": "4-Rest contactpersoon",
+            "factuuremail":"Email adres factuur",
 
         }
 
+soortKlanten = (
+    ("1", "Eindklant"),
+    ("2", "Tussenpartij")
+)
+
 class KlantenUpdatenForm(forms.ModelForm):
+    soort = forms.ChoiceField(choices=soortKlanten, required=False)
     class Meta:
         model = Klanten
         portaal_broker = forms.URLField(max_length=300)
         fields = '__all__'
-        exclude = ['contactpersoon', 'vestiging', 'soort', 'begindatum']
+        exclude = ['contactpersoon', 'vestiging', 'begindatum']
         labels = {
             "accountmanager": "4-Rest contactpersoon",
+            "soort": "Soort klant"
 
         }
 

@@ -101,11 +101,11 @@ $(document).ready(function() {
         <tbody id="myTable">
             {% for aanbiedingen in aanbieding_list %}
                 <tr>
-                    <td>{{ aanbiedingen.klant.klantnaam }}</td>
+                    <td>{{ aanbiedingen.klant.naam }}</td>
                     <td>{{ aanbiedingen.medewerker }}</td>
                     <td id="tarief">{{ aanbiedingen.tarief }}</td>
                     <td id="registratie">{{ aanbiedingen.registratie }}</td>
-                    <td>{{ aanbiedingen.broker.broker_naam }}</td>
+                    <td>{{ aanbiedingen.broker.naam }}</td>
                     <td>{{ aanbiedingen.functie_aanbieding }}</td>
                     <td id="status">{{ aanbiedingen.get_status_display }}</td>
 

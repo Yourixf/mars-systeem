@@ -100,13 +100,13 @@ $(document).ready(function() {
         <tbody id="myTable">
             {% for opdracht in opdrachtenLijst %}
                 <tr>
-                    <td>{{ opdracht.aanbieding.klant }}</td>
+                    <td>{{ opdracht.aanbieding.klant.naam }}</td>
                     <td>{{ opdracht.aanbieding.medewerker }}</td>
                     <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
                     <td id="startDatum">{{ opdracht.startdatum }}</td>
                     <td id="eindDatum">{{ opdracht.einddatum }}</td>
                     <td id="tarief">{{ opdracht.tarief_opdracht }}</td>
-                    <td>{{ opdracht.aanbieding.broker }}</td>
+                    <td>{{ opdracht.aanbieding.broker.naam }}</td>
 
 
                     {% csrf_token %}

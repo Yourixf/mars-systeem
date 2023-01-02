@@ -66,7 +66,7 @@ td, th {
             <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
             <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
             <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-            <th>Opleiding niveau</th><td>{{ medewerkers.opleidingsniveau }}</td></tr>
+            <th>Opleiding niveau</th><td>{{ medewerkers.get_opleidingsniveau_display }}</td></tr>
             <th>Postcode</th> <td>{{ medewerkers.postcode }}</td>
             <th>Mobiel nummer</th><td>{{ medewerkers.telefoonnummer }}</td></tr>
             <th>Burgerlijke staat</th><td>{{ medewerkers.get_burgerlijkse_staat_display }}</td>
@@ -76,6 +76,8 @@ td, th {
             <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
             <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
             <th>BV</th><td>{{ medewerkers.get_bv_display }}</td>
+            <th>Inhuur</th><td>{{ medewerkers.get_inhuur_display }}</td>
+
             </tr>
                 <td id="actieKnoppen">
                     <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
