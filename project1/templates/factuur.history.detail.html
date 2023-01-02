@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Facturatie wijzigingen/details{% endblock %}
+{% block body %}
+
+<html lang="">
+<head>
+<link rel=”stylesheet” type='text/css' href=”{% static 'css/style.css' %}”>
+<style>
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#basic-datatable1_wrapper {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#documentToevoegen {
+    text-align: center;
+}
+
+#documentBeschrijving {
+    max-width: 200px;
+}
+
+#document {
+    text-align: center;
+}
+
+#medeName{
+    text-align: center;
+}
+
+#actieKnoppen {
+    max-width: 170px;
+}
+
+</style>
+{#        <link rel="stylesheet" href=#}
+{#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
+{#        integrity=#}
+{#"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"#}
+{#        crossorigin="anonymous">#}
+
+</head>
+
+<h3 id="medeName"><a> Detail weergave </a></h3>
+<br>
+<section>
+    {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
+    <table>
+        <tr>
+            <th>Medewerker</th><td></td>
+            <th>Klant</th><td></td></tr>
+            <th>Tussenpartij</th><td></td>
+            <th>Startdatum</th><td></td>
+            <th>Einddatum</th><td></td><tr>
+            <th>Tarief</th><td></td>
+            <th>Betaalkorting</th><td></td></tr>
+            <th>Aantal uren</th>
+            <th>WERKNEMER UREN???</th>
+            <th>Klant Adres</th> <td></td>
+            <th>Email adres factuur</th><td></td></tr>
+            <th>medewerker bv</th><td></td>
+
+            <th>ICE nummer</th><td></td><tr>
+            <th>Geboortedatum</th><td></td>
+            <th>Email</th><td></td><tr>
+            <th>Lease auto</th><td></td>
+            <th>Status</th><td></td><tr></tr>
+            <th>BV</th><td></td>
+
+            </tr>
+                <td id="actieKnoppen">
+                    <a href="" class="btn btn-primary" role="button">Update</a>
+                    <a href="" class="btn btn-primary" role="button">Terug</a>
+                </td>
+            <tr>
+        </tr>
+    </table>
+    <br>
+</section>
+
+
+<br>
+<div class="container">
+
+
+
+
+    {#<button class="btnn btn4"><a href="{% url 'editor' medewerkers.id %}" style="color:white">Opmerkingen medewerker : {{ medewerkers.voornaam }}</a></button>#}
+</div>
+<br>
+
+</body>
+
+</html>
+
+{% endblock %}
