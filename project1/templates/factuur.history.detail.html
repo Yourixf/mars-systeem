@@ -55,36 +55,30 @@ td, th {
 
 </head>
 
-<h3 id="medeName"><a> Detail weergave </a></h3>
+<h3 id="medeName"><a> Detail weergave meest recente versie </a></h3>
 <br>
 <section>
     {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
+
+
     <table>
         <tr>
-            <th>Medewerker</th><td></td>
-            <th>Klant</th><td></td></tr>
-            <th>Tussenpartij</th><td></td>
-            <th>Startdatum</th><td></td>
-            <th>Einddatum</th><td></td><tr>
-            <th>Tarief</th><td></td>
-            <th>Betaalkorting</th><td></td></tr>
-            <th>Aantal uren</th>
-            <th>WERKNEMER UREN???</th>
-            <th>Klant Adres</th> <td></td>
-            <th>Email adres factuur</th><td></td></tr>
-            <th>medewerker bv</th><td></td>
-
-            <th>ICE nummer</th><td></td><tr>
-            <th>Geboortedatum</th><td></td>
-            <th>Email</th><td></td><tr>
-            <th>Lease auto</th><td></td>
-            <th>Status</th><td></td><tr></tr>
-            <th>BV</th><td></td>
+            <th>Medewerker</th><td>{{ opdracht.aanbieding.medewerker }}</td>
+            <th>Klant</th><td>{{ opdracht.aanbieding.klant.naam }}</td></tr>
+            <th>Tussenpartij</th><td>{{ opdracht.aanbieding.broker.naam }}</td>
+            <th>Startdatum</th><td>{{ opdracht.startdatum }}</td><tr>
+            <th>Tarief</th><td>{{ opdracht.tarief_opdracht }}</td>
+            <th>Einddatum</th><td>{{ opdracht.einddatum }}</td></tr>
+            <th>Betaalkorting</th><td>{{ opdracht.opdracht_betaalkorting }}</td>
+            <th>Aantal uren</th><td>{{ opdracht.aantal_uren }}</td><tr>
+            <th>Werknemer aantal uren</th><td>{{ opdracht.aanbieding.medewerker.aantal_uur }}</td>
+            <th>Klant adres</th><td>{{ hoofdvestiging }}</td></tr>
+            <th>Email adres factuur</th><td>{{ factuuremail }}</td>
+            <th>Medewerker bv</th><td>{{ opdracht.aanbieding.medewerker.get_bv_display }}</td><tr>
 
             </tr>
                 <td id="actieKnoppen">
-                    <a href="" class="btn btn-primary" role="button">Update</a>
-                    <a href="" class="btn btn-primary" role="button">Terug</a>
+                    <a href="{% url 'factuur_history_page' %}" class="btn btn-primary" role="button">Terug</a>
                 </td>
             <tr>
         </tr>

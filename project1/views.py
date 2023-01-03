@@ -25,10 +25,24 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 
 
 @login_required(login_url='login')
-def FactuurHistoryDetailPage(request):
+def FactuurHistoryDetailPage(request, pk):
+    opdracht = Opdrachten.objects.get(id=pk)
+
+    if opdracht.aanbieding.broker_id:
+        factuuremail = opdracht.aanbieding.broker.factuuremail
+        broker_id = opdracht.aanbieding.broker_id
+        hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
+    elif not opdracht.aanbieding.broker_id:
+        factuuremail = opdracht.aanbieding.klant.factuuremail
+        klant_id = opdracht.aanbieding.klant_id
+        hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=klant_id, vestiging='1'))
+
+
 
     context = {
-
+        'opdracht':opdracht,
+        'factuuremail':factuuremail,
+        'hoofdvestiging':hoofdvestiging,
     }
 
     return render(request, 'factuur.history.detail.html', context)
@@ -45,12 +59,12 @@ def ContractHistoryPage(request):
 
 @login_required(login_url='login')
 def FactuurHistoryPage(request):
-
-
-
+    datum_nu = date.today() - timedelta(days=30)
+    eind_datum = datum_nu + timedelta(days=60)
+    opdrachten_list = Opdrachten.objects.filter(Q(status_opdracht=1), begindatum__range=[datum_nu, eind_datum])
 
     context = {
-        '':''
+        'opdrachten_list':opdrachten_list,
     }
 
     return render(request, 'factuur.history.html', context)
@@ -857,7 +871,7 @@ def MedewerkersUpdaten(request, pk):
                 inhuur=medewerker_form.initial.get('inhuur'),
                 opleidingsniveau=medewerker_form.initial.get('opleidingsniveau'),
                 burgerlijkse_staat=medewerker_form.initial.get('burgelijkse_staat'),
-                bnsnummer=medewerker_form.initial.get('bnsnummer'),
+                bsnnummer=medewerker_form.initial.get('bsnnummer'),
                 geboortedatum=medewerker_form.initial.get('geboortedatum'),
                 telefoonnummer=medewerker_form.initial.get('telefoonnummer'),
                 tariefindicatie=medewerker_form.initial.get('tariefindicatie'),

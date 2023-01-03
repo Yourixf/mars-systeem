@@ -134,7 +134,7 @@ urlpatterns = [
     path(r'factuur/wijzigingen/', views.FactuurHistoryPage, name='factuur_history_page'),
     #voor Inhuur history pagina
     path(r'inhuur/wijzigingen/', views.InhuurHistoryPage, name='inhuur_history_page'),
-    path(r'factuur/wijzigingen/details/', views.FactuurHistoryDetailPage, name='factuur_history_detail'),
+    path(r'factuur/wijzigingen/details/<str:pk>/', views.FactuurHistoryDetailPage, name='factuur_history_detail'),
 
 
     # dit is de download path die hij zodat je de download van de betreffende persoon alleen kan downloaden op wie je klinkt en waar django het weg schrijft.

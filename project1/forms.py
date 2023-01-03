@@ -45,7 +45,7 @@ OPLEIDINGNIVEAU_CHOICES = (
 # Dit is de Form om medewerkers toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 class MedewerkersForm(forms.ModelForm):
-    bnsnummer = forms.IntegerField(required=False)
+    bsnnummer = forms.IntegerField(required=False)
     #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     email = forms.EmailField(max_length=254, required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
@@ -240,14 +240,14 @@ STATUS_AANBIEDING_CHOICES = (
 )
 
 class AanbiedingenForm(forms.ModelForm):
-    aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    #aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     registratie = forms.DateField(required=False)
     laatste_update = forms.DateField(required=False)
     functie = forms.CharField(required=False)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
     broker = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
-    accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
+    #accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False, max_value=200)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
@@ -264,6 +264,11 @@ class AanbiedingenForm(forms.ModelForm):
             'laatste_update': forms.DateInput(
                 attrs={'class': 'form-control',
                        'type': 'date'}),
+        }
+
+        labels = {
+            "accountmanager": "4-Rest contactpersoon",
+            "broker": "Tussenpartij",
 
         }
 class AanbiedingUpdatenForm(forms.ModelForm):

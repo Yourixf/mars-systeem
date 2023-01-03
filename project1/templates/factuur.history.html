@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}Factuur{% endblock %}
+{% block title %}Wijzigingen{% endblock %}
 {% block body %}
-    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Factuur</h3></div>
+    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Wijzigingen</h3></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
@@ -68,9 +68,9 @@ $(document).ready(function() {
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    columns: [ 0, 1, 2, 3, 4 ]
                 },
-            title: 'Aflopende opdrachten' +
+            title: 'Checklist facturatie' +
                 '' +
                 ' Export',
             customize: function( xlsx ) {
@@ -97,22 +97,24 @@ $(document).ready(function() {
 
 
         <tbody id="myTable">
+            {% for opdracht in opdrachten_list %}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ opdracht.aanbieding.medewerker }}</td>
+                    <td>{{ opdracht.aanbieding.klant.naam }}</td>
+                    <td>{{ opdracht.startdatum }}</td>
+                    <td>{{ opdracht.einddatum }}</td>
+                    <td>{{ opdracht.tarief_opdracht }}</td>
 
                     {% csrf_token %}
                         <form action="">
 
                             <td id="detail">
-                                <a href="{% url 'factuur_history_detail' %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <a href="{% url 'factuur_history_detail' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
                                 <input type="hidden" name="" value="" />
                             </td>
                         </form>
                 </tr>
+            {% endfor %}
         </tbody>
 
 

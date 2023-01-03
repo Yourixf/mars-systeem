@@ -122,7 +122,7 @@ class Medewerkers(models.Model):
     inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
     opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
-    bnsnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
     geboortedatum = models.DateField(null=True, blank=True)
     telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
@@ -130,6 +130,7 @@ class Medewerkers(models.Model):
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    aantal_uur = models.IntegerField(null=True, blank=True)
 
     #document = models.ForeignKey("Documenten",upload_to='static/', null=True, blank=True)
 
@@ -165,7 +166,7 @@ class Medewerkers_History(models.Model):
     inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
     opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
-    bnsnummer = models.IntegerField(null=True, blank=True)
+    bsnnummer = models.IntegerField(null=True, blank=True)
     geboortedatum = models.DateField(null=True, blank=True)
     telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
@@ -173,6 +174,7 @@ class Medewerkers_History(models.Model):
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
     updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    aantal_uur = models.IntegerField(null=True, blank=True)
 
 
 class Opmerkingen(models.Model):
@@ -226,6 +228,12 @@ class Klanten(models.Model):
     soort = models.CharField(max_length=15, null=True, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
     factuuremail = models.EmailField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        try:
+            return self.naam
+        except:
+            pizza = ''
 
 class Klanten_History(models.Model):
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -282,6 +290,9 @@ class Vestigingplaats(models.Model):
     opmerkingen = models.CharField(max_length=300, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
+    def __str__(self):
+        return self.straatnaam + ' ' + str(self.huisnummer) + ', ' + self.postcode + ' ' + self.plaats
+
 
 class Vestigingplaats_History(models.Model):
     vestig = models.ForeignKey(Vestigingplaats, on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -326,8 +337,8 @@ class Aanbiedingen(models.Model):
     laatste_update = models.DateField(null=True, blank=True)
     functie = models.CharField(max_length=50, blank=True)
     functie_aanbieding = models.CharField(max_length=50, blank=True)
-    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True)
-    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True)
+    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True, limit_choices_to={'soort': '1'})
+    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True, limit_choices_to={'soort': '2'})
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES, blank=True)
     tarief = models.FloatField(max_length=14, default=True, null=True, blank=True)

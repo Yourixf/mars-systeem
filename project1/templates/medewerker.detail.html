@@ -62,7 +62,7 @@ td, th {
     <table>
         <tr>
             <th>Naam</th><td>{{ medewerkers }}</td>
-            <th>Bsn nummer</th><td>{{ medewerkers.bnsnummer }}</td></tr>
+            <th>Bsn nummer</th><td>{{ medewerkers.bsnnummer }}</td></tr>
             <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
             <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
             <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
@@ -76,7 +76,8 @@ td, th {
             <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
             <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
             <th>BV</th><td>{{ medewerkers.get_bv_display }}</td>
-            <th>Inhuur</th><td>{{ medewerkers.get_inhuur_display }}</td>
+            <th>Inhuur</th><td>{{ medewerkers.get_inhuur_display }}</td><tr>
+            <th>Aantal uur</th><td>{{ medewerkers.aantal_uur }}</td>
 
             </tr>
                 <td id="actieKnoppen">
