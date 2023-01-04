@@ -17,8 +17,12 @@ td, th {
   padding: 8px;
 }
 
-#startDatum {
-    max-width: 80px;
+#datum {
+    max-width: 130px;
+}
+
+#namen {
+    max-width: 130px;
 }
 
 #eindDatum {
@@ -35,7 +39,7 @@ td, th {
 
 
 #detail {
-    max-width: 60px;
+    max-width: 20px;
 }
 </style>
 {% endblock %}
@@ -87,10 +91,10 @@ $(document).ready(function() {
 <table id="basic-datatable" class="table" style="width:100%">
         <thead>
         <tr>
-            <th>Medewerker</th>
-            <th>Klant naam</th>
-            <th>Startdatum</th>
-            <th>Einddatum</th>
+            <th id="namen">Medewerker</th>
+            <th id="namen">Klant naam</th>
+            <th id="datum">Startdatum opdracht</th>
+            <th id="datum">Einddatum opdracht</th>
             <th id="tarief">Tarief</th>
             <th id="detail">Detail</th>
         </tr>
