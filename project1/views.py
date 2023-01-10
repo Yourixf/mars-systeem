@@ -867,7 +867,7 @@ def MedewerkersUpdaten(request, pk):
                 woonplaats=medewerker_form.initial.get('woonplaats'),
                 postcode=medewerker_form.initial.get('postcode'),
                 icenummer=medewerker_form.initial.get('icenummer'),
-                email=medewerker_form.initial.get('email'),
+                privémail=medewerker_form.initial.get('privémail'),
                 inhuur=medewerker_form.initial.get('inhuur'),
                 opleidingsniveau=medewerker_form.initial.get('opleidingsniveau'),
                 burgerlijkse_staat=medewerker_form.initial.get('burgelijkse_staat'),
@@ -877,7 +877,8 @@ def MedewerkersUpdaten(request, pk):
                 tariefindicatie=medewerker_form.initial.get('tariefindicatie'),
                 lease_auto=medewerker_form.initial.get('lease_auto'),
                 status=medewerker_form.initial.get('status'),
-                bv=medewerker_form.initial.get('bv')
+                bv=medewerker_form.initial.get('bv'),
+                werkmail=medewerker_form.initial.get('werkmail')
             )
 
             orginele_medewerker_form = medewerker_form.save()

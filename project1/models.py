@@ -54,7 +54,6 @@ OPLEIDINGNIVEAU_CHOICES = (
     ("1", "Middelbaar beroepsonderwijs (MBO)"),
     ("2", "Hoger beroepsonderwijs (HBO)"),
     ("3", "Wetenschappelijk onderwijs (WO)"),
-
 )
 
 STATUS_MEDEWERKER_CHOICES = (
@@ -65,11 +64,10 @@ STATUS_MEDEWERKER_CHOICES = (
 )
 
 BV_CHOICES = (
-    ('1', 'Holding'),
-    ('2', 'Ict'),
-    ('3', 'Infra'),
-    ('4', 'III'),
-    ('5', 'Extern')
+    ('1', 'Ict'),
+    ('2', 'Infra'),
+    ('3', 'III'),
+    ('4', 'Extern')
 )
 
 BURGERLIJKE_STAAT_CHOICES = (
@@ -118,7 +116,7 @@ class Medewerkers(models.Model):
     woonplaats = models.CharField(max_length=150, blank=True)
     postcode = models.CharField(max_length=10, blank=True)
     icenummer = models.IntegerField(null=True, blank=True)
-    email = models.EmailField(max_length=150, blank=True)
+    privémail = models.EmailField(max_length=150, blank=True)
     inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
     opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
     burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
@@ -131,7 +129,7 @@ class Medewerkers(models.Model):
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
     aantal_uur = models.IntegerField(null=True, blank=True)
-
+    werkmail = models.EmailField(max_length=150, blank=True)
     #document = models.ForeignKey("Documenten",upload_to='static/', null=True, blank=True)
 
 

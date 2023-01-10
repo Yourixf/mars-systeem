@@ -77,7 +77,7 @@ $(document).ready(function() {
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
             title: 'Archief aanbiedingen' +
                 '' +
@@ -99,11 +99,9 @@ $(document).ready(function() {
             <th>Klantnaam</th>
             <th>Medewerker</th>
             <th id="tarief">Tarief</th>
-            <th id="registratieDatum">Registratiedatum</th>
             <th id="updateDatum">Laatste Update</th>
-            <th>Broker</th>
+            <th>Tussenpartij</th>
             <th>Fuctie aanbieding</th>
-            <th id="betaalkorting">Betaalkorting</th>
             <th id="status">Status</th>
             <th id="deleteUpdate">Update / Delete</th>
             <th id="detail">Details</th>
@@ -115,11 +113,9 @@ $(document).ready(function() {
                 <td>{{ aanbiedingen.klant.naam }}</td>
                 <td>{{ aanbiedingen.medewerker }}</td>
                 <td id="tarief">{{ aanbiedingen.tarief }}</td>
-                <td id="registratieDatum">{{ aanbiedingen.registratie }}</td>
                 <td id="updateDatum">{{ aanbiedingen.laatste_update }}</td>
                 <td>{{ aanbiedingen.broker.naam }}</td>
                 <td>{{ aanbiedingen.functie_aanbieding }}</td>
-                <td id="betaalkorting">{{ aanbiedingen.betaalkorting }}</td>
                 <td id="status">{{ aanbiedingen.get_status_display }}</td>
 
 

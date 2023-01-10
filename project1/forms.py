@@ -26,7 +26,6 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 
-
 # Een keuze gebruiker een keuze laten maken door de de jou aangemaakte keuze's maak je zoals hier onder.
 # zzper_eigenwerknemer = forms.ChoiceField(choices=EIGENWERKNEMER_CHOICES) Tussen de haakjes () verwijs je naar de gemaakte keuze's die je boven de forms zet.
 EIGENWERKNEMER_CHOICES = (
@@ -47,7 +46,6 @@ OPLEIDINGNIVEAU_CHOICES = (
 class MedewerkersForm(forms.ModelForm):
     bsnnummer = forms.IntegerField(required=False)
     #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    email = forms.EmailField(max_length=254, required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
     icenummer = forms.IntegerField(required=False)
     #foto_medewerker = forms.FileField(required=False)
@@ -278,7 +276,7 @@ class AanbiedingUpdatenForm(forms.ModelForm):
     functie = forms.CharField(required=False)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
-    accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
+    #accountmanager = forms.ChoiceField(required=False, choices=ACCOUNTMANAGER_CHOICES)
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
@@ -296,6 +294,11 @@ class AanbiedingUpdatenForm(forms.ModelForm):
             'laatste_update': forms.DateInput(
                 attrs={'class': 'form-control',
                        'type': 'date'}),
+        }
+
+        labels = {
+            "broker":"Tussenpartij",
+            "accountmanager":"4-Rest contactpersoon",
         }
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
