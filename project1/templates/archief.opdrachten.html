@@ -36,6 +36,17 @@ td, th {
 #detail {
     max-width: 60px;
 }
+
+#updateKnop {
+    background-color: #32933d;
+    color: white;
+}
+
+#detailKnop {
+    background-color: #4be15b;
+    color: white;
+}
+
 </style>
 {% endblock %}
 {% block content %}
@@ -112,12 +123,12 @@ $(document).ready(function() {
                     {% csrf_token %}
                         <form>
                             <td id="deleteUpdate">
-                                <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
 
                             </td>
                             <td id="detail">
-                                <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
                                 <input type="hidden" name="" value="{{ opdracht.id }}" />
                             </td>
                         </form>

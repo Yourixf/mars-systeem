@@ -47,7 +47,6 @@ class MedewerkersForm(forms.ModelForm):
     bsnnummer = forms.IntegerField(required=False)
     #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
-    icenummer = forms.IntegerField(required=False)
     #foto_medewerker = forms.FileField(required=False)
 
     class Meta:

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Aanbiedingen{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Aanbiedingen 4-Rest</h3><a href="{% url 'aanbieding_toevoegen' %}" class="btn btn-success" role="button"><h5>Aanbieding Toevoegen</h5></a></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Aanbiedingen 4-Rest</h3><a href="{% url 'aanbieding_toevoegen' %}" class="btn" id="aanbiedingToevoegenKnop" role="button"><h5>Aanbieding Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
@@ -36,7 +36,25 @@ td, th {
 #detailOpdracht {
     max-width: 140px;
 }
+#updateKnop {
+    background-color: #22742a;
+    color: white;
+}
 
+#detailKnop {
+    background-color: #2aa936;
+    color: white;
+}
+
+#opdrachtToevoegenKnop{
+    background-color: #4be15b;
+    color: white;
+}
+
+#aanbiedingToevoegenKnop{
+    background-color: #3CB64A;
+    color: white;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -111,15 +129,15 @@ $(document).ready(function() {
                        <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" class="no-export" style="display: inline;">
                            {% csrf_token %}
                            <td id="deleteUpdate">
-                               <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                               <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
                            </td>
                            <td id="detailOpdracht">
-                               <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                               <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
-                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-success btn-sm" role="button">Opdr maken</a>
+                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-sm" id="opdrachtToevoegenKnop" role="button">Opdr maken</a>
                                <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
 
                            </td>

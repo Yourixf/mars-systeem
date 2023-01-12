@@ -2,7 +2,7 @@
 
 {% block title %}Tussenpartijen {% endblock %}
 {% block body %}
-<div style="text-align: center;"><h3>Tussenpartijen 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn btn-success"  role="button"><h5>Tussenpartijen Toevoegen</h5></a></div>
+<div style="text-align: center;"><h3>Tussenpartijen 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn" id="tussenpartijToevoegenKnop"  role="button"><h5>Tussenpartijen Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
     <style>
@@ -35,6 +35,20 @@ td, th {
     max-width: 60px;
 }
 
+#updateKnop {
+    background-color: #32933d;
+    color: white;
+}
+
+#detailKnop {
+    background-color: #4be15b;
+    color: white;
+}
+
+#tussenpartijToevoegenKnop{
+    background-color: #3CB64A;
+    color: white;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -93,13 +107,13 @@ $(document).ready(function() {
                     <form action="{% url 'broker_delete' broker.id %}" method="post" class="no-export" style="display: inline;">
                         {% csrf_token %}
                         <td id="deleteUpdate">
-                            <a href="{% url 'broker_update' broker.id %}" class="no-export btn btn-primary btn-sm" role="button">Update</a>
+                            <a href="{% url 'broker_update' broker.id %}" class="no-export btn btn-sm" id="updateKnop" role="button">Update</a>
                             <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
                             <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de broker wilt verijderen?')">
                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
                         </td>
                         <td id="detail">
-                            <a href="{% url 'broker_detail' broker.id %}"  class="no-export btn btn-success btn-sm" role="button">View Details</a>
+                            <a href="{% url 'broker_detail' broker.id %}"  class="no-export btn btn-sm" id="detailKnop" role="button">View Details</a>
                             <input type="hidden" name="medewerker_id" value="{{ brokers_list.id }}" />
                         </td>
                     </form>

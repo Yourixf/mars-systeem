@@ -38,6 +38,21 @@ td, th {
 #detail {
     max-width: 60px;
 }
+
+#opdrAanbiedingKnop {
+    background-color: #22742a;
+    color: white;
+}
+
+#updateKnop {
+    background-color: #32933d;
+    color: white;
+}
+
+#detailKnop {
+    background-color: #4be15b;
+    color: white;
+}
 </style>
 <script>
 $(document).ready(function() {
@@ -91,22 +106,22 @@ $(document).ready(function() {
                     <td id="status">{{ medewerker.get_status_display }}</td>
                     <td id="woonplaats">{{ medewerker.woonplaats }}</td>
                     <td>{{ medewerker.straat }}</td>
-                    <td>{{ medewerker.email }}</td>
+                    <td>{{ medewerker.werkmail }}</td>
                      <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
                          {% csrf_token %}
                          <td id="opdrachtAanbieding">
-                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Opdracht / aanbieding</a>
+                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-sm" id="opdrAanbiedingKnop" role="button">Opdracht / aanbieding</a>
                              <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
                          </td>
                          <td id="deleteUpdate">
-                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
                              <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
 
                              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
                              <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
                          </td>
                          <td id="detail">
-                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-sm" id="detailKnop">View Details</a>
                              <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
                          </td>
                      </form>

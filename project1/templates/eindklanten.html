@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block title %} Eindklanten {% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Eindklanten 4-Rest</h3><a href="{% url 'eindklanten_toevoegen' %}" class="btn btn-success" role="button"><h5>Eindklant Toevoegen</h5></a></div>
+<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Eindklanten 4-Rest</h3><a href="{% url 'eindklanten_toevoegen' %}" class="btn" id="eindklantToevoegenKnop" role="button"><h5>Eindklant Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
@@ -29,6 +29,21 @@ td, th {
 
 #detail {
     max-width: 60px;
+}
+
+#updateKnop {
+    background-color: #32933d;
+    color: white;
+}
+
+#detailKnop {
+    background-color: #4be15b;
+    color: white;
+}
+
+#eindklantToevoegenKnop{
+    background-color: #3CB64A;
+    color: white;
 }
 </style>
 {% endblock %}
@@ -84,13 +99,13 @@ $(document).ready(function() {
                         <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
                         {% csrf_token %}
                             <td id="deleteUpdate">
-                                <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-primary btn-sm" role="button">Update</a>
+                                <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
                                 <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
                                 <span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
                             </td>
                             <td id="detail">
-                                <a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
                                 <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
                             </td>
                         </form>

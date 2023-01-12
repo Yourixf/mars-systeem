@@ -71,9 +71,12 @@ BV_CHOICES = (
 )
 
 BURGERLIJKE_STAAT_CHOICES = (
-    ('1', 'Ongehuwd'),
-    ('2', 'Gehuwd'),
-    ('3', 'Samenwonend'),
+    ('1', 'Gehuwd'),
+    ('2', 'Ongehuwd'),
+    ('3', 'Gescheiden/beëindigd samenleving'),
+    ('4', 'Weduwe/weduwnaar'),
+    ('5', 'Samenwonend zonder samenlevingscontract'),
+    ('6', 'Geregistreerd Partnerschap')
 )
 
 KANTOOR_CHOICES = (
@@ -111,26 +114,34 @@ class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
     tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     achternaam = models.CharField(max_length=100, blank=True)
-    huisnummer = models.CharField(max_length=20, blank=True)
-    straat = models.CharField(max_length=150, blank=True)
-    woonplaats = models.CharField(max_length=150, blank=True)
-    postcode = models.CharField(max_length=10, blank=True)
-    icenummer = models.IntegerField(null=True, blank=True)
-    privémail = models.EmailField(max_length=150, blank=True)
-    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
-    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
-    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
-    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    roepnaam = models.CharField(max_length=100, blank=True)
+    functie = models.CharField(max_length=50, blank=True)
     geboortedatum = models.DateField(null=True, blank=True)
+    geboorteplaats = models.CharField(max_length=100, blank=True)
+    nationaliteit = models.CharField(max_length=100, blank=True)
+    straat = models.CharField(max_length=150, blank=True)
+    huisnummer = models.CharField(max_length=20, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    woonplaats = models.CharField(max_length=150, blank=True)
     telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
-    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
-    lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
-    status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
-    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
-    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
-    aantal_uur = models.IntegerField(null=True, blank=True)
+    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    banknummer = models.CharField(max_length=100, blank=True)
+    privémail = models.EmailField(max_length=150, blank=True)
     werkmail = models.EmailField(max_length=150, blank=True)
-    #document = models.ForeignKey("Documenten",upload_to='static/', null=True, blank=True)
+    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
+    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
+
+    ice_persoon_naam = models.CharField( max_length=100, null=True, blank=True)
+    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    datum_in_dienst = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
+    aantal_uur = models.IntegerField(null=True, blank=True)
+    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
+    status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
+
+    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
+    begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
     def get_absolut_url(self):
@@ -152,28 +163,37 @@ class Medewerkers(models.Model):
 class Medewerkers_History(models.Model):
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=True, null=True)
     update_id = models.IntegerField(blank=True, null=True)
-    voornaam = models.CharField(max_length=100, blank=True)
-    tussenvoegsel = models.CharField(max_length=6, blank=True)
+    voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
+    tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     achternaam = models.CharField(max_length=100, blank=True)
-    huisnummer = models.CharField(max_length=20, blank=True)
-    straat = models.CharField(max_length=150, blank=True)
-    woonplaats = models.CharField(max_length=150, blank=True)
-    postcode = models.CharField(max_length=10, blank=True)
-    icenummer = models.IntegerField(null=True, blank=True)
-    email = models.EmailField(max_length=150, blank=True)
-    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
-    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
-    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
-    bsnnummer = models.IntegerField(null=True, blank=True)
+    roepnaam = models.CharField(max_length=100, blank=True)
+    functie = models.CharField(max_length=50, blank=True)
     geboortedatum = models.DateField(null=True, blank=True)
+    geboorteplaats = models.CharField(max_length=100, blank=True)
+    nationaliteit = models.CharField(max_length=100, blank=True)
+    straat = models.CharField(max_length=150, blank=True)
+    huisnummer = models.CharField(max_length=20, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    woonplaats = models.CharField(max_length=150, blank=True)
     telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
-    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
-    lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
-    status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
+    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    banknummer = models.CharField(max_length=100, blank=True)
+    privémail = models.EmailField(max_length=150, blank=True)
+    werkmail = models.EmailField(max_length=150, blank=True)
     bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
-    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
-    aantal_uur = models.IntegerField(null=True, blank=True)
+    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
 
+    ice_persoon_naam = models.CharField( max_length=100, null=True, blank=True)
+    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    datum_in_dienst = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
+    aantal_uur = models.IntegerField(null=True, blank=True)
+    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
+    status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
+
+    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
+    updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 class Opmerkingen(models.Model):
     DEFAULT = 'DEFAULT'

@@ -7,44 +7,63 @@
 <head>
 <link rel=”stylesheet” type='text/css' href=”{% static 'css/style.css' %}”>
 <style>
+    body{
+        background-color:#CBCBCB;
+    }
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        width: 55%;
+        position: relative;
+        padding: 20px;
+        margin: auto;
+    }
 
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+    #box #container {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        text-align: left;
+    }
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-#basic-datatable1_wrapper {
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
 
-#documentToevoegen {
-    text-align: center;
-}
+    #basic-datatable1_wrapper {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-#documentBeschrijving {
-    max-width: 200px;
-}
+    #documentToevoegen {
+        text-align: center;
+    }
 
-#document {
-    text-align: center;
-}
+    #documentBeschrijving {
+        max-width: 200px;
+    }
 
-#medeName{
-    text-align: center;
-}
+    #document {
+        text-align: center;
+    }
 
-#actieKnoppen {
-    max-width: 170px;
-}
+    #medeName{
+        text-align: center;
+    }
+
+    #actieKnoppen {
+        max-width: 170px;
+    }
 
 </style>
 {#        <link rel="stylesheet" href=#}
@@ -55,42 +74,82 @@ td, th {
 
 </head>
 
-<h3 id="medeName">{{ medewerkers }}<a> - </a>{{ medewerkers.pk }}</h3>
-<br>
-<section>
-    {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
-    <table>
-        <tr>
-            <th>Naam</th><td>{{ medewerkers }}</td>
-            <th>Bsn nummer</th><td>{{ medewerkers.bsnnummer }}</td></tr>
-            <th>Woonplaats</th><td>{{ medewerkers.woonplaats }}</td>
-            <th>Tarief indicatie</th><td>{{ medewerkers.tariefindicatie }}</td><tr>
-            <th>Straat en Huisnummer</th><td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-            <th>Opleiding niveau</th><td>{{ medewerkers.get_opleidingsniveau_display }}</td></tr>
-            <th>Postcode</th> <td>{{ medewerkers.postcode }}</td>
-            <th>Mobiel nummer</th><td>{{ medewerkers.telefoonnummer }}</td></tr>
-            <th>Burgerlijke staat</th><td>{{ medewerkers.get_burgerlijkse_staat_display }}</td>
-            <th>ICE nummer</th><td>{{ medewerkers.icenummer }}</td><tr>
-            <th>Geboortedatum</th><td>{{ medewerkers.geboortedatum }}</td>
-            <th>Email</th><td>{{ medewerkers.email }}</td><tr>
-            <th>Lease auto</th><td>{{ medewerkers.get_lease_auto_display }}</td>
-            <th>Status</th><td>{{ medewerkers.get_status_display }}</td><tr></tr>
-            <th>BV</th><td>{{ medewerkers.get_bv_display }}</td>
-            <th>Inhuur</th><td>{{ medewerkers.get_inhuur_display }}</td><tr>
-            <th>Aantal uur</th><td>{{ medewerkers.aantal_uur }}</td>
+<div id="box">
+
+    <h3 id="medeName">{{ medewerkers }}<a> - </a>{{ medewerkers.pk }}</h3>
+    <br>
+    <div id="container">
+            {{ medewerkers }}
+        {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
+        <table>
+            <tr>
+                <th>Naam</th>
+                <th>Roepnaam</th></tr>
+                <th>Functie</th>
+                <th>Geboortedatum</th>
+                <th>Geboorteplaats</th>
+                <th>Nationaliteit</th>
+                <th>Straat en Huisnummer</th>
+                <th>Postcode</th>
+                <th>Woonplaats</th>
+                <th>Telefoonnummer</th>
+                <th>Bsn nummer</th>
+                <th>Banknummer</th>
+                <th>Privémail</th>
+                <th>Werkmail</th>
+                <th>BV</th>
+                <th>Burgerlijke staat</th>
+                <th>Opleiding niveau</th>
+                <th>ICE persoon naam</th>
+                <th>ICE telefoonnummer</th>
+                <th>Datum in dienst</th>
+                <th>Lease auto</th>
+                <th>Aantal uur</th>
+                <th>Inhuur</th>
+                <th>Status</th>
+                <th>Tarief indicatie</th>
+            </tr>
+
+
+            <tr>
+                <td>{{ medewerkers }}</td>
+                <td>{{ medewerkers.roepnaam }}</td>
+                <td>{{ medewerkers.functie }}</td>
+                <td>{{ medewerkers.geboortedatum }}</td>
+                <td>{{ medewerkers.geboorteplaats }}</td>
+                <td>{{ medewerkers.nationaliteit }}</td>
+                <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
+                <td>{{ medewerkers.postcode }}</td>
+                <td>{{ medewerkers.woonplaats }}</td>
+                <td>{{ medewerkers.telefoonnummer }}</td>
+                <td>{{ medewerkers.bsnnummer }}</td>
+                <td>{{ medewerkers.banknummer }}</td>
+                <td>{{ medewerkers.privémail }}</td>
+                <td>{{ medewerkers.werkmail }}</td>
+                <td>{{ medewerkers.get_bv_display }}</td>
+                <td>{{ medewerkers.get_burgerlijkse_staat_display }}</td>
+                <td>{{ medewerkers.get_opleidingsniveau_display }}</td>
+                <td>{{ medewerkers.ice_persoon_naam }}</td>
+                <td>{{ medewerkers.ice_telefoonnummer }}</td>
+                <td>{{ medewerkers.datum_in_dienst }}</td>
+                <td>{{ medewerkers.get_lease_auto_display }}</td>
+                <td>{{ medewerkers.aantal_uur }}</td>
+                <td>{{ medewerkers.get_inhuur_display }}</td>
+                <td>{{ medewerkers.get_status_display }}</td>
+                <td>{{ medewerkers.tariefindicatie }}</td>
+
 
             </tr>
-                <td id="actieKnoppen">
-                    <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
-                    <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Terug</a>
 
+        </table>
+    </div>
 
-                </td>
-            <tr>
-        </tr>
-    </table>
     <br>
-</section>
+     <td id="actieKnoppen">
+         <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
+         <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Terug</a>
+     </td>
+</div>
 
 <script>
 $(document).ready(function() {

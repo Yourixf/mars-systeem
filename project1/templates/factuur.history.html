@@ -41,6 +41,11 @@ td, th {
 #detail {
     max-width: 20px;
 }
+
+#detailKnop{
+    background-color: #3CB64A;
+    color: white;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -113,7 +118,7 @@ $(document).ready(function() {
                         <form action="">
 
                             <td id="detail">
-                                <a href="{% url 'factuur_history_detail' opdracht.id %}"  class="btn btn-success btn-sm" role="button">View Details</a>
+                                <a href="{% url 'factuur_history_detail' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
                                 <input type="hidden" name="" value="" />
                             </td>
                         </form>
