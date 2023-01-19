@@ -1,21 +1,44 @@
 {% extends 'base.html' %}
 {% block title %}Lopende opdrachten{% endblock %}
 {% block body %}
-    <div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Lopende opdrachten 4-Rest</h3></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+#test{
+    text-align: center;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    body{
+        background-color:#CBCBCB;
+    }
+
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+    }
+
+    #box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
+
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    td{
+        white-space: nowrap;
+        overflow: auto;
+    }
 
 #startDatum {
     max-width: 90px;
@@ -43,10 +66,58 @@ td, th {
 }
 
 #detailKnop {
-    background-color: #4be15b;
+    background-color: #32933d;
     color: white;
 }
 
+#deleteKnop{
+    background-color: #ff0000;
+    color: white;
+}
+@media(min-width: 1950px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+
+    @media(min-width: 1600px) and (max-width: 1950px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width:1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
+    @media(max-width: 1100px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+            float: left;
+            text-align: left;
+        }
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -93,64 +164,58 @@ $(document).ready(function() {
   });
 </script>
 
+    <div id="test">
+        <div id="box">
+            <h3>Lopende opdrachten 4-Rest</h3>
+            <div id="container">
+                <table id="basic-datatable" class="table" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>Klantnaam</th>
+                        <th>Medewerker</th>
+                        <th>Functie aanbieding</th>
+                        <th id="startDatum">Startdatum</th>
+                        <th id="eindDatum">Einddatum</th>
+                        <th id="tarief">Tarief</th>
+                        <th>Tussenpartij</th>
+                        <th id="deleteUpdate">Update / Delete</th>
+                        <th id="detail">Detail</th>
+                    </tr>
 
-<table id="basic-datatable" class="table" style="width:100%">
-        <thead>
-        <tr>
-            <th>Klantnaam</th>
-            <th>Medewerker</th>
-            <th>Functie aanbieding</th>
-            <th id="startDatum">Startdatum</th>
-            <th id="eindDatum">Einddatum</th>
-            <th id="tarief">Tarief</th>
-            <th>Tussenpartij</th>
-            <th id="deleteUpdate">Update / Delete</th>
-            <th id="detail">Detail</th>
-        </tr>
-
-        <tbody id="myTable">
-            {% for opdracht in lopendeOpdrachtenList %}
-                <tr>
-                    <td>{{ opdracht.aanbieding.klant.naam }}</td>
-                    <td>{{ opdracht.aanbieding.medewerker }}</td>
-                    <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
-                    <td id="startDatum">{{ opdracht.startdatum }}</td>
-                    <td id="eindDatum">{{ opdracht.einddatum }}</td>
-                    <td id="tarief">{{ opdracht.tarief_opdracht }}</td>
-                    <td>{{ opdracht.aanbieding.broker.naam }}</td>
-
-
-                    {% csrf_token %}
-                        <form action="{% url 'delete_opdracht' opdracht.pk %}">
-                            <td id="deleteUpdate">
-                                <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
-                                <input type="hidden" name="" value="{{ opdracht.id }}" />
-                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
-                            </td>
-                            <td id="detail">
-                                <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
-                                <input type="hidden" name="" value="{{ opdracht.id }}" />
-                            </td>
-                        </form>
-                </tr>
-            {% endfor %}
-        </tbody>
+                    <tbody id="myTable">
+                        {% for opdracht in lopendeOpdrachtenList %}
+                            <tr>
+                                <td>{{ opdracht.aanbieding.klant.naam }}</td>
+                                <td>{{ opdracht.aanbieding.medewerker }}</td>
+                                <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
+                                <td id="startDatum">{{ opdracht.startdatum }}</td>
+                                <td id="eindDatum">{{ opdracht.einddatum }}</td>
+                                <td id="tarief">{{ opdracht.tarief_opdracht }}</td>
+                                <td>{{ opdracht.aanbieding.broker.naam }}</td>
 
 
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-</script>
+                                {% csrf_token %}
+                                    <form action="{% url 'delete_opdracht' opdracht.pk %}">
+                                        <td id="deleteUpdate">
+                                            <a href="{% url 'update_opdracht' opdracht.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
+                                            <input type="hidden" name="" value="{{ opdracht.id }}" />
+                                            <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
+                                        </td>
+                                        <td id="detail">
+                                            <a href="{% url 'detail_opdracht' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
+                                            <input type="hidden" name="" value="{{ opdracht.id }}" />
+                                        </td>
+                                    </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
-</table>
 <br><br><br>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

@@ -48,6 +48,8 @@ class MedewerkersForm(forms.ModelForm):
     #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
     telefoonnummer = forms.CharField(max_length=20, required=False)
     #foto_medewerker = forms.FileField(required=False)
+    voornaam = forms.CharField(required=True, label='Voornaam *')
+    achternaam = forms.CharField(required=True, label='Achternaam *')
 
     class Meta:
         model = Medewerkers
@@ -58,7 +60,13 @@ class MedewerkersForm(forms.ModelForm):
             'geboortedatum': forms.DateInput(
                 attrs={'class': 'form-control',
                        'type':'date'}),
+            'datum_in_dienst': forms.DateInput(
+                attrs={'class': 'form-control',
+                       'type': 'date'}
+            )
         }
+
+
 
 
 # Dit is de Form om Contracten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -148,8 +156,7 @@ class KlantenUpdatenForm(forms.ModelForm):
         exclude = ['contactpersoon', 'vestiging', 'begindatum']
         labels = {
             "accountmanager": "4-Rest contactpersoon",
-            "soort": "Soort klant"
-
+            "soort": "Soort klant",
         }
 
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -238,8 +245,8 @@ STATUS_AANBIEDING_CHOICES = (
 
 class AanbiedingenForm(forms.ModelForm):
     #aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
-    registratie = forms.DateField(required=False)
-    laatste_update = forms.DateField(required=False)
+    #registratie = forms.DateField(required=False)
+    #laatste_update = forms.DateField(required=False)
     functie = forms.CharField(required=False)
     functie_aanbieding = forms.CharField(required=False)
     klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
@@ -252,21 +259,14 @@ class AanbiedingenForm(forms.ModelForm):
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
-        exclude = ['begindatum']
+        exclude = ['begindatum', 'registratie', 'laatste_update',]
 
-        widgets = {
-            'registratie': forms.DateInput(
-                attrs={'class': 'form-control',
-                       'type': 'date'}),
-            'laatste_update': forms.DateInput(
-                attrs={'class': 'form-control',
-                       'type': 'date'}),
-        }
+
 
         labels = {
             "accountmanager": "4-Rest contactpersoon",
             "broker": "Tussenpartij",
-
+            "medewerker":"Medewerker *",
         }
 class AanbiedingUpdatenForm(forms.ModelForm):
     aangemaakt_door = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
@@ -285,15 +285,6 @@ class AanbiedingUpdatenForm(forms.ModelForm):
         model = Aanbiedingen
         fields = '__all__'
         exclude = ['begindatum']
-
-        widgets = {
-            'registratie': forms.DateInput(
-                attrs={'class': 'form-control',
-                       'type': 'date'}),
-            'laatste_update': forms.DateInput(
-                attrs={'class': 'form-control',
-                       'type': 'date'}),
-        }
 
         labels = {
             "broker":"Tussenpartij",

@@ -10,21 +10,146 @@
     body{
         background-color:#CBCBCB;
     }
+
+    @media(min-width: 1800px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 35%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width: 1200px) and (max-width: 1800px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 55%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }@media(min-width: 1100px) and (max-width: 1200px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+
+
+    @media(max-width: 700px) and (min-width: 530px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:530px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        }
+    }
+    @media(min-width: 1800px){
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+
+    }
+
+    @media(min-width:1000px) and (max-width: 1800px) {
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(max-width:1000px) {
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+    }
     #box {
         border-radius: 19px;
         background-color: #f2f2f2;
         margin: auto;
-        width: 55%;
         position: relative;
         padding: 20px;
         margin: auto;
     }
 
+    #box2 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        margin: auto;
+        overflow: auto;
+    }
+
     #box #container {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 8px;
+        row-gap: 0px;
+        column-gap: 15px;
         text-align: left;
+        overflow: auto;
     }
 
     table {
@@ -40,7 +165,7 @@
     }
 
     #basic-datatable1_wrapper {
-        width: 70%;
+        width: 100%;
         margin-left: auto;
         margin-right: auto;
     }
@@ -65,6 +190,43 @@
         max-width: 170px;
     }
 
+    input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
+
+    p{
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #documentToevoegenKnop{
+        background-color: #3CB64A;
+        color: white;
+    }
+
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
 </style>
 {#        <link rel="stylesheet" href=#}
 {#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
@@ -74,82 +236,46 @@
 
 </head>
 
-<div id="box">
+<div id="box" ALIGN="center">
 
-    <h3 id="medeName">{{ medewerkers }}<a> - </a>{{ medewerkers.pk }}</h3>
+    <h3 id="medeName">{{ medewerkers }} detail weergave</h3>
     <br>
     <div id="container">
-            {{ medewerkers }}
         {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
-        <table>
-            <tr>
-                <th>Naam</th>
-                <th>Roepnaam</th></tr>
-                <th>Functie</th>
-                <th>Geboortedatum</th>
-                <th>Geboorteplaats</th>
-                <th>Nationaliteit</th>
-                <th>Straat en Huisnummer</th>
-                <th>Postcode</th>
-                <th>Woonplaats</th>
-                <th>Telefoonnummer</th>
-                <th>Bsn nummer</th>
-                <th>Banknummer</th>
-                <th>Privémail</th>
-                <th>Werkmail</th>
-                <th>BV</th>
-                <th>Burgerlijke staat</th>
-                <th>Opleiding niveau</th>
-                <th>ICE persoon naam</th>
-                <th>ICE telefoonnummer</th>
-                <th>Datum in dienst</th>
-                <th>Lease auto</th>
-                <th>Aantal uur</th>
-                <th>Inhuur</th>
-                <th>Status</th>
-                <th>Tarief indicatie</th>
-            </tr>
+        <label>Naam</label><p>{{ medewerkers }}</p>
+        <label>Werkmail</label><p>{{ medewerkers.werkmail }}</p>
+        <label>Roepnaam</label><p>{{ medewerkers.roepnaam }}</p>
+        <label>Functie</label><p>{{ medewerkers.functie }}</p>
+        <label>Geboortedatum</label><p>{{ medewerkers.geboortedatum }}</p>
+        <label>Opleiding niveau</label> <p>{{ medewerkers.get_opleidingsniveau_display }}</p>
+        <label>Geboorteplaats</label><p>{{ medewerkers.geboorteplaats }}</p>
+        <label>Tarief indicatie</label><p>{{ medewerkers.tariefindicatie }}</p>
+        <label>Straat en Huisnummer</label><p>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</p>
+        <label>Nationaliteit</label><p>{{ medewerkers.nationaliteit }}</p>
+        <label>Postcode</label><p>{{ medewerkers.postcode }}</p>
+        <label>Bsn nummer</label><p>{{ medewerkers.bsnnummer }}</p>
+        <label>Woonplaats</label><p>{{ medewerkers.woonplaats }}</p>
+        <label>Datum in dienst</label> <p>{{ medewerkers.datum_in_dienst }}</p>
+        <label>Banknummer</label><p>{{ medewerkers.banknummer }}</p>
+        <label>BV</label> <p>{{ medewerkers.get_bv_display }}</p>
+        <label>Telefoonnummer</label><p>{{ medewerkers.telefoonnummer }}</p>
+        <label>ICE persoon naam</label><p>{{ medewerkers.ice_persoon_naam }}</p>
+        <label>Burgerlijke staat</label><p>{{ medewerkers.get_burgerlijkse_staat_display }}</p>
+        <label>ICE telefoonnummer</label> <p>{{ medewerkers.ice_telefoonnummer }}</p>
+        <label>Lease auto</label> <p>{{ medewerkers.get_lease_auto_display }}</p>
+        <label>Aantal uur</label><p>{{ medewerkers.aantal_uur }}</p>
+        <label>Status</label><p>{{ medewerkers.get_status_display }}</p>
 
-
-            <tr>
-                <td>{{ medewerkers }}</td>
-                <td>{{ medewerkers.roepnaam }}</td>
-                <td>{{ medewerkers.functie }}</td>
-                <td>{{ medewerkers.geboortedatum }}</td>
-                <td>{{ medewerkers.geboorteplaats }}</td>
-                <td>{{ medewerkers.nationaliteit }}</td>
-                <td>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</td>
-                <td>{{ medewerkers.postcode }}</td>
-                <td>{{ medewerkers.woonplaats }}</td>
-                <td>{{ medewerkers.telefoonnummer }}</td>
-                <td>{{ medewerkers.bsnnummer }}</td>
-                <td>{{ medewerkers.banknummer }}</td>
-                <td>{{ medewerkers.privémail }}</td>
-                <td>{{ medewerkers.werkmail }}</td>
-                <td>{{ medewerkers.get_bv_display }}</td>
-                <td>{{ medewerkers.get_burgerlijkse_staat_display }}</td>
-                <td>{{ medewerkers.get_opleidingsniveau_display }}</td>
-                <td>{{ medewerkers.ice_persoon_naam }}</td>
-                <td>{{ medewerkers.ice_telefoonnummer }}</td>
-                <td>{{ medewerkers.datum_in_dienst }}</td>
-                <td>{{ medewerkers.get_lease_auto_display }}</td>
-                <td>{{ medewerkers.aantal_uur }}</td>
-                <td>{{ medewerkers.get_inhuur_display }}</td>
-                <td>{{ medewerkers.get_status_display }}</td>
-                <td>{{ medewerkers.tariefindicatie }}</td>
-
-
-            </tr>
-
-        </table>
     </div>
 
-    <br>
-     <td id="actieKnoppen">
-         <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn btn-primary" role="button">Update</a>
-         <a href="{% url 'medewerkers' %}" class="btn btn-primary" role="button">Terug</a>
-     </td>
+    <div>
+        <a href="{% url 'medewerkers' %}" class="btn" role="button">Annuleer</a>
+        <a href="{% url 'medewerker_update' medewerkers.id %}" class="btn" role="button">Update</a>
+    </div>
+
 </div>
+
+<br>
 
 <script>
 $(document).ready(function() {
@@ -177,51 +303,48 @@ $(document).ready(function() {
   });
 </script>
 
-<section id="document">
-    <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Documenten</h3>
-    <a href="{% url 'documenten_upload' medewerkers.pk %}"  class="btn btn-primary" style="color:white">Documenten toevoegen</a><br>
+<div id="document">
+    <div id="box2">
+        <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Documenten</h3>
+        <a href="{% url 'documenten_upload' medewerkers.pk %}"  id="documentToevoegenKnop" class="btn" style="color:white">Documenten toevoegen</a><br>
 
-    <table id="basic-datatable1" class="table1">
-        <thead>
-            <tr>
-                <th id="naamDocument">Naam document</th>
-                <th id="soortDocument">Soort document</th>
-                <th id="beschrijving">Beschrijving</th>
-                <th id="actieKnoppen">Actie knoppen</th>
-            </tr>
-        </thead>
-        <tbody id="myTable">
-            {% for document in documenten_lijst %}
+        <table id="basic-datatable1" class="table1">
+            <thead>
                 <tr>
-                    <td>{{ document.naam_document }}</td>
-                    <td>{{ document.soort_document }}</td>
-                    <td id="documentBeschrijving">{{ document.beschrijving }}</td>
-
-                    <form action="{% url 'document_delete' document.pk %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                            <td id="deleteUpdate">
-                                {% if document.document %}
-                                    <a href="{{ document.document.url }}"  class="btn btn-primary btn-sm" role="button">Download</a>
-                                {% endif %}
-                                <a href="{% url 'documenten_update' document.id %}"  class="btn btn-primary btn-sm" role="button">Update</a>
-                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je dit document wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp Delete </button>
-                            </td>
-                    </form>
+                    <th id="naamDocument">Naam document</th>
+                    <th id="soortDocument">Soort document</th>
+                    <th id="beschrijving">Beschrijving</th>
+                    <th id="actieKnoppen">Actie knoppen</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</section>
+            </thead>
+            <tbody id="myTable">
+                {% for document in documenten_lijst %}
+                    <tr>
+                        <td>{{ document.naam_document }}</td>
+                        <td>{{ document.soort_document }}</td>
+                        <td id="documentBeschrijving">{{ document.beschrijving }}</td>
+
+                        <form action="{% url 'document_delete' document.pk %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                                <td id="deleteUpdate">
+                                    {% if document.document %}
+                                        <a href="{{ document.document.url }}"  class="btn btn-sm" id="detailKnop" role="button">Download</a>
+                                    {% endif %}
+                                    <a href="{% url 'documenten_update' document.id %}"  class="btn btn-sm" id="updateKnop" role="button">Update</a>
+                                    <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je dit document wilt verijderen?')">
+                                    <span class="glyphicon glyphicon-remove"></span>&nbsp Delete </button>
+                                </td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
 
 <br>
-<div class="container">
-
-
-
-
-    {#<button class="btnn btn4"><a href="{% url 'editor' medewerkers.id %}" style="color:white">Opmerkingen medewerker : {{ medewerkers.voornaam }}</a></button>#}
-</div>
 <br>
 
 </body>

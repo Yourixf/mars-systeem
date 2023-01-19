@@ -6,22 +6,43 @@
 
 <head>
 <style>
+        body{
+        background-color:#CBCBCB;
+    }
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
 }
 
 #basic-datatable1_wrapper {
-    width: 80%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
+input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
 
+    p, td, th{
+        overflow: auto;
+        white-space: nowrap;
+    }
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+#soortVes{
+    max-width: 100px;
 }
 
 #huisnummer {
@@ -35,6 +56,56 @@ td, th {
 #terug {
     text-align: center;
 }
+#keuzeKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+#box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        overflow: auto;
+    }
+@media(min-width: 1700px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 60%;
+        }
+    }
+
+    @media(min-width: 1500px) and (max-width: 1700px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+    @media(min-width:1000px) and (max-width: 1700px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(max-width:1000px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+    }
 
 </style>
 </head>
@@ -65,59 +136,53 @@ $(document).ready(function() {
   });
 </script>
 
-<div class="row">
-    <div class="form-group">
-        <div class="card card-body">
-            <hr>
-             <div style="text-align: center;" ><h3> Contactpersoon vestiging toevoegen </h3></div>
-            <hr>
+
+    <div id="test" ALIGN="center">
+        <div id="box">
+        <h3> Contactpersoon vestiging toevoegen </h3>
+        <div id="terug">
+            {% if eind_klant_pk %}
+                <div style="align-content: center">
+                    <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn" role="button">Annuleer</a>
+                </div>
+            {% endif %}
+            {% if broker_pk %}
+                <div style="align-content: center">
+                    <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn" role="button">Annuleer</a>
+                </div>
+            {% endif %}
+        </div>
+            <div id="container">
+                <table id="basic-datatable1" class="table1">
+                    <thead>
+                        <tr>
+                            <th id="soortVes">Soort vestiging</th>
+                            <th id="postcode">Postcode</th>
+                            <th id="straatnaam">Straatnaam</th>
+                            <th id="huisnummer">Huisnummer</th>
+                            <th id="plaats">Plaats</th>
+                            <th id="selecteer">Selecteer</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        {% for vestiging in vestiging_lijst %}
+                            <tr>
+                                <td>{{ vestiging.get_vestiging_display }}</td>
+                                <td>{{ vestiging.postcode }}</td>
+                                <td>{{ vestiging.straatnaam }}</td>
+                                <td>{{ vestiging.huisnummer }}</td>
+                                <td>{{ vestiging.plaats }}</td>
+                                <form action="{% url 'toevoegen_ContactVestiging' vestiging.id %}" method="post">
+                                    {% csrf_token %}
+                                    <td id="selecteer">
+                                        <button type="submit" class="no-export btn" id="keuzeKnop">Selecteer</button>
+                                    </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<div id="terug">
-    {% if eind_klant_pk %}
-        <div style="align-content: center">
-            <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
-        </div>
-    {% endif %}
-    {% if broker_pk %}
-        <div style="align-content: center">
-            <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Annuleer</a>
-        </div>
-    {% endif %}
-</div>
-<table id="basic-datatable1" class="table1">
-    <thead>
-        <tr>
-            <th>Soort vestiging</th>
-            <th>Postcode</th>
-            <th>Straatnaam</th>
-            <th id="huisnummer">Huisnummer</th>
-            <th>Plaats</th>
-            <th id="selecteer">Selecteer</th>
-        </tr>
-    </thead>
-    <tbody id="myTable">
-        {% for vestiging in vestiging_lijst %}
-            <tr>
-                <td>{{ vestiging.vestiging }}</td>
-                <td>{{ vestiging.postcode }}</td>
-                <td>{{ vestiging.straatnaam }}</td>
-                <td>{{ vestiging.huisnummer }}</td>
-                <td>{{ vestiging.plaats }}</td>
-                <form action="{% url 'toevoegen_ContactVestiging' vestiging.id %}" method="post">
-                    {% csrf_token %}
-                    <td id="selecteer">
-                        <button type="submit" class="no-export btn btn-danger">Selecteer</button>
-                    </td>
-                </form>
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
-
-
-
-
 {% endblock %}

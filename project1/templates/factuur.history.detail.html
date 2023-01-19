@@ -7,95 +7,173 @@
 <head>
 <link rel=”stylesheet” type='text/css' href=”{% static 'css/style.css' %}”>
 <style>
-
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
 
-#basic-datatable1_wrapper {
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#documentToevoegen {
-    text-align: center;
-}
-
-#documentBeschrijving {
-    max-width: 200px;
-}
-
-#document {
-    text-align: center;
-}
-
 #medeName{
     text-align: center;
 }
 
-#actieKnoppen {
-    max-width: 170px;
+#annuleerKnop{
+    background-color: #32933d;
+    color: white;
 }
 
-</style>
-{#        <link rel="stylesheet" href=#}
-{#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
-{#        integrity=#}
-{#"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"#}
-{#        crossorigin="anonymous">#}
+body{
+        background-color:#CBCBCB;
+    }
+input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
+  #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        overflow: auto;
+        padding: 20px;
+        margin: auto;
+    }
 
+#box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
+
+    @media(min-width: 1600px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 45%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media(min-width: 1200px) and (max-width: 1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 50%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width: 1200px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width: 700px) and (min-width: 530px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:530px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media(max-width:300px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box #container {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
+</style>
 </head>
 
-<h3 id="medeName"><a> Detail weergave meest recente versie </a></h3>
-<br>
-<section>
-    {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
 
+<div id="box" ALIGN="center">
+    <h3 id="medeName">Detail weergave meest recente versie</h3>
 
-    <table>
-        <tr>
-            <th>Medewerker</th><td>{{ opdracht.aanbieding.medewerker }}</td>
-            <th>Klant</th><td>{{ opdracht.aanbieding.klant.naam }}</td></tr>
-            <th>Tussenpartij</th><td>{{ opdracht.aanbieding.broker.naam }}</td>
-            <th>Startdatum</th><td>{{ opdracht.startdatum }}</td><tr>
-            <th>Tarief</th><td>{{ opdracht.tarief_opdracht }}</td>
-            <th>Einddatum</th><td>{{ opdracht.einddatum }}</td></tr>
-            <th>Betaalkorting</th><td>{{ opdracht.opdracht_betaalkorting }}</td>
-            <th>Aantal uren</th><td>{{ opdracht.aantal_uren }}</td><tr>
-            <th>Werknemer aantal uren</th><td>{{ opdracht.aanbieding.medewerker.aantal_uur }}</td>
-            <th>Klant adres</th><td>{{ hoofdvestiging }}</td></tr>
-            <th>Email adres factuur</th><td>{{ factuuremail }}</td>
-            <th>Medewerker bv</th><td>{{ opdracht.aanbieding.medewerker.get_bv_display }}</td><tr>
-
-            </tr>
-                <td id="actieKnoppen">
-                    <a href="{% url 'factuur_history_page' %}" class="btn btn-primary" role="button">Terug</a>
-                </td>
-            <tr>
-        </tr>
-    </table>
-    <br>
-</section>
-
-
-<br>
-<div class="container">
-
-
-
-
-    {#<button class="btnn btn4"><a href="{% url 'editor' medewerkers.id %}" style="color:white">Opmerkingen medewerker : {{ medewerkers.voornaam }}</a></button>#}
+    <div id="container">
+        <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+        <label>Klant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
+        <label>Tussenpartij</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
+        <label>Starpatum</label><p>{{ opdracht.starpatum }}</p>
+        <label>Tarief</label><p>{{ opdracht.tarief_opdracht }}</p>
+        <label>Einddatum</label><p>{{ opdracht.einddatum }}</p>
+        <label>Betaalkorting</label><p>{{ opdracht.opdracht_betaalkorting }}</p>
+        <label>Aantal uren</label><p>{{ opdracht.aantal_uren }}</p>
+        <label>Werknemer aantal uren</label><p>{{ opdracht.aanbieding.medewerker.aantal_uur }}</p>
+        <label>Klant adres</label><p>{{ hoofdvestiging }}</p>
+        <label>Email adres factuur</label><p>{{ factuuremail }}</p>
+        <label>Medewerker bv</label><p>{{ opdracht.aanbieding.medewerker.get_bv_display }}</p>
+    </div>
+    <div style="margin-top: 1%">
+        <a href="{% url 'factuur_history_page' %}" class="btn" role="button">Terug</a>
+    </div>
 </div>
-<br>
+    <br>
 
 </body>
 

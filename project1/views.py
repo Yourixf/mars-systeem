@@ -31,12 +31,17 @@ def FactuurHistoryDetailPage(request, pk):
     if opdracht.aanbieding.broker_id:
         factuuremail = opdracht.aanbieding.broker.factuuremail
         broker_id = opdracht.aanbieding.broker_id
-        hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
+        try:
+            hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
+        except:
+            hoofdvestiging = ''
     elif not opdracht.aanbieding.broker_id:
         factuuremail = opdracht.aanbieding.klant.factuuremail
         klant_id = opdracht.aanbieding.klant_id
-        hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=klant_id, vestiging='1'))
-
+        try:
+            hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=klant_id, vestiging='1'))
+        except:
+            hoofdvestiging = ''
 
 
     context = {
@@ -545,6 +550,8 @@ class OpmerkingenDeleteView(LoginRequiredMixin, DeleteView):
 @login_required(login_url='login')
 def MedewerkerDetail(request, pk):
     medewerkers = Medewerkers.objects.get(id=pk)
+
+
     documenten_lijst = Documenten.objects.filter(medewerker_id=pk)
     context = {
         'medewerkers': medewerkers,
@@ -807,13 +814,15 @@ def ArchiefMedewerkers(request):
 def MedewerkerAanbiedingOpdrachten(request, pk):
     medewerker = Medewerkers.objects.get(id=pk)
     aanbieding_list = Aanbiedingen.objects.filter(Q(medewerker=medewerker))
+    aanbieding_list = aanbieding_list.exclude(Q(status='6'))
+
     opdracht_list = Opdrachten.objects.filter(Q(aanbieding__medewerker=medewerker))
+    opdracht_list = opdracht_list.exclude(Q(status_opdracht='2'))
 
     context = {
         'aanbieding_list': aanbieding_list,
         'opdracht_list': opdracht_list,
         'medewerker':medewerker,
-
     }
 
     return render(request, 'medewerker.opdrachten.aanbiedingen.html', context)
@@ -874,8 +883,6 @@ def MedewerkersUpdaten(request, pk):
                 telefoonnummer=medewerker_form.initial.get('telefoonnummer'),
                 bsnnummer=medewerker_form.initial.get('bsnnummer'),
                 banknummer=medewerker_form.initial.get('banknummer'),
-                privémail=medewerker_form.initial.get('privémail'),
-                werkmail=medewerker_form.initial.get('werkmail'),
                 bv=medewerker_form.initial.get('bv'),
                 burgerlijkse_staat=medewerker_form.initial.get('burgelijkse_staat'),
                 opleidingsniveau=medewerker_form.initial.get('opleidingsniveau'),
@@ -884,7 +891,6 @@ def MedewerkersUpdaten(request, pk):
                 datum_in_dienst=medewerker_form.initial.get('datum_in_dienst'),
                 lease_auto=medewerker_form.initial.get('lease_auto'),
                 aantal_uur=medewerker_form.initial.get('aantal_uur'),
-                inhuur=medewerker_form.initial.get('inhuur'),
                 status=medewerker_form.initial.get('status'),
                 tariefindicatie=medewerker_form.initial.get('tariefindicatie'),
             )

@@ -26,6 +26,90 @@
         gap: 8px;
         text-align: left;
     }
+    @media(min-width: 1800px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 35%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width: 1200px) and (max-width: 1800px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 55%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }@media(min-width: 1100px) and (max-width: 1200px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+
+
+    @media(max-width: 700px) and (min-width: 530px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        #box #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:630px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        }
+    }
 
     #div_id_accountmanager select{
         padding: 7px;
@@ -49,6 +133,7 @@
          border-color: #3CB64A;
          resize: none;
     }
+
 
 
     input[class=btn], a[class=btn] {
@@ -76,12 +161,14 @@
     </style>
 
 
-<form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
+<form method="POST" class="form-group" ALIGN='center' action="" enctype="multipart/form-data">
         <div id="box">
             <div style="margin-top:-2%; margin-bottom: 2%"><h3> Medewerker toevoegen </h3></div>
-            <div id="container">
+            <div id="container" class="form-group">
                 {% csrf_token %}
                 {{ medewerker_form|capfirst }}
+
+
             </div>
             <div style="margin-top: 2%">
                 <a href="{% url 'medewerkers' %}" class="btn" role="button">Annuleer</a>

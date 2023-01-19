@@ -1,53 +1,126 @@
 
 {% extends 'base.html' %}
 {% block title %} Eindklanten {% endblock %}
-{% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Eindklanten 4-Rest</h3><a href="{% url 'eindklanten_toevoegen' %}" class="btn" id="eindklantToevoegenKnop" role="button"><h5>Eindklant Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
+{% block body %}
+<html lang="">
+<head>
 <style>
-.table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+#test{
+    text-align: center;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    body{
+        background-color:#CBCBCB;
+    }
 
-#portaal {
-    max-width: 250px;
-    overflow: hidden;
-}
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+    }
 
-#deleteUpdate {
-    max-width: 105px;
-}
+    #box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
 
-#detail {
-    max-width: 60px;
-}
 
-#updateKnop {
-    background-color: #32933d;
-    color: white;
-}
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
 
-#detailKnop {
-    background-color: #4be15b;
-    color: white;
-}
+    td{
+        white-space: nowrap;
+        overflow: auto;
+    }
 
-#eindklantToevoegenKnop{
-    background-color: #3CB64A;
-    color: white;
-}
+    #portaal {
+        max-width: 250px;
+    }
+
+    #deleteUpdate {
+        max-width: 105px;
+    }
+
+    #detail {
+        max-width: 60px;
+    }
+
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #eindklantToevoegenKnop{
+        background-color: #32933d;
+        color: white;
+    }
+
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+    @media(min-width: 1950px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+
+    @media(min-width: 1600px) and (max-width: 1950px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width:1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
+    @media(max-width: 1100px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, button.dt-button, div.dt-button, a.dt-button, input.dt-button{
+            float: left;
+            text-align: left;
+        }
+    }
 </style>
-{% endblock %}
-{% block content %}
+</head>
+
 
 
 
@@ -55,14 +128,14 @@ td, th {
 $(document).ready(function() {
     $("#basic-datatable").DataTable({
       pageLength: 10,
-      lengthChange: false,
+      lengthChange: true,
       bInfo : false,
       order: [[ 0, "asc" ]],
       dom: 'Bfrtip',
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4 ]
+                    columns: [ 0, 1, 2, 3 ]
                 },
             title: 'Eindklanten' +
                 '' +
@@ -76,57 +149,53 @@ $(document).ready(function() {
     });
   });
 </script>
-<div>
-    <table id="basic-datatable" class="table" style="width:100%">
-            <thead>
-            <tr>
-                <th>Klantnaam:</th>
-                <th>Email adres factuur:</th>
-                <th>Telefoonnummer klant:</th>
-                <th id="portaal">Portaal klant:</th>
-                <th id="deleteUpdate">Update / Delete</th>
-                <th id="detail">Detail</th>
-            </tr>
+    <div id="test">
+        <div id="box" ALIGN="center">
+            <h3>Eindklanten 4-Rest</h3>
+            <a href="{% url 'eindklanten_toevoegen' %}" class="btn" id="eindklantToevoegenKnop" role="button"><h5>Eindklant Toevoegen</h5></a>
+            <div id="container">
 
-            <tbody id="myTable">
-                {% for Eindklanten in eindklanten_list %}
+                <table id="basic-datatable" class="table">
+                    <thead>
                     <tr>
-                        <td>{{ Eindklanten.naam }}</td>
-                        <td>{{ Eindklanten.factuuremail }}</td>
-                        <td>{{ Eindklanten.telefoonnummer }}</td>
-                        <td id="portaal"><a href="{{ Eindklanten.portaal }}" target="_blank">{{Eindklanten.portaal}}</a></td>
-
-                        <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                            <td id="deleteUpdate">
-                                <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
-                                <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
-                            </td>
-                            <td id="detail">
-                                <a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
-                                <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
-                            </td>
-                        </form>
+                        <th>Klantnaam:</th>
+                        <th>Email adres factuur:</th>
+                        <th>Telefoonnummer klant:</th>
+                        <th id="portaal">Portaal klant:</th>
+                        <th id="deleteUpdate">Update / Delete</th>
+                        <th id="detail">Detail</th>
                     </tr>
-                {% endfor %}
-            </tbody>
 
-    <script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    });
-    </script>
+                    <tbody id="myTable">
+                        {% for Eindklanten in eindklanten_list %}
+                            <tr>
+                                <td>{{ Eindklanten.naam }}</td>
+                                <td>{{ Eindklanten.factuuremail }}</td>
+                                <td>{{ Eindklanten.telefoonnummer }}</td>
+                                <td id="portaal"><a href="{{ Eindklanten.portaal }}" target="_blank">{{Eindklanten.portaal}}</a></td>
 
+                                <form action="{% url 'eindklant_delete' Eindklanten.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                    <td id="deleteUpdate">
+                                        <a href="{% url 'eindklant_update' Eindklanten.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
+                                        <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
+                                        <button type="submit" class="btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je de eindklant {{ Eindklanten.klantnaam }} wilt verijderen?')">
+                                        <span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
+                                    </td>
+                                    <td id="detail">
+                                        <a href="{% url 'eindklant_detail' Eindklanten.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
+                                        <input type="hidden" name="medewerker_id" value="{{ Eindklanten.id }}" />
+                                    </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    </table>
-</div>
 <br><br><br>
+</html>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

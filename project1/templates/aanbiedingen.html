@@ -1,28 +1,46 @@
 {% extends 'base.html' %}
 {% block title %}Aanbiedingen{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Aanbiedingen 4-Rest</h3><a href="{% url 'aanbieding_toevoegen' %}" class="btn" id="aanbiedingToevoegenKnop" role="button"><h5>Aanbieding Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+#test{
+    text-align: center;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    body{
+        background-color:#CBCBCB;
+    }
 
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+    }
+
+    #box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
+
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    td{
+        white-space: nowrap;
+        overflow: auto;
+    }
 #tarief {
     max-width: 30px;
-}
-
-#registratie {
-    max-width: 90px;
 }
 
 #status {
@@ -37,24 +55,74 @@ td, th {
     max-width: 140px;
 }
 #updateKnop {
-    background-color: #22742a;
+    background-color: #32933d;
     color: white;
 }
 
 #detailKnop {
-    background-color: #2aa936;
+    background-color: #32933d;
     color: white;
 }
 
 #opdrachtToevoegenKnop{
-    background-color: #4be15b;
+    background-color: #32933d;
     color: white;
 }
 
 #aanbiedingToevoegenKnop{
-    background-color: #3CB64A;
+    background-color: #32933d;
     color: white;
 }
+
+#deleteKnop{
+    background-color: #ff0000;
+    color: white;
+}
+@media(min-width: 1950px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+
+    @media(min-width: 1600px) and (max-width: 1950px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width:1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
+    @media(max-width: 1100px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+            float: left;
+            text-align: left;
+        }
+    }
+
 </style>
 {% endblock %}
 {% block content %}
@@ -101,65 +169,60 @@ $(document).ready(function() {
   });
 </script>
 
+    <div id="test">
+        <div id="box">
+        <h3>Aanbiedingen 4-Rest</h3><a href="{% url 'aanbieding_toevoegen' %}" class="btn" id="aanbiedingToevoegenKnop" role="button"><h5>Aanbieding Toevoegen</h5></a>
 
-<table id="basic-datatable" class="table" style="width:100%">
-        <thead>
-        <tr>
-            <th>Klantnaam</th>
-            <th>Medewerker</th>
-            <th id="tarief">Tarief</th>
-            <th>Tussenpartij</th>
-            <th>Fuctie aanbieding</th>
-            <th id="status">Status</th>
-            <th id="deleteUpdate">Update / Delete</th>
-            <th id="detailOpdracht">Detail / Opdracht</th>
-        </tr>
+            <div id="container">
+                <table id="basic-datatable" class="table" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>Klantnaam</th>
+                        <th>Medewerker</th>
+                        <th id="tarief">Tarief</th>
+                        <th>Tussenpartij</th>
+                        <th>Fuctie aanbieding</th>
+                        <th id="status">Status</th>
+                        <th id="deleteUpdate">Update / Delete</th>
+                        <th id="detailOpdracht">Detail / Opdracht</th>
+                    </tr>
 
-        <tbody id="myTable">
-            {% for aanbiedingen in aanbieding_list %}
-                <tr>
-                    <td>{{ aanbiedingen.klant.naam }}</td>
-                    <td>{{ aanbiedingen.medewerker }}</td>
-                    <td id="tarief">{{ aanbiedingen.tarief }}</td>
-                    <td>{{ aanbiedingen.broker.naam }}</td>
-                    <td>{{ aanbiedingen.functie_aanbieding }}</td>
-                    <td id="status">{{ aanbiedingen.get_status_display }}</td>
-
-
-                       <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" class="no-export" style="display: inline;">
-                           {% csrf_token %}
-                           <td id="deleteUpdate">
-                               <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
-                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
-                               <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
-                               <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
-                           </td>
-                           <td id="detailOpdracht">
-                               <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
-                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
-                               <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-sm" id="opdrachtToevoegenKnop" role="button">Opdr maken</a>
-                               <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
-
-                           </td>
-                       </form>
-                </tr>
-            {% endfor %}
-        </tbody>
+                    <tbody id="myTable">
+                        {% for aanbiedingen in aanbieding_list %}
+                            <tr>
+                                <td>{{ aanbiedingen.klant.naam }}</td>
+                                <td>{{ aanbiedingen.medewerker }}</td>
+                                <td id="tarief">{{ aanbiedingen.tarief }}</td>
+                                <td>{{ aanbiedingen.broker.naam }}</td>
+                                <td>{{ aanbiedingen.functie_aanbieding }}</td>
+                                <td id="status">{{ aanbiedingen.get_status_display }}</td>
 
 
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-</script>
+                                   <form action="{% url 'aanbieding_delete' aanbiedingen.pk %}" class="no-export" style="display: inline;">
+                                       {% csrf_token %}
+                                       <td id="deleteUpdate">
+                                           <a href="{% url 'aanbieding_update' aanbiedingen.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
+                                           <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                                           <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze aanbieding wilt verijderen?')">
+                                           <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete</button>
+                                       </td>
+                                       <td id="detailOpdracht">
+                                           <a href="{% url 'aanbieding_detail' aanbiedingen.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
+                                           <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+                                           <a href="{% url 'toevoegen_opdracht' aanbiedingen.id %}"  class="btn btn-sm" id="opdrachtToevoegenKnop" role="button">Opdr maken</a>
+                                           <input type="hidden" name="" value="{{ aanbiedingen.id }}" />
+
+                                       </td>
+                                   </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
-</table>
 <br><br><br>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

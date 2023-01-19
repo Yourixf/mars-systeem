@@ -1,46 +1,181 @@
 {% extends 'base.html' %}
 {% block title %}Aanbiedingen/datails{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Details aanbiedingen 4-Rest</h3></div><br>
 <html lang="">
 <head>
 <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+    body{
+        background-color:#CBCBCB;
+    }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    #box1 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        width: 55%;
+        position: relative;
+        padding: 20px;
+        margin: auto;
+    }
+
+    #box1 #container {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            row-gap: 0px;
+            column-gap: 15px;
+            text-align: left;
+    }
+
+    input[class=btn], a[class=btn] {
+            display: inline-block;
+            align: center;
+            background-color: #3CB64A;
+            padding: 12px 20px;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            margin: auto;
+    }
+
+    p{
+        overflow: auto;
+        white-space: nowrap;
+    }
+    #aanbieName{
+        margin-bottom: 5%;
+    }
+
+    #buttonArea{
+        margin-top: 1%;
+    }
+
+    @media(min-width: 1600px){
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 45%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media(min-width: 1200px) and (max-width: 1600px) {
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 50%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width: 1200px) {
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width: 700px) and (min-width: 530px){
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:530px) {
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media(max-width:300px) {
+        #box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        #box1 #container {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
 </style>
 </head>
 
-<table>
-    <tr>
-        <th>Klantnaam</th><td>{{ aanbieding.klant.naam }}</td>
-        <th>Medewerker</th><td>{{ aanbieding.medewerker}}</td><tr></tr>
-        <th>Tarief</th><td>{{ aanbieding.tarief }}</td>
-        <th>Registratiedatum</th><td>{{ aanbieding.registratie }}</td><tr></tr>
-        <th>Functie</th> <td>{{ aanbieding.functie }}</td>
-        <th>Fuctie aanbieding</th><td>{{ aanbieding.functie_aanbieding }}</td><tr></tr>
-        <th>4-Rest contactpersoon</th><td>{{ aanbieding.get_accountmanager_display }}</td>
-        <th>Laatste Update</th><td>{{ aanbieding.laatste_update }}</td><tr></tr>
-        <th>Betaalkorting</th><td>{{ aanbieding.betaalkorting }}</td>
-        <th>Status</th><td>{{ aanbieding.get_status_display }}</td><tr></tr>
-        <th>Broker</th><td>{{ aanbieding.broker.naam }}</td>
-        <tr>
-            <td>
-                <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn btn-primary" role="button">Update</a>
-                <a href="{% url 'aanbiedingen' %}" class="btn btn-primary" role="button">Terug</a>
+<div id="box1" ALIGN="center">
+    <h3 id="aanbieName">Details aanbiedingen 4-Rest</h3>
+    <div id="container">
+        <label>Medewerker</label><p>{{ aanbieding.medewerker }}</p>
+        <label>Tarief</label><p>{{ aanbieding.tarief }}</p>
 
-            </td>
-        </tr>
+        <label>Betaalkorting</label><p>{{ aanbieding.betaalkorting }}</p>
+        <label>Aangemaakt door</label><p>{{ aanbieding.get_aangemaakt_door_display }}</p>
+        <label>Functie</label><p>{{ aanbieding.functie }}</p>
+        <label>Functie aanbieding</label><p>{{ aanbieding.functie_aanbieding }}</p>
+        <label>Klant</label><p>{{ aanbieding.klant }}</p>
+        <label>Tussenpartij</label><p>{{ aanbieding.broker }}</p>
+        <label>4-Rest contactpersoon</label><p>{{ aanbieding.accountmanager }}</p>
+        <label>Status</label><p>{{ aanbieding.get_status_display }}</p>
 
-</table>
+
+    </div>
+        <div id="buttonArea">
+            <a href="{% url 'aanbiedingen' %}" class="btn" role="button">Terug</a>
+            <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn" id="" role="button">Update</a>
+        </div>
+    </tr>
+</div>
 
 </html>
 

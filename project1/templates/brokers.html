@@ -2,53 +2,119 @@
 
 {% block title %}Tussenpartijen {% endblock %}
 {% block body %}
-<div style="text-align: center;"><h3>Tussenpartijen 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn" id="tussenpartijToevoegenKnop"  role="button"><h5>Tussenpartijen Toevoegen</h5></a></div>
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
     <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+    body{
+        background-color:#CBCBCB;
+    }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+    }
 
-#telNummer {
-    max-width: 100px;
-}
+    #box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
 
-#portaal {
-    max-width: 300px;
-    overflow: hidden;
-}
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    td{
+        white-space: nowrap;
+        overflow: auto;
+    }
 
-#deleteUpdate {
-    max-width: 105px;
-}
+    #telNummer {
+        max-width: 100px;
+    }
 
-#detail {
-    max-width: 60px;
-}
+    #portaal {
+        max-width: 300px;
+    }
 
-#updateKnop {
-    background-color: #32933d;
-    color: white;
-}
+    #deleteUpdate {
+        max-width: 105px;
+    }
 
-#detailKnop {
-    background-color: #4be15b;
-    color: white;
-}
+    #detail {
+        max-width: 60px;
+    }
 
-#tussenpartijToevoegenKnop{
-    background-color: #3CB64A;
-    color: white;
-}
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #tussenpartijToevoegenKnop{
+        background-color: #32933d;
+        color: white;
+    }
+
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+
+    @media(min-width: 1750px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+
+    @media(min-width: 1600px) and (max-width: 1750px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width:1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
+    @media(max-width: 1100px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+            float: left;
+            text-align: left;
+        }
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -79,48 +145,55 @@ $(document).ready(function() {
     });
   });
 </script>
-<br><br>
+<div id="area">
+    <div id="box" ALIGN="center">
+        <h3>Tussenpartijen 4-Rest</h3><a href="{% url 'brokers_toevoegen' %}" class="btn" id="tussenpartijToevoegenKnop"  role="button"><h5>Tussenpartijen Toevoegen</h5></a>
+        <div id="container">
+            <table id="basic-datatable" class="table" style="width:100%">
 
-<table id="basic-datatable" class="dataTables_wrapper no-footer" style="width:100%">
-
-        <thead>
-        <tr>
-            <th>Tussenpartij naam:</th>
-            <th>4-Rest contactpersoon:</th>
-            <th>Email adres factuur:</th>
-            <th id="telNummer">Telefoonnummer tussenpartij:</th>
-            <th id="portaal">Portaal tussenpartij:</th>
-            <th id="deleteUpdate" class="no-export">Update / Delete</th>
-            <th id="detail" class="no-export">Detail</th>
-        </tr>
-
-        <tbody id="myTable">
-            {% for broker in brokers_list %}
+                <thead>
                 <tr>
-                    <td>{{ broker.naam }}</td>
-                    <td>{{ broker.get_accountmanager_display }}</td>
-                    <td>{{ broker.factuuremail }}</td>
-
-                    <td id="telNummer">{{ broker.telefoonnummer }}</td>
-                    <td id="portaal"><a href="{{ broker.portaal }}" target="_blank">{{broker.portaal}}</a></td>
-
-                    <form action="{% url 'broker_delete' broker.id %}" method="post" class="no-export" style="display: inline;">
-                        {% csrf_token %}
-                        <td id="deleteUpdate">
-                            <a href="{% url 'broker_update' broker.id %}" class="no-export btn btn-sm" id="updateKnop" role="button">Update</a>
-                            <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
-                            <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de broker wilt verijderen?')">
-                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                        </td>
-                        <td id="detail">
-                            <a href="{% url 'broker_detail' broker.id %}"  class="no-export btn btn-sm" id="detailKnop" role="button">View Details</a>
-                            <input type="hidden" name="medewerker_id" value="{{ brokers_list.id }}" />
-                        </td>
-                    </form>
+                    <th>Tussenpartij naam:</th>
+                    <th>4-Rest contactpersoon:</th>
+                    <th>Email adres factuur:</th>
+                    <th id="telNummer">Telefoonnummer tussenpartij:</th>
+                    <th id="portaal">Portaal tussenpartij:</th>
+                    <th id="deleteUpdate" class="no-export">Update / Delete</th>
+                    <th id="detail" class="no-export">Detail</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-</table>
+
+                <tbody id="myTable">
+                    {% for broker in brokers_list %}
+                        <tr>
+                            <td>{{ broker.naam }}</td>
+                            <td>{{ broker.get_accountmanager_display }}</td>
+                            <td>{{ broker.factuuremail }}</td>
+
+                            <td id="telNummer">{{ broker.telefoonnummer }}</td>
+                            <td id="portaal"><a href="{{ broker.portaal }}" target="_blank">{{broker.portaal}}</a></td>
+
+                            <form action="{% url 'broker_delete' broker.id %}" method="post" class="no-export" style="display: inline;">
+                                {% csrf_token %}
+                                <td id="deleteUpdate">
+                                    <a href="{% url 'broker_update' broker.id %}" class="no-export btn btn-sm" id="updateKnop" role="button">Update</a>
+                                    <input type="hidden" name="medewerker_id" value="{{ Brokers.id }}" />
+                                    <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je de broker wilt verijderen?')">
+                                    <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                                </td>
+                                <td id="detail">
+                                    <a href="{% url 'broker_detail' broker.id %}"  class="no-export btn btn-sm" id="detailKnop" role="button">View Details</a>
+                                    <input type="hidden" name="medewerker_id" value="{{ brokers_list.id }}" />
+                                </td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
 
 <script>
 

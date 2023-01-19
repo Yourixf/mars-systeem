@@ -5,23 +5,15 @@
 <html lang="">
 <head>
 <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+
 
 #basic-datatable1_wrapper {
-    width: 80%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
-#basic-datatable2_wrapper {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-}
+
 
 td, th {
   border: 1px solid #dddddd;
@@ -43,31 +35,204 @@ td, th {
     overflow-wrap: break-word;
     overflow: clip;
 }
-#contactpers {
-    text-align: center;
-}
+input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
 
-#telefoonnummer {
-    max-width: 85px;
-}
+    p, td, th{
+        overflow: auto;
+        white-space: nowrap;
+    }
 
-#mailAdres {
-    max-width: 140px;
-    overflow: hidden;
-}
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
 
-#functie {
-    max-width: 100px;
-}
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
 
-#vestigingPlaats{
-    max-width: 100px;
-}
+    body{
+        background-color:#CBCBCB;
+    }
 
-#vestigToevoegen {
-    margin-bottom: 2px;
-}
+  .box1 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        overflow: auto;
+        padding: 20px;
+        margin: auto;
+    }
 
+
+    #box2 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        overflow: auto;
+    }
+
+    .box1 #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
+
+    @media(min-width: 1700px){
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 60%;
+        }
+    }
+
+    @media(min-width: 1500px) and (max-width: 1700px){
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+    @media(min-width: 1600px){
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 45%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media(min-width: 1200px) and (max-width: 1600px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 50%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width: 1200px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width: 700px) and (min-width: 530px){
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:530px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media(max-width:300px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
+
+
+    @media(min-width:1000px) and (max-width: 1700px) {
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(max-width:1000px) {
+        #box2 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+    }
 </style>
 </head>
 <script>
@@ -96,62 +261,62 @@ $(document).ready(function() {
   });
 </script>
 
-<div id="detail">
-    <table>
-        <tr>
-            <th>Contactpersoon naam:</th><td>{{ contactpersoon.naam }}</td>
-            <th>Mail adres:</th><td>{{ contactpersoon.mail_adres }}</td></tr>
-            <th>Telefoonnummer:</th><td>{{ contactpersoon.telefoonnummer }}</td>
-            <th>Functie:</th><td>{{ contactpersoon.functie }}</td></tr>
-            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ contactpersoon.opmerkingen }}</td>
-            <tr>
-                <td>
-                    <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-primary" role="button">Update</a>
-                    {% if eind_klant_pk %}
-                        <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
-                    {% endif %}
-                    {% if broker_pk %}
-                        <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
-                    {% endif %}
-                </td>
-            </tr>
-    </table>
+<div id="detail" class="box1" ALIGN="center">
+    <div id="container">
+    
+            <label>Contactpersoon naam:</label><p>{{ contactpersoon.naam }}</p>
+            <label>Mail adres:</label><p>{{ contactpersoon.mail_adres }}</p>
+            <label>Telefoonnummer:</label><p>{{ contactpersoon.telefoonnummer }}</p>
+            <label>Functie:</label><p>{{ contactpersoon.functie }}</p>
+            <label id="opmerking">Opmerkingen:</label><p id="opmerkingen">{{ contactpersoon.opmerkingen }}</p>
+    </div>
+    <div style="margin-top: 1%">
+        <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn" role="button">Update</a>
+        {% if eind_klant_pk %}
+            <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% endif %}
+        {% if broker_pk %}
+            <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% endif %}
+    </div>
 </div>
+<br>
 
 <div id="vestiging">
     <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
-
-    <table id="basic-datatable1" class="table1">
-        <thead>
-            <tr>
-                <th>Vestiging</th>
-                <th>Postcode</th>
-                <th>Straatnaam</th>
-                <th>Huisnummer</th>
-                <th>Plaats</th>
-                <th id="deleteUpdate">Delete</th>
-            </tr>
-        </thead>
-        <tbody id="myTable">
-            {% for vestiging in vestiging_lijst %}
+    <div id="box2">
+        <table id="basic-datatable1" class="table1">
+            <thead>
                 <tr>
-                    <td>{{ vestiging.vestiging }}</td>
-                    <td>{{ vestiging.postcode }}</td>
-                    <td>{{ vestiging.straatnaam }}</td>
-                    <td>{{ vestiging.huisnummer }}</td>
-                    <td>{{ vestiging.plaats }}</td>
-
-                    <form action="{% url 'delete_contact_vestiging' vestiging.pk %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                            <td id="deleteUpdate">
-                                <button type="submit" class="no-export btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                            </td>
-                    </form>
+                    <th>Vestiging</th>
+                    <th>Postcode</th>
+                    <th>Straatnaam</th>
+                    <th>Huisnummer</th>
+                    <th>Plaats</th>
+                    <th id="deleteUpdate">Delete</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="myTable">
+                {% for vestiging in vestiging_lijst %}
+                    <tr>
+                        <td>{{ vestiging.vestiging }}</td>
+                        <td>{{ vestiging.postcode }}</td>
+                        <td>{{ vestiging.straatnaam }}</td>
+                        <td>{{ vestiging.huisnummer }}</td>
+                        <td>{{ vestiging.plaats }}</td>
+
+                        <form action="{% url 'delete_contact_vestiging' vestiging.pk %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                                <td id="deleteUpdate">
+                                    <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">
+                                    <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                                </td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 	<h1 class="title">{{ eindklant_pk.opmerking_title }}</h1>

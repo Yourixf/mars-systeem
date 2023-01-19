@@ -2,57 +2,148 @@
 {% extends 'base.html' %}
 {% block title %}4-Rest/Archief Medewerkers{% endblock %}
 {% block body %}
-<div style="text-align: center;" xmlns="http://www.w3.org/1999/html"><h3>Archief Medewerkers 4-Rest</h3></div>
 
 {% if medewerkers %}
 <style>
- table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+    #test{
+        text-align: center;
+    }
+    body{
+            background-color:#CBCBCB;
+        }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+    }
 
-#status {
-    max-width: 40px;
-}
+    #box #container{
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
 
-#woonplaats {
-    max-width: 80px;
-}
 
-#opdrachtAanbieding {
-    max-width: 110px;
-}
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    td{
+        white-space: nowrap;
+        overflow: auto;
 
-#deleteUpdate {
-    max-width: 100px;
-    min-width: 100px;
-}
+    }
 
-#detail {
-    max-width: 60px;
-}
+    #telnummer {
+        max-width:100px ;
+    }
 
-#opdrAanbiedingKnop {
-    background-color: #22742a;
-    color: white;
-}
+    #medeNaam{
+        max-width: 110px;
+    }
 
-#updateKnop {
-    background-color: #32933d;
-    color: white;
-}
+    #status {
+        max-width: 40px;
+    }
 
-#detailKnop {
-    background-color: #4be15b;
-    color: white;
-}
+    #woonplaats {
+        max-width: 80px;
+    }
+
+    #straat {
+        max-width: 100px;
+    }
+
+    #opdrachtAanbieding {
+        max-width: 70px;
+        min-width: 60px;
+    }
+
+    #deleteUpdate {
+        max-width: 70px;
+        min-width: 60px;
+    }
+
+    #detail {
+        max-width: 30px;
+        min-width: 25px;
+    }
+
+    #opdrAanbiedingKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #medewerkerToevoegenKnop{
+        background-color: #32933d;
+        color: white;
+    }
+
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+  @media(min-width: 1750px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 70%;
+        }
+    }
+
+
+    @media(min-width: 1600px) and (max-width: 1750px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width:1600px) {
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
+    @media(max-width: 1100px){
+        #box {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+            float: left;
+            text-align: left;
+        }
+    }
+
 </style>
 <script>
 $(document).ready(function() {
@@ -83,55 +174,62 @@ $(document).ready(function() {
   });
 </script>
 
+<div id="test">
+    <div id="box">
+    <h3>Archief Medewerkers 4-Rest</h3>
+        <div id="container">
+            <table id="basic-datatable" class="table" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th id="medeNaam">Naam:</th>
+                        <th id="telnummer">Telefoonnummer:</th>
+                        <th id="status">Status:</th>
+                        <th id="woonplaats">Woonplaats:</th>
+                        <th id="straat">Straat:</th>
+                        <th id="opdrachtAanbieding">Opdracht / Aanbieding</th>
+                        <th id="deleteUpdate">Update / Delete</th>
+                        <th id="detail">Detail</th>
+                    </tr>
 
-<table id="basic-datatable" class="table" style="width: 100%">
-    <thead>
-        <tr>
-            <th>Naam:</th>
-            <th>Telefoonnummer:</th>
-            <th id="status">Status:</th>
-            <th id="woonplaats">Woonplaats:</th>
-            <th>Straat:</th>
-            <th>E-mail:</th>
-            <th id="opdrachtAanbieding">Opdracht / Aanbieding</th>
-            <th id="deleteUpdate">Update / Delete</th>
-            <th id="detail">Detail</th>
-        </tr>
+                    <tbody id="myTable">
+                        {% for medewerker in medewerkers %}
+                            <tr>
+                                <td>{{ medewerker }} </td>
+                                <td>{{ medewerker.telefoonnummer }}</td>
+                                <td id="status">{{ medewerker.get_status_display }}</td>
+                                <td id="woonplaats">{{ medewerker.woonplaats }}</td>
+                                <td>{{ medewerker.straat }}</td>
+                                 <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
+                                     {% csrf_token %}
+                                     <td id="opdrachtAanbieding">
+                                         <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-sm" id="opdrAanbiedingKnop" role="button">Opdracht / aanbieding</a>
+                                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                                     </td>
+                                     <td id="deleteUpdate">
+                                         <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
+                                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
 
-        <tbody id="myTable">
-            {% for medewerker in medewerkers %}
-                <tr>
-                    <td>{{ medewerker }} </td>
-                    <td>{{ medewerker.telefoonnummer }}</td>
-                    <td id="status">{{ medewerker.get_status_display }}</td>
-                    <td id="woonplaats">{{ medewerker.woonplaats }}</td>
-                    <td>{{ medewerker.straat }}</td>
-                    <td>{{ medewerker.werkmail }}</td>
-                     <form action="{% url 'medewerker_delete' medewerker.pk %}" method="post" style="display: inline;">
-                         {% csrf_token %}
-                         <td id="opdrachtAanbieding">
-                             <a href="{% url 'opdracht_aanbieding_medewerkers' medewerker.id %}" class="btn btn-sm" id="opdrAanbiedingKnop" role="button">Opdracht / aanbieding</a>
-                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
-                         </td>
-                         <td id="deleteUpdate">
-                             <a href="{% url 'medewerker_update' medewerker.id %}" class="btn btn-sm" id="updateKnop" role="button">Update</a>
-                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                                         <button type="submit" id="deleteKnop" class="btn btn-sm" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
+                                         <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                                     </td>
+                                     <td id="detail">
+                                         <a href="{% url 'details' medewerker.id %}"  class="btn btn-sm" id="detailKnop">View Details</a>
+                                         <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
+                                     </td>
+                                 </form>
+                        {% endfor %}
+                            </tr>
 
-                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Weet je zeker dat je de medewerker {{ medewerker.voornaam }} {{ medewerker.tussenvoegsel }} {{ medewerker.achternaam }} wilt verijderen?')">
-                             <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                         </td>
-                         <td id="detail">
-                             <a href="{% url 'details' medewerker.id %}"  class="btn btn-sm" id="detailKnop">View Details</a>
-                             <input type="hidden" name="medewerker_id" value="{{ medewerker.id }}" />
-                         </td>
-                     </form>
-            {% endfor %}
-                </tr>
+                    </tbody>
+                </thead>
 
-        </tbody>
-    </thead>
+            </table>
 
-</table>
+
+        </div>
+    </div>
+
+</div>
 
 {% else %}
     {% comment %}<h3>Deze medewerker is verwijderd.</h3>

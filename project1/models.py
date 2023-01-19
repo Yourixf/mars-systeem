@@ -80,7 +80,7 @@ BURGERLIJKE_STAAT_CHOICES = (
 )
 
 KANTOOR_CHOICES = (
-    ('1', 'Hoofkantoor'),
+    ('1', 'Hoofdkantoor'),
     ('2', 'Bijkantoor')
 )
 
@@ -88,8 +88,6 @@ KLANT_SOORT_CHOICES = (
     ('1', 'Eindklant'),
     ('2', 'Tussenpartij'),
 )
-
-
 
 class Documenten(models.Model):
     naam_document = models.CharField(max_length=20, blank=True)
@@ -112,35 +110,32 @@ class Documenten_History(models.Model):
 
 class Medewerkers(models.Model):
     voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
-    tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
-    achternaam = models.CharField(max_length=100, blank=True)
+    werkmail = models.EmailField(max_length=150, blank=True)
     roepnaam = models.CharField(max_length=100, blank=True)
     functie = models.CharField(max_length=50, blank=True)
-    geboortedatum = models.DateField(null=True, blank=True)
-    geboorteplaats = models.CharField(max_length=100, blank=True)
-    nationaliteit = models.CharField(max_length=100, blank=True)
-    straat = models.CharField(max_length=150, blank=True)
-    huisnummer = models.CharField(max_length=20, blank=True)
-    postcode = models.CharField(max_length=10, blank=True)
-    woonplaats = models.CharField(max_length=150, blank=True)
-    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
-    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
-    banknummer = models.CharField(max_length=100, blank=True)
-    privémail = models.EmailField(max_length=150, blank=True)
-    werkmail = models.EmailField(max_length=150, blank=True)
-    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
-    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
-
-    ice_persoon_naam = models.CharField( max_length=100, null=True, blank=True)
-    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    achternaam = models.CharField(max_length=100, blank=True)
     datum_in_dienst = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    geboortedatum = models.DateField(null=True, blank=True)
+    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    geboorteplaats = models.CharField(max_length=100, blank=True)
+    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    nationaliteit = models.CharField(max_length=100, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
+    straat = models.CharField(max_length=150, blank=True)
+    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
+    huisnummer = models.CharField(max_length=20, blank=True)
+    ice_persoon_naam = models.CharField( max_length=100, null=True, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    woonplaats = models.CharField(max_length=150, blank=True)
     aantal_uur = models.IntegerField(null=True, blank=True)
-    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
+    banknummer = models.CharField(max_length=100, blank=True)
+   # privémail = models.EmailField(max_length=150, blank=True)
+    tariefindicatie = models.FloatField(max_length=20, blank=True, null=True, default=0)
+    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
-
-    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
@@ -163,36 +158,36 @@ class Medewerkers(models.Model):
 class Medewerkers_History(models.Model):
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=True, null=True)
     update_id = models.IntegerField(blank=True, null=True)
-    voornaam = models.CharField(max_length=100, blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
-    tussenvoegsel = models.CharField(max_length=6, blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
-    achternaam = models.CharField(max_length=100, blank=True)
+    voornaam = models.CharField(max_length=100,
+                                blank=True)  # max_length=... is bedoeld voor hoeveel tekens het maximaal mag bevatten.
+    werkmail = models.EmailField(max_length=150, blank=True)
     roepnaam = models.CharField(max_length=100, blank=True)
     functie = models.CharField(max_length=50, blank=True)
-    geboortedatum = models.DateField(null=True, blank=True)
-    geboorteplaats = models.CharField(max_length=100, blank=True)
-    nationaliteit = models.CharField(max_length=100, blank=True)
-    straat = models.CharField(max_length=150, blank=True)
-    huisnummer = models.CharField(max_length=20, blank=True)
-    postcode = models.CharField(max_length=10, blank=True)
-    woonplaats = models.CharField(max_length=150, blank=True)
-    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
-    bsnnummer = models.IntegerField(null=True, blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
-    banknummer = models.CharField(max_length=100, blank=True)
-    privémail = models.EmailField(max_length=150, blank=True)
-    werkmail = models.EmailField(max_length=150, blank=True)
-    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
-    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    tussenvoegsel = models.CharField(max_length=6,
+                                     blank=True)  # blank=True betekend dat het veld leeg mag zijn ( bij Charfield )
     opleidingsniveau = models.CharField(choices=OPLEIDINGNIVEAU_CHOICES, max_length=50, blank=True)
-
-    ice_persoon_naam = models.CharField( max_length=100, null=True, blank=True)
-    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    achternaam = models.CharField(max_length=100, blank=True)
     datum_in_dienst = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    geboortedatum = models.DateField(null=True, blank=True)
+    burgerlijkse_staat = models.CharField(choices=BURGERLIJKE_STAAT_CHOICES, max_length=100, blank=True)
+    geboorteplaats = models.CharField(max_length=100, blank=True)
+    bsnnummer = models.IntegerField(null=True,
+                                    blank=True)  # null=True betekend dat het veld leeg mag zijn ( bij IntegerField )
+    nationaliteit = models.CharField(max_length=100, blank=True)
     lease_auto = models.CharField(max_length=15, choices=LEASE_AUTO_CHOICES, null=True, blank=True)
+    straat = models.CharField(max_length=150, blank=True)
+    bv = models.CharField(choices=BV_CHOICES, blank=True, max_length=50)
+    huisnummer = models.CharField(max_length=20, blank=True)
+    ice_persoon_naam = models.CharField(max_length=100, null=True, blank=True)
+    postcode = models.CharField(max_length=10, blank=True)
+    ice_telefoonnummer = models.IntegerField(null=True, blank=True)
+    woonplaats = models.CharField(max_length=150, blank=True)
     aantal_uur = models.IntegerField(null=True, blank=True)
-    inhuur = models.CharField(choices=INHUUR_CHOICES, max_length=50, blank=True)
+    banknummer = models.CharField(max_length=100, blank=True)
+    # privémail = models.EmailField(max_length=150, blank=True)
+    tariefindicatie = models.FloatField(max_length=20, blank=True, null=True, default=0)
+    telefoonnummer = models.CharField(null=True, max_length=20, blank=True)
     status = models.CharField(choices=STATUS_MEDEWERKER_CHOICES, max_length=50, blank=True)
-
-    tariefindicatie = models.FloatField(max_length=20, blank=True, default=0)
     updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 class Opmerkingen(models.Model):
@@ -350,18 +345,21 @@ class Contactpersonen_History(models.Model):
 
 
 class Aanbiedingen(models.Model):
-    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
-    registratie = models.DateField(null=True, blank=True)
-    laatste_update = models.DateField(null=True, blank=True)
-    functie = models.CharField(max_length=50, blank=True)
-    functie_aanbieding = models.CharField(max_length=50, blank=True)
-    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True, limit_choices_to={'soort': '1'})
-    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True, limit_choices_to={'soort': '2'})
-    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
-    status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES, blank=True)
+    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False, null=True)
     tarief = models.FloatField(max_length=14, default=True, null=True, blank=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True, blank=True)
-    medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False, null=True)
+    aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+    functie = models.CharField(max_length=50, blank=True)
+    functie_aanbieding = models.CharField(max_length=50, blank=True)
+    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True,
+                              limit_choices_to={'soort': '1'})
+    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True,
+                               limit_choices_to={'soort': '2'})
+    accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
+
+    registratie = models.DateField(null=True, blank=True)
+    laatste_update = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 

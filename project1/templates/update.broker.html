@@ -41,11 +41,60 @@
         margin:auto;
         border-color: #3CB64A;
     }
+
+     @media(min-width: 1600px){
+         #container {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 25%;
+        }
+     }
+
+    @media(min-width: 1300px) and (max-width: 1600px){
+        #container {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 35%;
+        }
+
+    }
+    @media(max-width:1300px) {
+        #container {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 45%;
+        }
+    }
+
+    @media(max-width:720px) {
+        #container {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+    }
+    @media (max-width:400px) {
+        #container {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 95%;
+        }
+    }
+
     #container {
       border-radius: 19px;
       background-color: #f2f2f2;
       padding: 20px;
-      width: 32%;
       margin: auto;
       position: relative;
     }
