@@ -3,158 +3,155 @@
 {% block body %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
-<style>
-#test{
-    text-align: center;
-}
+<html lang="">
+    <head>
+        <style>
+            #test{
+                text-align: center;
+            }
 
-    body{
-        background-color:#CBCBCB;
-    }
+            body{
+                background-color:#CBCBCB;
+            }
 
-    #box {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        padding: 20px;
-    }
+            #box {
+                border-radius: 19px;
+                background-color: #f2f2f2;
+                margin: auto;
+                position: relative;
+                padding: 20px;
+            }
 
-    #box #container {
-        display: grid;
-        row-gap: 0px;
-        column-gap: 15px;
-        text-align: left;
-        overflow: auto;
-    }
-
-
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-td{
-    white-space: nowrap;
-    overflow: auto;
-
-}
-
-#datum {
-    max-width: 130px;
-}
-
-#namen {
-    max-width: 130px;
-}
-
-#tarief {
-    max-width: 30px;
-}
-
-#detail {
-    max-width: 30px;
-}
-
-#detailKnop{
-    background-color: #32933d;
-    color: white;
-}
- @media(min-width: 1950px){
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 60%;
-        }
-    }
+            #box #container {
+                display: grid;
+                row-gap: 0px;
+                column-gap: 15px;
+                text-align: left;
+                overflow: auto;
+            }
 
 
-    @media(min-width: 1600px) and (max-width: 1950px) {
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 70%;
-        }
-    }
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            td{
+                white-space: nowrap;
+                overflow: auto;
 
-    @media(min-width: 1100px) and (max-width:1600px) {
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 85%;
-        }
-    }
+            }
 
-    @media(max-width: 1100px){
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 85%;
-        }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, button.dt-button, div.dt-button, a.dt-button, input.dt-button{
-            float: left;
-            text-align: left;
-        }
-    }
-</style>
-{% endblock %}
-{% block content %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            #datum {
+                max-width: 130px;
+            }
 
-    <!-- scripts voor sortable table -->
+            #namen {
+                max-width: 130px;
+            }
 
-    <!-- scripts voor pagination -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+            #tarief {
+                max-width: 30px;
+            }
 
-     <!-- scripts voor export -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+            #detail {
+                max-width: 30px;
+            }
+
+            #detailKnop{
+                background-color: #32933d;
+                color: white;
+            }
+            div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+                margin-right: 10px;
+            }
+
+             @media(min-width: 1950px){
+                #box {
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                    width: 60%;
+                }
+            }
 
 
-<script>
-$(document).ready(function() {
-    $("#basic-datatable").DataTable({
-      pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
-      order: [[ 0, "asc" ]],
-      dom: 'Bfrtip',
-        buttons: [ {
-            extend: 'excelHtml5',
-            exportOptions: {
+            @media(min-width: 1600px) and (max-width: 1950px) {
+                #box {
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                    width: 70%;
+                }
+            }
+
+            @media(min-width: 1100px) and (max-width:1600px) {
+                #box {
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                    width: 85%;
+                }
+            }
+
+            @media(max-width: 1100px) {
+                #box {
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                    width: 95%;
+                }
+
+                div.dataTables_wrapper div.dataTables_filter,div.dataTables_wrapper div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+                    float: left;
+                    text-align: left;
+                    margin-top: 15px;
+                    margin-right: 10px;
+                    overflow: auto;
+                }
+
+                #detail{
+                    max-width: 100px;
+                }
+            }
+
+        </style>
+    </head>
+
+
+    <script>
+    $(document).ready(function() {
+        $("#basic-datatable").DataTable({
+            pageLength: 10,
+            order: [[ 0, "asc" ]],
+            dom: 'lBfrtip',
+            buttons: [ {
+                extend: 'excelHtml5',
+                exportOptions: {
                     columns: [ 0, 1, 2, 3, 4 ]
                 },
-            title: 'Checklist facturatie' +
-                '' +
-                ' Export',
-            customize: function( xlsx ) {
-                var sheet = xlsx.xl.worksheets['sheet1.xml'];
-
-                $('row c[r^="C"]', sheet).attr( 'c', '2' );
-            }
-        } ]
-    });
-  });
-</script>
+                title: 'Checklist facturatie' +
+                    '' +
+                    ' Export',
+                customize: function( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c[r^="C"]', sheet).attr( 'c', '2' );
+                }
+            } ]
+        });
+      });
+    </script>
 
     <div id="test">
         <div id="box">
-        <h3>Wijzigingen</h3>
+            <h3>Wijzigingen</h3>
+            <br>
             <div id="container">
-                <table id="basic-datatable" class="table" style="width:100%">
+                <table id="basic-datatable" class="table">
                     <thead>
                     <tr>
                         <th id="namen">Medewerker</th>
@@ -174,14 +171,12 @@ $(document).ready(function() {
                                 <td>{{ opdracht.einddatum }}</td>
                                 <td>{{ opdracht.tarief_opdracht }}</td>
 
-                                {% csrf_token %}
-                                    <form action="">
-
-                                        <td id="detail">
-                                            <a href="{% url 'factuur_history_detail' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
-                                            <input type="hidden" name="" value="" />
-                                        </td>
-                                    </form>
+                                <form action="" style="display: inline">{% csrf_token %}
+                                    <td id="detail">
+                                        <a href="{% url 'factuur_history_detail' opdracht.id %}"  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
+                                        <input type="hidden" name="" value="" />
+                                    </td>
+                                </form>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -191,7 +186,8 @@ $(document).ready(function() {
     </div>
 
 
-<br><br><br>
+    <br><br><br>
+</html>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">
 

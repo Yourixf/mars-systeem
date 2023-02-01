@@ -3,127 +3,146 @@
 {% block body %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
-<style>
-#test{
-    text-align: center;
-}
+    <html lang="">
+        <head>
+            <style>
+                #test{
+                    text-align: center;
+                }
 
-    body{
-        background-color:#CBCBCB;
-    }
+                body{
+                    background-color:#CBCBCB;
+                }
 
-    #box {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        padding: 20px;
-    }
+                #box {
+                    border-radius: 19px;
+                    background-color: #f2f2f2;
+                    margin: auto;
+                    position: relative;
+                    padding: 20px;
+                }
 
-    #box #container {
-        display: grid;
-        row-gap: 0px;
-        column-gap: 15px;
-        text-align: left;
-        overflow: auto;
-    }
-
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    td{
-        white-space: nowrap;
-        overflow: auto;
-    }
-#tarief {
-    max-width: 30px;
-}
-
-#status {
-    max-width: 60px;
-}
-
-#deleteUpdate {
-    max-width: 105px;
-}
-
-#detailOpdracht {
-    max-width: 140px;
-}
-#updateKnop {
-    background-color: #32933d;
-    color: white;
-}
-
-#detailKnop {
-    background-color: #32933d;
-    color: white;
-}
-
-#opdrachtToevoegenKnop{
-    background-color: #32933d;
-    color: white;
-}
-
-#aanbiedingToevoegenKnop{
-    background-color: #32933d;
-    color: white;
-}
-
-#deleteKnop{
-    background-color: #ff0000;
-    color: white;
-}
-@media(min-width: 1950px){
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 70%;
-        }
-    }
+                #box #container {
+                    display: grid;
+                    row-gap: 0px;
+                    column-gap: 15px;
+                    text-align: left;
+                    overflow: auto;
+                }
 
 
-    @media(min-width: 1600px) and (max-width: 1950px) {
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 80%;
-        }
-    }
+                td, th {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
 
-    @media(min-width: 1100px) and (max-width:1600px) {
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 95%;
-        }
-    }
+                td{
+                    white-space: nowrap;
+                    overflow: auto;
+                }
+                #tarief {
+                    max-width: 30px;
+                    min-width: 29px;
+                }
 
-    @media(max-width: 1100px){
-        #box {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 95%;
-        }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
-            float: left;
-            text-align: left;
-        }
-    }
+                #status {
+                    max-width: 60px;
+                    min-width: 55px;
+                }
 
-</style>
+                #deleteUpdate {
+                    max-width: 105px;
+                    min-width: 104px;
+                }
+
+                #detailOpdracht {
+                    max-width: 145px;
+                    min-width: 144px;
+                }
+                #updateKnop {
+                    background-color: #32933d;
+                    color: white;
+                }
+
+                #detailKnop {
+                    background-color: #32933d;
+                    color: white;
+                }
+
+                #opdrachtToevoegenKnop{
+                    background-color: #32933d;
+                    color: white;
+                }
+
+                #aanbiedingToevoegenKnop{
+                    background-color: #32933d;
+                    color: white;
+                }
+
+                #deleteKnop{
+                    background-color: #ff0000;
+                    color: white;
+                }
+
+                div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+                    margin-right: 10px;
+                }
+                @media(min-width: 1950px){
+                    #box {
+                        -webkit-transition: width 2s ease-in-out;
+                        -moz-transition: width 2s ease-in-out;
+                        -o-transition: width 2s ease-in-out;
+                        transition: width 2s ease-in-out;
+                        width: 70%;
+                    }
+                }
+
+
+                @media(min-width: 1600px) and (max-width: 1950px) {
+                    #box {
+                        -webkit-transition: width 2s ease-in-out;
+                        -moz-transition: width 2s ease-in-out;
+                        -o-transition: width 2s ease-in-out;
+                        transition: width 2s ease-in-out;
+                        width: 80%;
+                    }
+                }
+
+                @media(min-width: 1100px) and (max-width:1600px) {
+                    #box {
+                        -webkit-transition: width 2s ease-in-out;
+                        -moz-transition: width 2s ease-in-out;
+                        -o-transition: width 2s ease-in-out;
+                        transition: width 2s ease-in-out;
+                        width: 95%;
+                    }
+                }
+
+                @media(max-width: 1100px){
+                    #box {
+                        -webkit-transition: width 2s ease-in-out;
+                        -moz-transition: width 2s ease-in-out;
+                        -o-transition: width 2s ease-in-out;
+                        transition: width 2s ease-in-out;
+                        width: 95%;
+                    }
+                    div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+                        float: left;
+                        text-align: left;
+                        margin-top: 15px;
+                        margin-right: 10px;
+                        overflow: auto;
+                    }
+                    #deleteUpdate{
+                        max-width: 140px;
+                    }
+                    #detailOpdracht {
+                        max-width: 180px;
+                    }
+                }
+            </style>
+        </head>
 {% endblock %}
 {% block content %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -142,32 +161,32 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
 
-
 <script>
-$(document).ready(function() {
-    $("#basic-datatable").DataTable({
-      pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
-      order: [[ 0, "asc" ]],
-      dom: 'Bfrtip',
-        buttons: [ {
-            extend: 'excelHtml5',
-            exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+    $(document).ready(function() {
+        $("#basic-datatable").DataTable({
+            pageLength: 10,
+            order: [[ 0, "asc" ]],
+            "columnDefs": [
+                { "searchable": false, "targets": 5 }
+            ],
+            dom: 'lBfrtip',
+            buttons: [ {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4 ]
                 },
-            title: 'Open aanbiedingen' +
-                '' +
-                ' Export',
-            customize: function( xlsx ) {
-                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                title: 'Medewerkers' +
+                    '' +
+                    ' Export',
+                customize: function( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
-                $('row c[r^="C"]', sheet).attr( 'c', '2' );
-            }
-        } ]
-    });
-  });
-</script>
+                    $('row c[r^="C"]', sheet).attr( 'c', '2' );
+                }
+            }]
+        });
+      });
+    </script>
 
     <div id="test">
         <div id="box">
@@ -224,5 +243,6 @@ $(document).ready(function() {
 
 
 <br><br><br>
+    </html>
 {% endblock %}
 <input class="btn btn-primary" type=button value="Terug" onClick="javascript:history.go(-1);">

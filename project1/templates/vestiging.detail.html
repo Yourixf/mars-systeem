@@ -33,48 +33,153 @@ tr {
     max-width: 10px;
 }
 
-#label {
-    max-width: 10px;
+
+input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
+
+    p, td, th{
+        overflow: auto;
+        white-space: nowrap;
+    }
+  body{
+        background-color:#CBCBCB;
+    }
+label{
+    overflow: auto;
 }
-
-#deleteUpdate {
-    max-width: 105px;
-}
-
-
-#vestiging {
-    text-align: center;
+  #container p{
+    overflow: auto;
 }
 
 #opmerkingen {
-    max-width: 125px;
-    overflow-wrap: break-word;
-    overflow: clip;
-}
-#contactpers {
-    text-align: center;
+    max-height: 150px;
+    white-space: normal;
 }
 
-#telefoonnummer {
-    max-width: 85px;
-}
+  .box1 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        overflow: auto;
+        padding: 20px;
+        margin: auto;
+    }
 
-#mailAdres {
-    max-width: 140px;
-    overflow: hidden;
-}
+.box1 #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
 
-#functie {
-    max-width: 100px;
-}
 
-#vestigingPlaats{
-    max-width: 100px;
-}
+    @media(min-width: 1600px){
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 45%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1px;
+        }
+    }
 
-#vestigToevoegen {
-    margin-bottom: 2px;
-}
+    @media(min-width: 1200px) and (max-width: 1600px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 50%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1px;
+
+        }
+    }
+
+    @media(min-width: 1100px) and (max-width: 1200px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 65%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(min-width:700px) and (max-width: 1100px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 80%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width: 700px) and (min-width: 530px){
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 85%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        }
+    }
+
+    @media(max-width:530px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media(max-width:300px) {
+        .box1 {
+            -webkit-transition: width 2s ease-in-out;
+            -moz-transition: width 2s ease-in-out;
+            -o-transition: width 2s ease-in-out;
+            transition: width 2s ease-in-out;
+            width: 92%;
+        }
+        .box1 #container {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
 
 </style>
 </head>
@@ -104,27 +209,25 @@ $(document).ready(function() {
   });
 </script>
 
-<div id="detail">
-    <table>
-        <tr>
-            <th>Vestiging:</th><td>{{ vestiging_pk.vestiging }}</td>
-            <th>Postcode:</th><td>{{ vestiging_pk.postcode }}</td></tr>
-            <th>Straatnaam:</th><td>{{ vestiging_pk.straatnaam }}</td>
-            <th>Huisnummer:</th><td>{{ vestiging_pk.huisnummer }}</td></tr>
-            <th>Plaats:</th><td>{{ vestiging_pk.plaats }}</td>
-            <th id="opmerking">Opmerkingen:</th><td id="opmerkingen">{{ vestiging_pk.opmerkingen }}</td>
-            <tr>
-                <td>
-                    <a href="{% url 'vestiging_updaten' vestiging_pk.id %}" class="btn btn-primary" role="button">Update</a>
-                    {% if eind_klant_pk %}
-                        <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
-                    {% endif %}
-                    {% if broker_pk %}
-                        <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn btn-primary" role="button">Terug</a>
-                    {% endif %}
-                </td>
-            </tr>
-    </table>
+<div id="detail" class="box1" align="center">
+    <H3 style="margin-top: 1%; margin-bottom: 3%;">Vestigingplaats detail pagina</H3>
+
+    <div id="container">
+            <label>Vestiging:</label><p>{{ vestiging.get_vestiging_display }}</p>
+            <label>Postcode:</label><p>{{ vestiging.postcode }}</p>
+            <label>Straatnaam:</label><p>{{ vestiging.straatnaam }}</p>
+            <label>Huisnummer:</label><p>{{ vestiging.huisnummer }}</p>
+            <label>Plaats:</label><p>{{ vestiging.plaats }}</p>
+            <label>Opmerkingen:</label><p id="opmerkingen">{{ vestiging.opmerkingen }}</p>
+    </div>
+    <div style="margin-top: 1%">
+        <a href="{% url 'vestiging_updaten' vestiging.id %}" class="btn" role="button">Update</a>
+        {% if klant_pk.soort == '1' %}
+            <a href="{% url 'eindklant_detail' klant_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% elif klant_pk.soort == '2' %}
+            <a href="{% url 'broker_detail' klant_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% endif %}
+    </div>
 </div>
 
 

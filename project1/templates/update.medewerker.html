@@ -26,13 +26,13 @@
         text-align: left;
     }
 
-    @media(min-width: 1800px){
+    @media(min-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
-            width: 35%;
+            width: 45%;
         }
         #box #container {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -40,7 +40,7 @@
         }
     }
 
-    @media(min-width: 1200px) and (max-width: 1800px){
+    @media(min-width: 1200px) and (max-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -125,6 +125,7 @@
          border-radius: 100px;
          resize: vertical;
          width: 100%;
+         max-height: 32px;
          max-height: 30px;
          display: block;
          border-color: #3CB64A;

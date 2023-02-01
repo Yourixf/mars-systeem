@@ -1,113 +1,375 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 {% block body %}
-<h1>CRM/-HRM- Systeem 4-Rest</h1>
-
-<html>
+<html lang="">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Float four columns side by side */
 
 
-/* Clear floats after the columns */
+    <style>
+        body {
+            background-color:#CBCBCB;
+            background-image: url("/images/for8.jpg");
+            background-repeat: no-repeat;
+            background-size: 100%;
 
-/* Responsive columns */
-@media screen and (max-width: 600px) {
-}
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        td{
+            white-space: nowrap;
+            overflow: auto;
+        }
 
-/* Style the counter cards */
-.card {
-  padding: 16px;
-  text-align: center;
-  background-color: #3CB64A;
-  color: white;
+        #detail {
+            max-width: 30px;
+        }
 
-}
+        #detailKnop{
+            background-color: #32933d;
+            color: white;
+        }
+
+        #box6,  #container6 {
+            display: grid;
+            row-gap: 0px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
+
+        #box6 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 20px;
+            overflow: auto;
+            width: 95%;
+            outline: solid;
+            outline-color: #32933d;
+        }
+        #box5,  #container5 {
+            display: grid;
+            row-gap: 0px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
+        #box5 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 20px;
+            overflow: auto;
+            width: 70%;
+            outline: solid;
+            outline-color: #32933d;
+        }
 
 
-.card-title {
-    color: black;
-}
-#total-orders {
-    padding-bottom: 40px;
-    background-color: #3CB64A;
-    width:33%;
-    float: right;
-    margin-left: 7px;
-}
+        #box4 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 15px;
+            width: 90%;
+            outline: solid;
+            outline-color: #32933d;
+        }
+        #box4,  #container4 {
+            row-gap: 10px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
+
+        #box3 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 15px;
+            width: 90%;
+            outline: solid;
+            outline-color: #32933d;
+        }
+        #box3,  #container3 {
+            row-gap: 10px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
+
+        #box2 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 15px;
+            width: 90%;
+            outline: solid;
+            outline-color: #32933d;
+
+        }
+        #box2,  #container2 {
+            row-gap: 10px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
 
 
-#orders-delivered{
-    padding-bottom: 40px;
-    background-color: #3CB64A;
-    width:33%;
-    float: right;
-}
-#orders-pending{
-    padding-bottom: 40px;
-    background-color: #3CB64A;
-    width:33%;
+        #box1 {
+            border-radius: 19px;
+            background-color: #f2f2f2;
+            margin: auto;
+            position: relative;
+            padding: 15px;
+            width: 90%;
+            outline: solid;
+            outline-color: #32933d;
+        }
+        #box1,  #container1 {
+            row-gap: 10px;
+            column-gap: 15px;
+            text-align: center;
+            overflow: auto;
+        }
+        #area2{
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            display: grid;
+        }
 
-}
+        #area1{
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            display: grid;
+        }
 
-</style>
+        @media(min-width: 1800px){
+            #area1{
+                -webkit-transition: width 2s ease-in-out;
+                -moz-transition: width 2s ease-in-out;
+                -o-transition: width 2s ease-in-out;
+                transition: width 2s ease-in-out;
+
+                margin: auto;
+                width: 70%;
+            }
+        }
+
+        @media(min-width: 1000px) and (max-width: 1800px) {
+            #area1{
+                grid-template-columns: repeat(4,minmax(0,1fr));
+                -webkit-transition: width 2s ease-in-out;
+                -moz-transition: width 2s ease-in-out;
+                -o-transition: width 2s ease-in-out;
+                transition: width 2s ease-in-out;
+                margin: auto;
+            }
+        }
+
+        @media(max-width: 1000px){
+            #area1{
+                grid-template-columns: repeat(2,minmax(0,1fr));
+                -webkit-transition: width 2s ease-in-out;
+                -moz-transition: width 2s ease-in-out;
+                -o-transition: width 2s ease-in-out;
+                transition: width 2s ease-in-out;
+                margin: auto;
+            }
+            #box1, #box2,#box3, #box4{
+                border-radius: 0px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media(max-width: 1000px){
+            #area2{
+                grid-template-columns: repeat(1,minmax(0,1fr));
+                margin: auto;
+                align-content: center;
+            }
+            #box5, #box6{
+                border-radius: 0px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 20px;
+                width: 95%;
+            }
+        }
+
+
+        #link{
+            color: black;
+        }
+        #link:hover{
+            color: #32933d;
+        }
+        #achtergrondFoto{
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
 </head>
-<body>
- <div class="col">
-	<div class="col">
-		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="total-orders">
-               <div class="bi bi-cash-coin fa-2x">
-			  		<h5 class="card-title">Aantal (eind) klanten</h5>
-			  	</div>
-			  	<div class="card-body">
-			    	<h3 class="card-title">{{ klanten_count }}<a href="{% url 'eindklanten' %}"></a></h3>
-			  	</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="col">
-		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="orders-delivered">
-			  	<div class="bi bi-person-circle fa-2x">
-			  		<h5 class="card-title">Aantal medewerkers</h5>
-			  	</div>
-			  	<div class="card-body">
-			    	<h3 class="card-title">{{ medewerkers_count }}
-					</h3>
-			  	</div>
-			</div>
-		</div>
-	</div>
-	<div class="col">
-		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="orders-pending">
-			  	<div class="bi bi-envelope-open fa-2x">
-			  		<h5 class="card-title">Aantal open aanbiedingen</h5>
-			  	</div>
-			  	<div class="card-body">
-			    	<h3 class="card-title">{{ open_aanbied_count }}</h3>
-			  	</div>
-			</div>
-		</div>
-	</div>
-<br><br>
- <button class="success"><a href="{% url 'create_list' %}">Opmerkingen toevoegen medewerkers-klanten </a></button><br><br>
- <button class="success"><a href="{% url 'todo_list' %}">Opmerkingen van medewerkers-klanten </a></button>
+
+    <script>
+    $(document).ready(function() {
+        $("#basic-datatable1").DataTable({
+          pageLength: 4,
+          lengthChange: false   ,
+          bInfo : false,
+          order: [[ 0, "asc" ]],
+            searching: false,
+        });
+      });
+
+    $(document).ready(function() {
+        $("#basic-datatable2").DataTable({
+          pageLength: 4,
+          lengthChange: false,
+          bInfo : false,
+          order: [[ 0, "asc" ]],
+            searching: false,
+        });
+      });
+    </script>
 <br>
 
-</body>
+    <div id="area1">
+        <a href="{% url 'medewerkers' %}" id="link">
+            <div id="box1">
+                <div id="container1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                    </svg>
+                    <h1>{{ medewerkers_count }}</h1>
+                    <h4>4-Rest Medewerkers indienst</h4>
+
+                </div>
+            </div>
+        </a>
+
+        <a  href="{% url 'aanbiedingen' %}" id="link">
+            <div id="box2">
+                <div id="container2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                      <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                      <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    <h1>{{ open_aanbied_count }}</h1>
+                    <h4>Openstaande aanbiedingen</h4>
+                </div>
+            </div>
+        </a>
+
+
+        <a href="{% url 'eindklanten' %}" id="link">
+            <div id="box3">
+                <div id="container3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cup-hot" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6H.5ZM13 12.5a2.01 2.01 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5ZM2.64 13.825 1.123 7h11.754l-1.517 6.825A1.5 1.5 0 0 1 9.896 15H4.104a1.5 1.5 0 0 1-1.464-1.175Z"/>
+                      <path d="m4.4.8-.003.004-.014.019a4.167 4.167 0 0 0-.204.31 2.327 2.327 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.593.593 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3.31 3.31 0 0 1-.202.388 5.444 5.444 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4.149 4.149 0 0 0 .204-.31 2.06 2.06 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.593.593 0 0 0-.09-.252A4.334 4.334 0 0 0 3.6 2.8l-.01-.012a5.099 5.099 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a5.446 5.446 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8Zm3 0-.003.004-.014.019a4.167 4.167 0 0 0-.204.31 2.327 2.327 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.593.593 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3.31 3.31 0 0 1-.202.388 5.444 5.444 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4.149 4.149 0 0 0 .204-.31 2.06 2.06 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.593.593 0 0 0-.09-.252A4.334 4.334 0 0 0 6.6 2.8l-.01-.012a5.099 5.099 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a5.446 5.446 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8Zm3 0-.003.004-.014.019a4.077 4.077 0 0 0-.204.31 2.337 2.337 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.593.593 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3.198 3.198 0 0 1-.202.388 5.385 5.385 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4.149 4.149 0 0 0 .204-.31 2.06 2.06 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.593.593 0 0 0-.09-.252A4.334 4.334 0 0 0 9.6 2.8l-.01-.012a5.099 5.099 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a5.446 5.446 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8Z"/>
+                    </svg>
+                    <h1>{{ klanten_count }}</h1>
+                    <h4>Geregistreerde klanten</h4>
+                </div>
+            </div>
+        </a>
+
+
+        <a href="{% url 'leegloop_medewerkers' %}" id="link">
+            <div id="box4">
+                <div id="container4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-rocket-takeoff" viewBox="0 0 16 16">
+                      <path d="M9.752 6.193c.599.6 1.73.437 2.528-.362.798-.799.96-1.932.362-2.531-.599-.6-1.73-.438-2.528.361-.798.8-.96 1.933-.362 2.532Z"/>
+                      <path d="M15.811 3.312c-.363 1.534-1.334 3.626-3.64 6.218l-.24 2.408a2.56 2.56 0 0 1-.732 1.526L8.817 15.85a.51.51 0 0 1-.867-.434l.27-1.899c.04-.28-.013-.593-.131-.956a9.42 9.42 0 0 0-.249-.657l-.082-.202c-.815-.197-1.578-.662-2.191-1.277-.614-.615-1.079-1.379-1.275-2.195l-.203-.083a9.556 9.556 0 0 0-.655-.248c-.363-.119-.675-.172-.955-.132l-1.896.27A.51.51 0 0 1 .15 7.17l2.382-2.386c.41-.41.947-.67 1.524-.734h.006l2.4-.238C9.005 1.55 11.087.582 12.623.208c.89-.217 1.59-.232 2.08-.188.244.023.435.06.57.093.067.017.12.033.16.045.184.06.279.13.351.295l.029.073a3.475 3.475 0 0 1 .157.721c.055.485.051 1.178-.159 2.065Zm-4.828 7.475.04-.04-.107 1.081a1.536 1.536 0 0 1-.44.913l-1.298 1.3.054-.38c.072-.506-.034-.993-.172-1.418a8.548 8.548 0 0 0-.164-.45c.738-.065 1.462-.38 2.087-1.006ZM5.205 5c-.625.626-.94 1.351-1.004 2.09a8.497 8.497 0 0 0-.45-.164c-.424-.138-.91-.244-1.416-.172l-.38.054 1.3-1.3c.245-.246.566-.401.91-.44l1.08-.107-.04.039Zm9.406-3.961c-.38-.034-.967-.027-1.746.163-1.558.38-3.917 1.496-6.937 4.521-.62.62-.799 1.34-.687 2.051.107.676.483 1.362 1.048 1.928.564.565 1.25.941 1.924 1.049.71.112 1.429-.067 2.048-.688 3.079-3.083 4.192-5.444 4.556-6.987.183-.771.18-1.345.138-1.713a2.835 2.835 0 0 0-.045-.283 3.078 3.078 0 0 0-.3-.041Z"/>
+                      <path d="M7.009 12.139a7.632 7.632 0 0 1-1.804-1.352A7.568 7.568 0 0 1 3.794 8.86c-1.102.992-1.965 5.054-1.839 5.18.125.126 3.936-.896 5.054-1.902Z"/>
+                    </svg>
+                    <h1>{{ leegloop_medewerkers_count }}</h1>
+                    <h4>Medewerkers in de leegloop</h4>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <br><br><br><br>
+
+    <div id="area2">
+        <div id="box5" ALIGN="center">
+            <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Openstaande aanbiedingen</h3>
+            <div id="container5">
+                <table id="basic-datatable1" class="table">
+                    <thead>
+                        <tr>
+                            <th id="medewerkerNaam">Medewerker</th>
+                            <th id="aantal">Aantal</th>
+                            <th id="detail">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        {% for item in arrayMedeAanbieding %}
+                            <tr>
+                                <td>{{ item.medeNaam }}</td>
+                                <td>{{ item.aanb }}</td>
+                                <td id="deleteUpdate"><a href="{% url 'aanbieding_detail' item.medePK %}"  class="btn btn-sm" id="detailKnop" role="button">Details</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="box6">
+            <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Aflopende opdrachten</h3>
+            <div id="container6">
+               <table id="basic-datatable2" class="table">
+                    <thead>
+                        <tr>
+                            <th id="medeNaam">Medewerker</th>
+                            <th id="telnummer">Klant</th>
+                            <th id="status">Einddatum</th>
+                            <th id="detail">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        {% for opdracht in all_aflopendeOpdr %}
+                            <tr>
+                                <td>{{ opdracht.aanbieding.medewerker }} </td>
+                                <td id="telnummer">{{ opdracht.aanbieding.klant}}</td>
+                                <td id="status">{{ opdracht.einddatum }}</td>
+
+                                <form action="" method="post" style="display: inline;">{% csrf_token %}
+                                     <td id="detail">
+                                         <a href="{% url 'detail_opdracht' opdracht.pk %}"  class="btn btn-sm" id="detailKnop" role="button">Details</a>
+                                     </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </html>
 
 

@@ -5,15 +5,11 @@
 <html lang="">
 <head>
 <style>
-
-
 #basic-datatable1_wrapper {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
-
-
 
 td, th {
   border: 1px solid #dddddd;
@@ -22,217 +18,214 @@ td, th {
 }
 
 #deleteUpdate {
-    max-width: 105px;
+    max-width: 50px;
+    min-width: 50px;
 }
-
 
 #vestiging {
     text-align: center;
 }
 
-#opmerkingen {
-    max-width: 125px;
-    overflow-wrap: break-word;
-    overflow: clip;
-}
 input[class=btn], a[class=btn] {
-        display: inline-block;
-        align: center;
-        background-color: #3CB64A;
-        padding: 12px 20px;
-        color: white;
-        border: none;
-        border-radius: 16px;
-        cursor: pointer;
-        margin: auto;
-    }
+    display: inline-block;
+    align: center;
+    background-color: #3CB64A;
+    padding: 12px 20px;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    margin: auto;
+}
 
-    p, td, th{
-        overflow: auto;
-        white-space: nowrap;
-    }
+p, td, th{
+    overflow: auto;
+    white-space: nowrap;
+}
 
-    #deleteKnop{
-        background-color: #ff0000;
-        color: white;
-    }
-    #updateKnop {
-        background-color: #32933d;
-        color: white;
-    }
+#deleteKnop{
+    background-color: #ff0000;
+    color: white;
+}
 
-    #detailKnop {
-        background-color: #32933d;
-        color: white;
-    }
+body{
+    background-color:#CBCBCB;
+}
 
-    body{
-        background-color:#CBCBCB;
-    }
+.box1 {
+    border-radius: 19px;
+    background-color: #f2f2f2;
+    margin: auto;
+    position: relative;
+    overflow: auto;
+    padding: 20px;
+    margin: auto;
+}
 
-  .box1 {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        overflow: auto;
-        padding: 20px;
-        margin: auto;
-    }
+#box2 {
+    border-radius: 19px;
+    background-color: #f2f2f2;
+    margin: auto;
+    position: relative;
+    padding: 20px;
+    overflow: auto;
+}
+
+.box1 #container {
+    display: grid;
+    row-gap: 0px;
+    column-gap: 15px;
+    text-align: left;
+    overflow: auto;
+}
 
 
+
+#container p{
+    overflow: auto;
+}
+
+#opmerkingen {
+    max-height: 150px;
+    white-space: break-spaces;
+}
+@media(min-width: 1700px){
     #box2 {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        padding: 20px;
-        overflow: auto;
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 60%;
     }
+}
 
+@media(min-width: 1500px) and (max-width: 1700px){
+    #box2 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 70%;
+    }
+}
+
+@media(min-width: 1600px){
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 45%;
+    }
     .box1 #container {
-        display: grid;
-        row-gap: 0px;
-        column-gap: 15px;
-        text-align: left;
-        overflow: auto;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
     }
+}
 
-    @media(min-width: 1700px){
-        #box2 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 60%;
-        }
+@media(min-width: 1200px) and (max-width: 1600px) {
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 50%;
     }
+    .box1 #container {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
 
-    @media(min-width: 1500px) and (max-width: 1700px){
-        #box2 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 70%;
-        }
     }
+}
 
-    @media(min-width: 1600px){
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 45%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
+@media(min-width: 1100px) and (max-width: 1200px) {
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 65%;
     }
+    .box1 #container {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    @media(min-width: 1200px) and (max-width: 1600px) {
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 50%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-
-        }
     }
+}
 
-    @media(min-width: 1100px) and (max-width: 1200px) {
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 65%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-
-        }
+@media(min-width:700px) and (max-width: 1100px) {
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 80%;
     }
+    .box1 #container {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    @media(min-width:700px) and (max-width: 1100px) {
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 80%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-
-        }
     }
+}
 
-    @media(max-width: 700px) and (min-width: 530px){
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 85%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-
-        }
+@media(max-width: 700px) and (min-width: 530px){
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 85%;
     }
+    .box1 #container {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    @media(max-width:530px) {
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 92%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
     }
+}
 
-    @media(max-width:300px) {
-        .box1 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 92%;
-        }
-        .box1 #container {
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-        }
+@media(max-width:530px) {
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 92%;
     }
-
-
-    @media(min-width:1000px) and (max-width: 1700px) {
-        #box2 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 80%;
-        }
+    .box1 #container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+}
 
-    @media(max-width:1000px) {
-        #box2 {
-            -webkit-transition: width 2s ease-in-out;
-            -moz-transition: width 2s ease-in-out;
-            -o-transition: width 2s ease-in-out;
-            transition: width 2s ease-in-out;
-            width: 92%;
-        }
+@media(max-width:300px) {
+    .box1 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 92%;
     }
+    .box1 #container {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+
+@media(min-width:1000px) and (max-width: 1700px) {
+    #box2 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 80%;
+    }
+}
+
+@media(max-width:1000px) {
+    #box2 {
+        -webkit-transition: width 2s ease-in-out;
+        -moz-transition: width 2s ease-in-out;
+        -o-transition: width 2s ease-in-out;
+        transition: width 2s ease-in-out;
+        width: 92%;
+    }
+}
 </style>
 </head>
 <script>
@@ -262,29 +255,28 @@ $(document).ready(function() {
 </script>
 
 <div id="detail" class="box1" ALIGN="center">
+    <H3 style="margin-top: 1%; margin-bottom: 3%;">Contactpersoon detail pagina</H3>
     <div id="container">
-    
-            <label>Contactpersoon naam:</label><p>{{ contactpersoon.naam }}</p>
-            <label>Mail adres:</label><p>{{ contactpersoon.mail_adres }}</p>
-            <label>Telefoonnummer:</label><p>{{ contactpersoon.telefoonnummer }}</p>
-            <label>Functie:</label><p>{{ contactpersoon.functie }}</p>
-            <label id="opmerking">Opmerkingen:</label><p id="opmerkingen">{{ contactpersoon.opmerkingen }}</p>
+        <label>Contactpersoon naam:</label><p>{{ contactpersoon.naam }}</p>
+        <label>Mail adres:</label><p>{{ contactpersoon.mail_adres }}</p>
+        <label>Telefoonnummer:</label><p>{{ contactpersoon.telefoonnummer }}</p>
+        <label>Functie:</label><p>{{ contactpersoon.functie }}</p>
+        <label>Opmerkingen:</label><p id="opmerkingen">{{ contactpersoon.opmerkingen }}</p>
     </div>
     <div style="margin-top: 1%">
         <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn" role="button">Update</a>
-        {% if eind_klant_pk %}
-            <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn" role="button">Terug</a>
-        {% endif %}
-        {% if broker_pk %}
-            <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% if klant_soort == '1' %}
+            <a href="{% url 'eindklant_detail' klant_pk.pk  %}" class="btn" role="button">Terug</a>
+        {% elif klant_soort == '2' %}
+            <a href="{% url 'broker_detail' klant_pk.pk  %}" class="btn" role="button">Terug</a>
         {% endif %}
     </div>
 </div>
 <br>
 
 <div id="vestiging">
-    <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
     <div id="box2">
+        <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;">Vestiging adressen</h3>
         <table id="basic-datatable1" class="table1">
             <thead>
                 <tr>
@@ -299,13 +291,13 @@ $(document).ready(function() {
             <tbody id="myTable">
                 {% for vestiging in vestiging_lijst %}
                     <tr>
-                        <td>{{ vestiging.vestiging }}</td>
+                        <td>{{ vestiging.get_vestiging_display }}</td>
                         <td>{{ vestiging.postcode }}</td>
                         <td>{{ vestiging.straatnaam }}</td>
                         <td>{{ vestiging.huisnummer }}</td>
                         <td>{{ vestiging.plaats }}</td>
 
-                        <form action="{% url 'delete_contact_vestiging' vestiging.pk %}" method="post" style="display: inline;">
+                        <form action="{% url 'delete_contact_vestiging' contactpersoon.pk %}" method="post" style="display: inline;">
                             {% csrf_token %}
                                 <td id="deleteUpdate">
                                     <button type="submit" class="no-export btn btn-sm" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze vestiging wilt verijderen?')">

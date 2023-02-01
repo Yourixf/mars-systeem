@@ -99,7 +99,11 @@
         background-color: #ff0000;
         color: white;
     }
-  @media(min-width: 1750px){
+    div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+        margin-right: 10px;
+    }
+
+    @media(min-width: 1950px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -110,7 +114,7 @@
     }
 
 
-    @media(min-width: 1600px) and (max-width: 1750px) {
+    @media(min-width: 1600px) and (max-width: 1950px) {
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -138,24 +142,40 @@
             transition: width 2s ease-in-out;
             width: 95%;
         }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
             float: left;
             text-align: left;
+            margin-top: 15px;
+            margin-right: 10px;
+            overflow: auto;
         }
-    }
 
+        #telnummer{
+            max-width: 100px;
+        }
+
+        #opdrachtAanbieding{
+            max-width: 150px;
+        }
+
+        #deleteUpdate{
+            max-width: 140px;
+        }
+        #detail{
+            max-width: 100px;
+        }
+
+    }
 </style>
 <script>
 $(document).ready(function() {
     $("#basic-datatable").DataTable({
       pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
       order: [[ 0, "asc" ]],
       "columnDefs": [
           { "searchable": false, "targets": 6 }
       ],
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
@@ -169,7 +189,7 @@ $(document).ready(function() {
 
                 $('row c[r^="C"]', sheet).attr( 'c', '2' );
             }
-        } ]
+        }]
     });
   });
 </script>

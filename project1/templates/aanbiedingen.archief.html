@@ -67,7 +67,7 @@
 }
 
 #detailKnop {
-    background-color: #4be15b;
+    background-color: #32933d;
     color: white;
 }
 
@@ -75,6 +75,11 @@
     background-color: #ff0000;
     color: white;
 }
+
+ div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+     margin-right: 10px;
+ }
+
 
   @media(min-width: 1950px){
         #box {
@@ -115,9 +120,18 @@
             transition: width 2s ease-in-out;
             width: 95%;
         }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+        div.dataTables_wrapper div.dataTables_filter,div.dataTables_wrapper div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
             float: left;
             text-align: left;
+            margin-top: 15px;
+            margin-right: 10px;
+            overflow: auto;
+        }
+        #deleteUpdate{
+            max-width: 140px;
+        }
+        #detail{
+            max-width: 100px;
         }
     }
 
@@ -145,10 +159,8 @@
 $(document).ready(function() {
     $("#basic-datatable").DataTable({
       pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
       order: [[ 0, "asc" ]],
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {

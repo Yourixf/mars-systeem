@@ -1,3 +1,4 @@
+import getpass
 import os
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -17,6 +18,10 @@ from .models import *
 from django.db.models import *
 from itertools import chain
 
+
+from django.contrib.auth.hashers import check_password
+
+
 # De views.py kan je functies wegschrijven voor in de templates. Hier voor kan je dingen importen die staan bovenaan de template. (dingen vanuit Django en vanuit andere templates zoals Forms, Models enzov).
 # @login_required(login_url='login') is een ingebouwde Django functie ter beveiliging als de "User" niet is ingelogd kan die niet op die pagina komen.
 
@@ -30,6 +35,7 @@ def FactuurHistoryDetailPage(request, pk):
 
     if opdracht.aanbieding.broker_id:
         factuuremail = opdracht.aanbieding.broker.factuuremail
+        broker_id = opdracht.aanbieding.broker_id
         broker_id = opdracht.aanbieding.broker_id
         try:
             hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
@@ -91,36 +97,28 @@ def ContactpersoonDetailPage(request, pk):
     contactpersoon = Contactpersonen.objects.get(id=pk)
     vestiging = contactpersoon.vestiging_id
     vestiging_lijst = Vestigingplaats.objects.filter(id=vestiging)
-    vorige_pagina = request.META['HTTP_REFERER']
-    if 'broker' in vorige_pagina:
-        broker_pk = contactpersoon.klant
-        context = {
-            'contactpersoon': contactpersoon,
-            'vestiging_lijst': vestiging_lijst,
-            'broker_pk': broker_pk,
-        }
-    elif 'klant' in vorige_pagina:
-        eind_klant_pk = contactpersoon.klant
-        context = {
-            'contactpersoon': contactpersoon,
-            'vestiging_lijst': vestiging_lijst,
-            'eind_klant_pk': eind_klant_pk,
-        }
+
+    klant_pk = contactpersoon.klant
+    klant_soort = klant_pk.soort
+
+    context = {
+        'contactpersoon': contactpersoon,
+        'vestiging_lijst':vestiging_lijst,
+        'klant_pk':klant_pk,
+        'klant_soort':klant_soort
+    }
     return render(request, 'contactpersoon.detail.html', context)
 
 @login_required(login_url='login')
 def ContactVestigingDeleten(request, pk):
     vorige_pagina = request.META['HTTP_REFERER']
-    vestiging = Vestigingplaats.objects.get(id=pk)
-
-    contactpersoon = Contactpersonen.objects.get(vestiging_id=vestiging)
-
+    previous_page = request.session.get('vorige_pagina')
+    contactpersoon = Contactpersonen.objects.get(id=pk)
     contactpersoon.vestiging_id = ''
-
     contactpersoon.save()
+    contactpersoon_pk = contactpersoon.pk
 
-
-    return redirect(vorige_pagina)
+    return redirect('detail_contactpersonen', contactpersoon_pk)
 
 @login_required(login_url='login')
 def ContactVestigingToevoegen(request, pk):
@@ -160,25 +158,16 @@ def ContactVestigingToevoegen(request, pk):
             contactpersoon = Contactpersonen.objects.get(id=contactpersoon_id)
             contactpersoon.vestiging_id = pk
             contactpersoon.save()
+            brokerr = contactpersoon.klant.pk
 
-            """""
-            vestiging = contactpersoon.vestiging
-            vestiging.contactpersoon_id = contactpersoon_id
-            vestiging.save()
-            """""
-            return redirect('brokers')
+            return redirect('broker_detail', brokerr)
         elif 'klant' in previous_page:
             contactpersoon = Contactpersonen.objects.get(id=contactpersoon_id)
             contactpersoon.vestiging_id = pk
             contactpersoon.save()
+            klantt = contactpersoon.klant.pk
 
-            """""
-            vestiging = contactpersoon.vestiging
-            vestiging.contactpersoon_id = contactpersoon_id
-            vestiging.save()
-            """""
-
-            return redirect('eindklanten')
+            return redirect('eindklant_detail', klantt)
 
     else:
         return render(request, 'contact.vestiging.toevoegen.html', context)
@@ -190,55 +179,38 @@ def ContactPersonenDelete(request, pk):
     contactpersoon = Contactpersonen.objects.get(id=pk)
     contactpersoon_form = ContactpersoonForm(request.POST or None, instance=contactpersoon)
 
-    vorige_pagina = request.META['HTTP_REFERER']
+    klant = contactpersoon.klant
 
-    if 'broker' in vorige_pagina:
-        contactpersoon = contactpersoon_form.save()
-        contactpersoon.vestiging_id = ''
-        contactpersoon.save()
-        contactpersoon.delete()
-        return redirect(vorige_pagina)
-    elif 'klant' in vorige_pagina:
-        contactpersoon = contactpersoon_form.save()
-        contactpersoon.vestiging_id = ''
-        contactpersoon.save()
-        contactpersoon.delete()
-        return redirect(vorige_pagina)
+    contactpersoon = contactpersoon_form.save()
+    contactpersoon.vestiging_id = ''
+    contactpersoon.save()
+    contactpersoon.delete()
 
+    if klant.soort == '1':
+        return redirect('eindklant_detail', klant.pk)
+    elif klant.soort == '2':
+        return redirect('broker_detail', klant.pk)
 
 @login_required(login_url='login')
 def ContactPersonenToevoegen(request, pk):
     contactpersoon_form = ContactpersoonForm()
-    vorige_pagina = request.META['HTTP_REFERER']
 
-    if 'broker' in vorige_pagina:
-        request.session['vorige_pagina'] = 'broker'
-        broker_pk = Klanten.objects.get(id=pk)
-        context = {
-            'contactpersoon_form': contactpersoon_form,
-            'broker_pk': broker_pk
-        }
-    elif 'klant' in vorige_pagina:
-        request.session['vorige_pagina'] = 'klant'
-        eind_klant_pk = Klanten.objects.get(id=pk)
-        context = {
-            'contactpersoon_form': contactpersoon_form,
-            'eind_klant_pk': eind_klant_pk,
-        }
+    klant_pk = Klanten.objects.get(id=pk)
+    context = {
+        'contactpersoon_form':contactpersoon_form,
+        'klant_pk':klant_pk
+    }
 
     if request.method == 'POST':
-        previous_page = request.session.get('vorige_pagina')
         contactpersoon_form = ContactpersoonForm(request.POST, request.FILES)
         if contactpersoon_form.is_valid():
             contactpersoon = contactpersoon_form.save()
-            if 'broker' in previous_page:
-                contactpersoon.klant_id = pk
-                contactpersoon.save()
-                return redirect('brokers')
-            elif 'klant' in previous_page:
-                contactpersoon.klant_id = pk
-                contactpersoon.save()
-                return redirect('eindklanten')
+            contactpersoon.klant_id = pk
+            contactpersoon.save()
+            if klant_pk.soort == '1':
+                return redirect('eindklant_detail', klant_pk.pk)
+            elif klant_pk.soort == '2':
+                return redirect('broker_detail', klant_pk.pk)
     else:
         return render(request, 'contactpersoon.toevoegen.html', context)
 
@@ -248,23 +220,14 @@ def ContactPersoonUpdaten(request, pk):
     contactpersoon_pk = Contactpersonen.objects.get(id=pk)
     contactpersoon_form = ContactpersoonUpdatenForm(instance=contactpersoon_pk)
 
-    vorige_pagina = request.META['HTTP_REFERER']
-    if 'broker' in vorige_pagina:
-        request.session['vorige_pagina'] = 'broker'
-        broker_pk = contactpersoon_pk.klant
-        context = {
-            'contactpersoon_form': contactpersoon_form,
-            'contactpersoon_pk': contactpersoon_pk,
-            'broker_pk': broker_pk,
-        }
-    elif 'klant' in vorige_pagina:
-        request.session['vorige_pagina'] = 'klant'
-        eind_klant_pk = contactpersoon_pk.klant
-        context = {
-            'contactpersoon_form': contactpersoon_form,
-            'contactpersoon_pk': contactpersoon_pk,
-            'eind_klant_pk': eind_klant_pk,
-        }
+    vorige_pagina = request.META.get('HTTP_REFERER')
+    request.session['vorige_pagina'] = 'klant'
+    klant_pk = contactpersoon_pk.klant
+    context = {
+        'contactpersoon_form': contactpersoon_form,
+        'contactpersoon_pk': contactpersoon_pk,
+        'klant_pk':klant_pk
+    }
 
     if request.method == 'POST':
         previous_page = request.session.get('vorige_pagina')
@@ -308,10 +271,10 @@ def ContactPersoonUpdaten(request, pk):
             contactpersoon.begindatum = dateformat.format(timezone.now(), 'o-m-d')
             contactpersoon.save()
 
-            if 'broker' in previous_page:
-                return redirect('brokers')
-            elif 'klant' in previous_page:
-                return redirect('eindklanten')
+            if klant_pk.soort == '1':
+                return redirect('eindklant_detail', klant_pk.pk)
+            elif klant_pk.soort == '2':
+                return redirect('broker_detail', klant_pk.pk)
     else:
         return render(request, 'update.contactpersoon.html', context)
 
@@ -319,45 +282,26 @@ def ContactPersoonUpdaten(request, pk):
 def VestigingToevoegen(request, pk):
     vestiging_form = VestigingplaatsForm()
 
-    vorige_pagina = request.META['HTTP_REFERER']
-    volgende_pagina = request.META['PATH_INFO']
+    klant_pk = Klanten.objects.get(id=pk)
 
-
-    if 'broker' in vorige_pagina:
-        request.session['vorige_pagina'] = 'broker'
-        broker_pk = Klanten.objects.get(id=pk)
-        context = {
-            'vestiging_form': vestiging_form,
-            'broker_pk': broker_pk,
-
-        }
-    elif 'klant' in vorige_pagina:
-        request.session['vorige_pagina'] = 'klant'
-        eind_klant_pk = Klanten.objects.get(id=pk)
-        context = {
-            'vestiging_form': vestiging_form,
-            'eind_klant_pk': eind_klant_pk,
-        }
+    context = {
+        'vestiging_form':vestiging_form,
+        'klant_pk':klant_pk
+    }
 
     if request.method == 'POST':
-        previous_page = request.session.get('vorige_pagina')
-
         vestiging_form = VestigingplaatsForm(request.POST, request.FILES)
         if vestiging_form.is_valid():
             vestiging = vestiging_form.save()
+            vestiging.klant_id = pk
+            vestiging.save()
 
-            if 'broker' in previous_page:
-                vestiging.klant_id = pk
-                vestiging.save()
-                return redirect('brokers')
-
-            elif 'klant' in previous_page:
-                vestiging.klant_id = pk
-                vestiging.save()
-                return redirect('eindklanten')
+            if klant_pk.soort == '1':
+                return redirect('eindklant_detail', klant_pk.pk)
+            elif klant_pk.soort == '2':
+                return redirect('broker_detail', klant_pk.pk)
     else:
         return render(request, 'vestiging.toevoegen.html', context)
-
 
 @login_required(login_url='login')
 def VestigingUpdaten(request, pk):
@@ -365,28 +309,15 @@ def VestigingUpdaten(request, pk):
     vestiging_form = VestigingplaatsForm(instance=vestiging_pk)
 
     vorige_pagina = request.META['HTTP_REFERER']
-    if 'broker' in vorige_pagina:
-        request.session['vorige_pagina'] = 'broker'
-        broker_pk = vestiging_pk.klant
+    request.session['vorige_pagina'] = 'klant'
+    klant_pk = vestiging_pk.klant
 
-        context = {
-            'vestiging_form': vestiging_form,
-            'vestiging_pk': vestiging_pk,
-            'broker_pk': broker_pk
-        }
-    elif 'klant' in vorige_pagina:
-        request.session['vorige_pagina'] = 'klant'
-        eind_klant_pk = vestiging_pk.klant
-
-        context = {
-            'vestiging_form': vestiging_form,
-            'vestiging_pk': vestiging_pk,
-            'eind_klant_pk': eind_klant_pk,
-        }
-
+    context = {
+        'vestiging_form': vestiging_form,
+        'vestiging_pk': vestiging_pk,
+        'klant_pk': klant_pk
+    }
     previous_pagina = request.session.get('vorige_pagina')
-
-
 
     if request.method == 'POST':
         vestiging_form = VestigingplaatsForm(request.POST, request.FILES, instance=vestiging_pk)
@@ -423,10 +354,10 @@ def VestigingUpdaten(request, pk):
             vestiging_form.begindatum = dateformat.format(timezone.now(), 'o-m-d')
             vestiging_form.save()
 
-            if 'broker' in previous_pagina:
-                return redirect('brokers')
-            elif 'klant' in previous_pagina:
-                return redirect('eindklanten')
+            if klant_pk.soort =='2':
+                return redirect('broker_detail', klant_pk.pk)
+            elif klant_pk.soort == '1' :
+                return redirect('eindklant_detail', klant_pk.pk)
 
     else:
         return render(request, 'update.vestiging.html', context)
@@ -434,80 +365,54 @@ def VestigingUpdaten(request, pk):
 
 @login_required(login_url='login')
 def VestigingDetailPage(request, pk):
-    vestiging_pk = Vestigingplaats.objects.get(id=pk)
+    vestiging = Vestigingplaats.objects.get(id=pk)
 
     vorige_pagina = request.META['HTTP_REFERER']
-    if 'broker' in vorige_pagina:
-        request.session['vorige_pagina'] = 'broker'
-        broker_pk = vestiging_pk.klant
 
-        context = {
-            'vestiging_pk': vestiging_pk,
-            'broker_pk': broker_pk
-        }
-    elif 'klant' in vorige_pagina:
-        request.session['vorige_pagina'] = 'klant'
-        eind_klant_pk = vestiging_pk.klant
+    klant_pk = vestiging.klant
 
-        context = {
-            'vestiging_pk': vestiging_pk,
-            'eind_klant_pk': eind_klant_pk,
-        }
+    context = {
+        'vestiging': vestiging,
+        'klant_pk': klant_pk,
+    }
 
     return render(request, 'vestiging.detail.html', context)
 
 @login_required(login_url='login')
 def VestigingDeleten(request, pk):
     vestiging = Vestigingplaats.objects.get(id=pk)
-    vestiging_form = VestigingplaatsForm(request.POST or None, instance=vestiging)
+    klant = vestiging.klant
 
-    vorige_pagina = request.META['HTTP_REFERER']
+    vestiging.klant_id = ''
+    vestiging.save()
 
-    if 'broker' in vorige_pagina:
-        vestiging = vestiging_form.save()
-        broker = vestiging.broker
-        broker.vestiging_id = ''
+    contactpersoon_lijst = Contactpersonen.objects.filter(vestiging_id=vestiging.id)
 
-        broker.save()
-        vestiging.save()
-        vestiging.delete()
+    for c in contactpersoon_lijst:
+        c.vestiging_id = ''
+        c.save()
 
-        if Vestigingplaats.objects.filter(broker_id=broker).first():
-            vebo = Vestigingplaats.objects.filter(broker_id=broker).first()
-            broker.vestiging_id = vebo
-            broker.save()
-        elif Vestigingplaats.objects.filter(broker_id=broker).last():
-            vebo = Vestigingplaats.objects.filter(broker_id=broker).last()
-            broker.vestiging_id = vebo
-            broker.save()
-        else:
-            vebo = ''
-            broker.vestiging_id = vebo
-            broker.save()
-        return redirect(vorige_pagina)
+    vestiging.delete()
 
-    elif 'klant' in vorige_pagina:
-        vestiging = vestiging_form.save()
-        klant = vestiging.klant
-        klant.vestiging_id = ''
+    if klant.soort == '1':
+        return redirect('eindklant_detail', klant.pk)
+    elif klant.soort == '2':
+        return redirect('broker_detail', klant.pk)
 
-        klant.save()
-        vestiging.save()
-        vestiging.delete()
 
-        if Vestigingplaats.objects.filter(klant_id=klant).first():
-            vebo = Vestigingplaats.objects.filter(klant_id=klant).first()
-            klant.vestiging_id = vebo
-            klant.save()
-        elif Vestigingplaats.objects.filter(klant_id=klant).last():
-            vebo = Vestigingplaats.objects.filter(klant_id=klant).last()
-            klant.vestiging_id = vebo
-            klant.save()
-        else:
-            vebo = ''
-            klant.vestiging_id = vebo
-            klant.save()
-        return redirect(vorige_pagina)
+
+    #vestiging = vestiging_form.save()
+    #klant = vestiging.klant
+    #klant.vestiging_id = ''
+
+    #klant.save()
+    #vestiging.save()
+    # vestiging.delete()
+
+    #if klant.soort == '1':
+    #    return redirect('eindklant_detail', klant.pk)
+    #elif klant.soort == '2':
+    #    return redirect('broker_detail', klant.pk)
 
 # Dit is de "ListView" van opmerkingen in die template krijg je alle ingevoerde opmerkingen.
 # in de ListView,CreateView,UpdateView, DeleteView kan je geen @login_required(login_url='login') maar inplaats daarvan doe je tussen de haakjes
@@ -711,10 +616,10 @@ def DocumentenUpdate(request, pk):
 # daarna een succes bericht ( messages.success(request, 'account is gemaakt voor ' + user) en daarna stuurt die je terug naar de login pagina.
 
 def registerPage(request):
-    form = forms.CreateUserForm()
+    form = CreateUserForm()
 
     if request.method == 'POST':
-        form = forms.CreateUserForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
@@ -728,6 +633,7 @@ def registerPage(request):
 
 # De login vraagt om een username en password, als deze overeen komen kom je in de applicatie. anders kom je terug bij de login pagina met een bericht dat het wachtwoord of username niet klopt
 def loginPage(request):
+    message =''
     if request.method == 'POST':
         username = request.POST.get('username', )
         password = request.POST.get('password', )
@@ -738,9 +644,9 @@ def loginPage(request):
             login(request, user)
             return redirect('index')
         else:
-            messages.info(request, 'Gebruikersnaam of wachtwoord klopt niet')
+            message = messages.info(request, 'Gebruikersnaam of wachtwoord klopt niet')
 
-    context = {}
+    context = {'message':message}
     return render(request, "login.html", context)
 
 
@@ -768,13 +674,29 @@ def Index(request):
     all_aanbieding = Aanbiedingen.objects.filter(Q(status='1'))
     open_aanbied_count = all_aanbieding.count()
 
+    arrayMedeAanbieding = []
+
+    for medewerker in all_medewerkers_indienst:
+        aanbiedingen = all_aanbieding.filter(medewerker=medewerker).count()
+        if aanbiedingen > 0 :
+            class medeAanb():
+                medePK = medewerker.pk
+                medeNaam = medewerker
+                aanb = aanbiedingen
+            arrayMedeAanbieding.append(medeAanb)
+
+    datum_nu = date.today()
+    eind_datum = datum_nu + timedelta(days=60)
+    all_aflopendeOpdr = Opdrachten.objects.filter(Q(status_opdracht=1), einddatum__range=[datum_nu, eind_datum])
 
     context = {
         'medewerkers_count': medewerkers_count,
         'leegloop_medewerkers_count': leegloop_medewerkers_count,
         'klanten_count': klanten_count,
         'open_aanbied_count': open_aanbied_count,
-
+        'all_aanbieding':all_aanbieding,
+        'all_aflopendeOpdr':all_aflopendeOpdr,
+        'arrayMedeAanbieding':arrayMedeAanbieding,
     }
     return render(request, 'index.html', context)
 
@@ -1080,8 +1002,16 @@ def EindklantDetail(request, pk):
     vestiging_lijst = Vestigingplaats.objects.filter(Q(klant_id=eindklant_pk.id))
     contactpersoon_lijst = Contactpersonen.objects.filter(Q(klant_id=eindklant_pk.id))
 
+    pizza = False
 
-    # hier kijkt de code als ware of er een vestiging adres is
+    for c in contactpersoon_lijst:
+        if hasattr(c, 'vestiging'):
+            pizza = True
+        elif not hasattr(c, 'vestiging'):
+            pizza = False
+            break
+
+    # hier kijkt de code of er een vestiging adres is
     try:
         # als er een vestiging adres is bij de klant dan is staat die info in 'vestiging'
         vestiging = Vestigingplaats.objects.get(klant_id=eindklant_pk)
@@ -1093,7 +1023,8 @@ def EindklantDetail(request, pk):
         'eindklant_pk': eindklant_pk,
         'vestiging': vestiging,
         'vestiging_lijst': vestiging_lijst,
-        'contactpersoon_lijst': contactpersoon_lijst
+        'contactpersoon_lijst': contactpersoon_lijst,
+        'pizza' : pizza
 
     }
     return render(request, 'eindklanten.detail.html', context)
@@ -1297,8 +1228,6 @@ def AanbiedingUpdaten(request, pk):
     else:
         if aanbieding.status == '5':
             aanbieding.status = '1'
-
-
             aanbieding.save()
 
     context = {
@@ -1350,7 +1279,8 @@ def AanbiedingUpdaten(request, pk):
                 status=aanbieding_form.initial.get('status'),
                 tarief=aanbieding_form.initial.get('tarief'),
                 betaalkorting=aanbieding_form.initial.get('betaalkorting'),
-                medewerker=aanbiedingMedewerker
+                opmerking=aanbieding_form.initial.get('opmerking'),
+                medewerker=aanbiedingMedewerker,
             )
 
             history_record.save()
@@ -1542,6 +1472,8 @@ def OpdrachtenUpdaten(request, pk):
                 opdracht_betaalkorting=opdracht_form.initial.get('opdracht_betaalkorting'),
                 aantal_uren=opdracht_form.initial.get('aantal_uren'),
                 opdracht_aangemaakt_door=opdracht_form.initial.get('opdracht_aangemaakt_door'),
+                opdracht_nummer=opdracht_form.initial.get('opdracht_nummer'),
+                opmerking=opdracht_form.initial.get('opmerking'),
                 date_created=opdracht_form.initial.get('date_created')
             )
 

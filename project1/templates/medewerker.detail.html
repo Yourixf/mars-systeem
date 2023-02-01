@@ -11,13 +11,118 @@
         background-color:#CBCBCB;
     }
 
-    @media(min-width: 1800px){
+
+    #box {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        margin: auto;
+    }
+
+    #box2 {
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        margin: auto;
+        overflow: auto;
+    }
+
+    #box #container {
+        display: grid;
+        row-gap: 0px;
+        column-gap: 15px;
+        text-align: left;
+        overflow: auto;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+    #basic-datatable1_wrapper {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #documentToevoegen {
+        text-align: center;
+    }
+
+    #documentBeschrijving {
+        max-width: 200px;
+    }
+
+    #document {
+        text-align: center;
+    }
+
+    #medeName{
+        text-align: center;
+    }
+
+    #actieKnoppen {
+        max-width: 170px;
+    }
+
+    input[class=btn], a[class=btn] {
+        display: inline-block;
+        align: center;
+        background-color: #3CB64A;
+        padding: 12px 20px;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        margin: auto;
+    }
+
+    p{
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+
+    #updateKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #detailKnop {
+        background-color: #32933d;
+        color: white;
+    }
+
+    #documentToevoegenKnop{
+        background-color: #3CB64A;
+        color: white;
+    }
+
+    #deleteKnop{
+        background-color: #ff0000;
+        color: white;
+    }
+    @media(min-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
-            width: 35%;
+            width: 45%;
         }
         #box #container {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -25,13 +130,13 @@
         }
     }
 
-    @media(min-width: 1200px) and (max-width: 1800px){
+    @media(min-width: 1200px) and (max-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
-            width: 55%;
+            width: 50%;
         }
         #box #container {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -125,108 +230,6 @@
             width: 92%;
         }
     }
-    #box {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        padding: 20px;
-        margin: auto;
-    }
-
-    #box2 {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        padding: 20px;
-        margin: auto;
-        overflow: auto;
-    }
-
-    #box #container {
-        display: grid;
-        row-gap: 0px;
-        column-gap: 15px;
-        text-align: left;
-        overflow: auto;
-    }
-
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    #basic-datatable1_wrapper {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #documentToevoegen {
-        text-align: center;
-    }
-
-    #documentBeschrijving {
-        max-width: 200px;
-    }
-
-    #document {
-        text-align: center;
-    }
-
-    #medeName{
-        text-align: center;
-    }
-
-    #actieKnoppen {
-        max-width: 170px;
-    }
-
-    input[class=btn], a[class=btn] {
-        display: inline-block;
-        align: center;
-        background-color: #3CB64A;
-        padding: 12px 20px;
-        color: white;
-        border: none;
-        border-radius: 16px;
-        cursor: pointer;
-        margin: auto;
-    }
-
-    p{
-        overflow: auto;
-        white-space: nowrap;
-    }
-
-
-    #updateKnop {
-        background-color: #32933d;
-        color: white;
-    }
-
-    #detailKnop {
-        background-color: #32933d;
-        color: white;
-    }
-
-    #documentToevoegenKnop{
-        background-color: #3CB64A;
-        color: white;
-    }
-
-    #deleteKnop{
-        background-color: #ff0000;
-        color: white;
-    }
 </style>
 {#        <link rel="stylesheet" href=#}
 {#"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
@@ -253,10 +256,10 @@
         <label>Straat en Huisnummer</label><p>{{ medewerkers.straat }} {{ medewerkers.huisnummer }}</p>
         <label>Nationaliteit</label><p>{{ medewerkers.nationaliteit }}</p>
         <label>Postcode</label><p>{{ medewerkers.postcode }}</p>
-        <label>Bsn nummer</label><p>{{ medewerkers.bsnnummer }}</p>
+        <label>BSN nummer</label><p>{{ medewerkers.bsnnummer }}</p>
         <label>Woonplaats</label><p>{{ medewerkers.woonplaats }}</p>
         <label>Datum in dienst</label> <p>{{ medewerkers.datum_in_dienst }}</p>
-        <label>Banknummer</label><p>{{ medewerkers.banknummer }}</p>
+        <label>Rekeningnummer</label><p>{{ medewerkers.banknummer }}</p>
         <label>BV</label> <p>{{ medewerkers.get_bv_display }}</p>
         <label>Telefoonnummer</label><p>{{ medewerkers.telefoonnummer }}</p>
         <label>ICE persoon naam</label><p>{{ medewerkers.ice_persoon_naam }}</p>
@@ -264,7 +267,7 @@
         <label>ICE telefoonnummer</label> <p>{{ medewerkers.ice_telefoonnummer }}</p>
         <label>Lease auto</label> <p>{{ medewerkers.get_lease_auto_display }}</p>
         <label>Aantal uur</label><p>{{ medewerkers.aantal_uur }}</p>
-        <label>Status</label><p>{{ medewerkers.get_status_display }}</p>
+        <label>Status opdracht</label><p>{{ medewerkers.get_status_display }}</p>
 
     </div>
 

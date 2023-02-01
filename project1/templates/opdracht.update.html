@@ -26,13 +26,13 @@
         text-align: left;
     }
 
-    @media(min-width: 1800px){
+    @media(min-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
-            width: 35%;
+            width: 45%;
         }
         #box #container {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -40,7 +40,7 @@
         }
     }
 
-    @media(min-width: 1200px) and (max-width: 1800px){
+    @media(min-width: 1200px) and (max-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -120,15 +120,15 @@
     }
 
      select, input[type=text], input[type=url], input[type=email], input[type=number], input[type=betaalkorting], input[type=date]{
-        padding: 7px;
-        border: 1px solid #ccc;
-        border-radius: 100px;
-        resize: vertical;
-        width: 100%;
-         max-height: 30px;
-        display: block;
-        margin:auto;
-        border-color: #3CB64A;
+         padding: 7px;
+         border: 1px solid #ccc;
+         border-radius: 100px;
+         resize: vertical;
+         width: 100%;
+         max-height: 32px;
+         display: block;
+         align-self: start;
+         border-color: #3CB64A;
          resize: none;
     }
 
@@ -155,19 +155,33 @@
         margin: auto;
         border-color: #3CB64A;
     }
+    textarea[name=opmerking]{
+        padding: 7px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        resize: vertical;
+        width: 100%;
+        height: 55px;
+        max-height: 200px;
+        display: block;
+        margin:auto;
+        border-color: #3CB64A;
+    }
 
     </style>
-    <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
-
+    <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">{% csrf_token %}
         <div id="box">
             <div style="text-align: center; margin-top: -2%;margin-bottom: 2%"><h3> Opdracht update </h3></div>
 
             <div class="form-group" id="container">
-                {% csrf_token %}
                 {{ opdracht_form|capfirst }}
+
+            </div>
+            <h3>Aanbieding</h3>
+            <div id="container">
                 {{ aanbieding_form|capfirst }}
             </div>
-            <div>
+            <div style="margin-top: 10px">
                 <a href="{% url 'detail_opdracht' opdracht.pk %}" class="btn" role="button">Terug</a>
                 <input class="btn" type="submit" value="Update" name="medewerker-update">
             </div>

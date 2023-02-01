@@ -127,6 +127,12 @@
         overflow: auto;
         white-space: nowrap;
     }
+
+    #opmerking {
+        height: 90px;
+        max-height: 150px;
+        white-space: break-spaces;
+    }
     @media(min-width: 1600px){
         #box {
             -webkit-transition: width 2s ease-in-out;
@@ -226,22 +232,32 @@
     </head>
 
     <div id="box" ALIGN="center">
-        <h3>Details opdrachten 4-Rest</h3>
+        <h3>Details opdracht 4-Rest</h3>
         <br>
         <div id="container">
-            <label>Klantnaam</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
-            <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+
             <label>Tarief</label><p>{{ opdracht.tarief_opdracht }}</p>
             <label>Registratiedatum</label><p>{{ opdracht.date_created }}</p>
-            <label>Functie</label><p>{{ opdracht.aanbieding.functie }}</p>
-            <label>Fuctie aanbieding</label><p>{{ opdracht.aanbieding.functie_aanbieding }}</p>
-            <label>4-Rest contactpersoon</label><p>{{ opdracht.aanbieding.get_accountmanager_display }}</p>
+
             <label>Start datum</label><p>{{ opdracht.startdatum }}</p>
-            <label>Status</label><p>{{ opdracht.get_status_opdracht_display }}</p>
+            <label>Status opdracht</label><p>{{ opdracht.get_status_opdracht_display }}</p>
             <label>Eind datum</label><p>{{ opdracht.einddatum }}</p>
             <label>Aantal uur</label><p>{{ opdracht.aantal_uren }}</p>
             <label>Aangemaakt door</label><p>{{ opdracht.get_opdracht_aangemaakt_door_display }}</p>
-            <label>Broker</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
+            <label>Opdracht nummer</label><p>{{ opdracht.opdracht_nummer }}</p>
+
+            <label>Opdracht opmerking</label><p id="opmerking">{{ opdracht.opmerking }}</p>
+        </div>
+        <h3>Aanbieding details</h3>
+
+        <div id="container">
+            <label>Eindklant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
+            <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+            <label>Functie</label><p>{{ opdracht.aanbieding.functie }}</p>
+            <label>Fuctie aanbieding</label><p>{{ opdracht.aanbieding.functie_aanbieding }}</p>
+            <label>4-Rest contactpersoon</label><p>{{ opdracht.aanbieding.get_accountmanager_display }}</p>
+            <label>Tussenpartij</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
+            <label>Aanbieding opmerking</label><p id="opmerking">{{ opdracht.aanbieding.opmerking }}</p>
         </div>
         <div>
             <a href="{% url 'lopende_opdrachten' %}" class="btn" role="button">Terug</a>

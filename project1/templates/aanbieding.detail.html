@@ -56,6 +56,11 @@
         margin-top: 1%;
     }
 
+    #opmerking {
+        max-height: 150px;
+        white-space: break-spaces;
+    }
+
     @media(min-width: 1600px){
         #box1 {
             -webkit-transition: width 2s ease-in-out;
@@ -167,6 +172,7 @@
         <label>Tussenpartij</label><p>{{ aanbieding.broker }}</p>
         <label>4-Rest contactpersoon</label><p>{{ aanbieding.accountmanager }}</p>
         <label>Status</label><p>{{ aanbieding.get_status_display }}</p>
+        <label>Opmerking</label><p id="opmerking">{{ aanbieding.opmerking }}</p>
 
 
     </div>

@@ -3,6 +3,7 @@
 <head>
     <title>{% block title %}4-Rest{% endblock %}</title>
     {% load static %}
+    <script src="js/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -30,30 +31,32 @@
         /* SCROLL FUNCTIE CUSTOMIZATION */
         /* width */
         ::-webkit-scrollbar {
-          width: 8px;
+            width: 8px;
             height: 7px;
         }
 
         /* Track */
         ::-webkit-scrollbar-track {
-          box-shadow: inset 0 0 2px grey;
-          border-radius: 1px;
+            box-shadow: inset 0 0 2px grey;
+            border-radius: 1px;
+            padding-right: 10px;
         }
 
         /* Handle */
         ::-webkit-scrollbar-thumb {
-          background: #32933d;
-          border-radius: 3px;
+            background: #32933d;
+            border-radius: 5px;
         }
 
         /* Handle on hover */
         ::-webkit-scrollbar-thumb:hover {
-          background: #07520e;
+            background: #07520e;
         }
 
         #LogoFoto{
             width:80px;
-            margin-left: 5px
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
         #ulHello-msg {
@@ -77,20 +80,25 @@
 </head>
 <body> {% load static %}
 <nav id="navbar" class="navbar navbar-default">
-    <img src="/images/Logo-4-rest-IT-white.png" alt="logo_4-rest" class="navbar-left" id="LogoFoto">
     <div class="container-fluid">
         <div class="navbar-header">
+            <a href="{% url 'index' %}"><img src="/images/Logo-4-rest-IT-white.png" alt="logo_4-rest" class="navbar-left" id="LogoFoto"></a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topnavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <span class="glyphicon"></span> Home
-                </a>
+
         </div>
 
         <div class="collapse navbar-collapse" id="topnavbar">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <span class="glyphicon"></span> Home
+                    </a>
+                </li>
+            </ul>
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">Medewerker <span class="glyphicon"></span></a>

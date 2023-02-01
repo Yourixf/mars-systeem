@@ -360,6 +360,7 @@ class Aanbiedingen(models.Model):
     registratie = models.DateField(null=True, blank=True)
     laatste_update = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_AANBIEDING_CHOICES, blank=True)
+    opmerking = models.CharField(max_length=600, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
@@ -382,6 +383,7 @@ class Aanbiedingen_History(models.Model):
     tarief = models.FloatField(max_length=14, default=True, null=True)
     betaalkorting = models.FloatField(max_length=14, default=True, null=True)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False)
+    opmerking = models.CharField(max_length=600, blank=True)
     updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
@@ -390,12 +392,14 @@ class Opdrachten(models.Model):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
     status_opdracht = models.CharField(max_length=50, choices=STATUS_OPDRACHT_CHOICES)
     startdatum = models.DateField(null=True, blank=True)
-    einddatum = models.DateField(null=True, blank=True)
     tarief_opdracht = models.FloatField(default=True, blank=True)
+    einddatum = models.DateField(null=True, blank=True)
     opdracht_betaalkorting = models.FloatField(default=True, null=True, blank=True)
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     date_created = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    opdracht_nummer = models.CharField(max_length=50, blank=True)
+    opmerking = models.CharField(max_length=600, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
 
 
@@ -416,4 +420,6 @@ class Opdrachten_History(models.Model):
     aantal_uren = models.IntegerField(blank=True)
     opdracht_aangemaakt_door = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     date_created = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    opdracht_nummer = models.CharField(max_length=50, blank=True)
+    opmerking = models.CharField(max_length=600, blank=True)
     updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))

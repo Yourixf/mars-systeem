@@ -123,11 +123,10 @@
                 <form method="POST" ALIGN='center' action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ contactpersoon_form|crispy }}
-                    {% if eind_klant_pk %}
-                        <a href="{% url 'eindklant_detail' eind_klant_pk.pk  %}" class="btn" id="annuleerKnop" role="button">Annuleer</a>
-                    {% endif %}
-                    {% if broker_pk %}
-                        <a href="{% url 'broker_detail' broker_pk.pk  %}" class="btn" id="annuleerKnop" role="button">Annuleer</a>
+                    {% if klant_pk.soort == '1' %}
+                        <a href="{% url 'eindklant_detail' klant_pk.pk  %}" class="btn" id="annuleerKnop" role="button">Annuleer</a>
+                    {% elif klant_pk.soort == '2' %}
+                        <a href="{% url 'broker_detail' klant_pk.pk  %}" class="btn" id="annuleerKnop" role="button">Annuleer</a>
                     {% endif %}
                 <input class="btn" type="submit" name="Vestiging toevoegen">
                 </form>

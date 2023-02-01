@@ -35,6 +35,7 @@
 
     #tabelVestiging {
         max-width: 80px;
+        min-width: 80px;
     }
 
     #contactpers {
@@ -43,6 +44,7 @@
 
     #telefoonnummer {
         max-width: 65px;
+        min-width: 65px;
     }
 
     #contactpersNaam {
@@ -51,23 +53,28 @@
 
     #mailAdres {
         max-width: 80px;
+        min-width: 80px;
     }
 
     #functie {
         max-width: 100px;
+        min-width: 100px;
     }
 
     #contactVestigingPlaatsHeader {
-        max-width: 130px;
+        max-width: 120px;
+        min-width: 120px;
     }
 
     #contactVestigingPlaats {
         white-space: nowrap;
         max-width: 130px;
+        min-width: 130px;
     }
 
     #contactpersNaam {
         max-width: 80px;
+        min-width: 80px;
     }
 
     #vestigToevoegen {
@@ -77,27 +84,37 @@
     }
 
     #deleteUpdate {
-        max-width: 85px;
+        max-width: 95px;
     }
 
     #actieKnoppen {
+    {% if pizza == False %}
         max-width: 170px;
+        min-width: 170px;
+    {% elif pizza == True %}
+        max-width: 70px;
+        min-width: 70px;
+    {% endif %}
     }
 
     #postcode {
         max-width: 65px;
+        min-width: 65px;
     }
 
     #plaats{
         max-width: 65px;
+        min-width: 65px;
     }
 
     #huisnummer {
         max-width: 65px;
+        min-width: 65px;
     }
 
     #straatNaam{
         max-width: 65px;
+        min-width: 65px;
     }
     #updateKnop {
             background-color: #32933d;
@@ -359,6 +376,22 @@ input[class=btn], a[class=btn] {
             transition: width 2s ease-in-out;
             width: 92%;
         }
+        #actieKnoppen{
+            max-width: 270px;
+            min-width: 260px;
+        }
+
+        #mailAdres{
+            max-width: 110px;
+            min-width: 100px;
+        }
+
+        #telefoonnummer{
+            max-width: 110px;
+            min-width: 100px;
+        }
+
+
     }
 
 
@@ -501,19 +534,18 @@ $(document).ready(function() {
                     <td id="mailAdres">{{ contactpersoon.mail_adres }}</td>
                     <td id="telefoonnummer">{{ contactpersoon.telefoonnummer }}</td>
                     <td id="functie">{{ contactpersoon.functie }}</td>
-                    <td id="contactVestigingPlaats">{{ contactpersoon.vestiging.vestiging }} {{ contactpersoon.vestiging.plaats }}</td>
+                    <td id="contactVestigingPlaats">{{ contactpersoon.vestiging.get_vestiging_display }} {{ contactpersoon.vestiging.plaats }}</td>
 
-                    <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                            <td id="actieKnoppen">
-                                <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-xs" id="updateKnop" role="button">Update</a>
-                                <a href="{% url 'detail_contactpersonen' contactpersoon.id %}" class="btn btn-xs" id="detailKnop" role="button">Detail</a>
-                                <button type="submit" class="no-export btn btn-xs" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
-                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
-                                {% if not contactpersoon.vestiging %}
-                                    <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'toevoegen_ContactVestiging' contactpersoon.id %}" class="btn btn-xs" role="button" style="margin-top: 1px">Vestiging Toevoegen</a>
-                                {% endif %}
-                            </td>
+                    <form action="{% url 'delete_contactpersoon' contactpersoon.id %}" method="post" style="display: inline;">{% csrf_token %}
+                        <td id="actieKnoppen" style="max-width: 90px">
+                            <a href="{% url 'update_contactpersoon' contactpersoon.id %}" class="btn btn-xs" id="updateKnop" role="button">Update</a>
+                            <a href="{% url 'detail_contactpersonen' contactpersoon.id %}" class="btn btn-xs" id="detailKnop" role="button">Detail</a>
+                            <button type="submit" class="no-export btn btn-xs" id="deleteKnop" onclick="return confirm('Weet je zeker dat je deze contactpersoon wilt verijderen?')">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete </button>
+                            {% if not contactpersoon.vestiging %}
+                                <a id="vestigToevoegen" name="vestigContact" value="contactpersoon" href="{% url 'toevoegen_ContactVestiging' contactpersoon.id %}" class="btn btn-xs" role="button" style="margin-top: 1px">Vestiging Toevoegen</a>
+                            {% endif %}
+                        </td>
                     </form>
                 </tr>
             {% endfor %}

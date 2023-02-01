@@ -69,6 +69,11 @@
     background-color: #32933d;
     color: white;
 }
+
+div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+    margin-right: 10px;
+}
+
   @media(min-width: 1950px){
         #box {
             -webkit-transition: width 2s ease-in-out;
@@ -108,9 +113,18 @@
             transition: width 2s ease-in-out;
             width: 95%;
         }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, button.dt-button, div.dt-button, a.dt-button, input.dt-button{
+        div.dataTables_wrapper div.dataTables_filter,div.dataTables_wrapper div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
             float: left;
             text-align: left;
+            margin-top: 15px;
+            margin-right: 10px;
+            overflow: auto;
+        }
+        #deleteUpdate{
+            max-width: 140px;
+        }
+        #detail{
+            max-width: 100px;
         }
     }
 </style>
@@ -137,10 +151,8 @@
 $(document).ready(function() {
     $("#basic-datatable").DataTable({
       pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
       order: [[ 0, "asc" ]],
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
@@ -160,6 +172,7 @@ $(document).ready(function() {
 </script>
     <div id="test">
         <div id="box">
+            <h3>Archief opdrachten 4-Rest</h3>
             <div id="container">
                 <table id="basic-datatable" class="table" style="width:100%">
                     <thead>

@@ -21,6 +21,7 @@ from .models import *
 
 # dit is de form om een nieuwe gebruiker aan te maken.
 class CreateUserForm(UserCreationForm):
+    # LopE3@fke
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -41,15 +42,18 @@ OPLEIDINGNIVEAU_CHOICES = (
 )
 
 
+
 # Dit is de Form om medewerkers toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
 # de class Meta is zodat Django gaat zoeken naar de gewenste model.
 class MedewerkersForm(forms.ModelForm):
-    bsnnummer = forms.IntegerField(required=False)
+    bsnnummer = forms.IntegerField(required=False, label='BSN nummer')
     #geboorte_datum = forms.CharField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}), required=False)
-    telefoonnummer = forms.CharField(max_length=20, required=False)
+    telefoonnummer = forms.CharField(max_length=20, required=True, label='Telefoonnummer *')
     #foto_medewerker = forms.FileField(required=False)
-    voornaam = forms.CharField(required=True, label='Voornaam *')
+    voornaam = forms.CharField(required=False)
     achternaam = forms.CharField(required=True, label='Achternaam *')
+    banknummer = forms.CharField(max_length=100, label='Rekeningnummer', required=False , widget= forms.TextInput
+                           (attrs={'placeholder':'NL99 BANK 0123 4567 89'}))
 
     class Meta:
         model = Medewerkers
@@ -66,7 +70,13 @@ class MedewerkersForm(forms.ModelForm):
             )
         }
 
-
+        labels = {
+            'status':'Status opdracht',
+            'bv': 'BV',
+            'ice_telefoonnummer':'ICE telefoonnummer',
+            'ice_persoon_naam':'ICE persoon naam',
+            'roepnaam':'Roepnaam *'
+        }
 
 
 # Dit is de Form om Contracten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
@@ -98,6 +108,7 @@ class ContactpersoonForm(forms.ModelForm):
 
 
 class ContactpersoonUpdatenForm(forms.ModelForm):
+    opmerkingen = forms.CharField(widget=forms.Textarea, max_length=300, required=False)
     class Meta:
         model = Contactpersonen
         fields = '__all__'
@@ -255,13 +266,12 @@ class AanbiedingenForm(forms.ModelForm):
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False, max_value=200)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
+    opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False, label='Aanbieding opmerking')
 
     class Meta:
         model = Aanbiedingen
         fields = '__all__'
         exclude = ['begindatum', 'registratie', 'laatste_update',]
-
-
 
         labels = {
             "accountmanager": "4-Rest contactpersoon",
@@ -280,6 +290,8 @@ class AanbiedingUpdatenForm(forms.ModelForm):
     tarief = forms.DecimalField(initial=00.00, required=False)
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
+    opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False, label='Aanbieding opmerking')
+
 
     class Meta:
         model = Aanbiedingen
@@ -289,6 +301,7 @@ class AanbiedingUpdatenForm(forms.ModelForm):
         labels = {
             "broker":"Tussenpartij",
             "accountmanager":"4-Rest contactpersoon",
+            "klant":"Eindklant",
         }
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
@@ -296,6 +309,8 @@ class OpdrachtenForm(forms.ModelForm):
     tarief_opdracht = forms.FloatField(min_value=0, required=False)
     opdracht_betaalkorting = forms.FloatField(min_value=0, required=False)
     aantal_uren = forms.IntegerField(required=False, min_value=0, max_value=40)
+    opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False, label='Opdracht opmerking')
+
     class Meta:
         model = Opdrachten
         fields = '__all__'
@@ -312,11 +327,15 @@ class OpdrachtenForm(forms.ModelForm):
                 attrs={'class': 'form-control',
                        'type': 'date'})
         }
+
+
 class OpdrachtenToevoegenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING)
     tarief_opdracht = forms.FloatField(min_value=0, required=False)
     opdracht_betaalkorting = forms.FloatField(min_value=0, required=False)
     aantal_uren = forms.IntegerField(required=False, min_value=0, max_value=40, initial=0)
+    opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False)
+
     class Meta:
         model = Opdrachten
         fields = '__all__'
@@ -343,6 +362,7 @@ class DocumentenForm(ModelForm):
         model = Documenten
         fields = ['naam_document', 'soort_document', 'beschrijving', 'document']
         exclude = ['begindatum']
+
 
 
 class DocumentenUpdatenForm(ModelForm):

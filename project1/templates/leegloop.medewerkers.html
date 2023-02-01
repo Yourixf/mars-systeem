@@ -98,7 +98,11 @@
         color: white;
     }
 
-  @media(min-width: 1750px){
+    div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
+        margin-right: 10px;
+    }
+
+    @media(min-width: 1950px){
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -108,7 +112,7 @@
         }
     }
 
-    @media(min-width: 1600px) and (max-width: 1750px) {
+    @media(min-width: 1600px) and (max-width: 1950px) {
         #box {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
@@ -136,9 +140,26 @@
             transition: width 2s ease-in-out;
             width: 95%;
         }
-        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate{
+        div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
             float: left;
             text-align: left;
+            margin-top: 15px;
+            margin-right: 10px;
+            overflow: auto;
+        }
+        #telnummer{
+            max-width: 100px;
+        }
+
+        #opdrachtAanbieding{
+            max-width: 150px;
+        }
+
+        #deleteUpdate{
+            max-width: 140px;
+        }
+        #detail{
+            max-width: 100px;
         }
     }
 
@@ -146,19 +167,17 @@
 <script>
 $(document).ready(function() {
     $("#basic-datatable").DataTable({
-      pageLength: 10,
-      lengthChange: false,
-      bInfo : false,
-      order: [[ 0, "asc" ]],
-      "columnDefs": [
-          { "searchable": false, "targets": 5 }
-      ],
-      dom: 'Bfrtip',
+        pageLength: 10,
+        order: [[ 0, "asc" ]],
+        "columnDefs": [
+            { "searchable": false, "targets": 5 }
+        ],
+        dom: 'lBfrtip',
         buttons: [ {
             extend: 'excelHtml5',
             exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5 ]
-                },
+                columns: [ 0, 1, 2, 3, 4, 5 ]
+            },
             title: 'Medewerkers' +
                 '' +
                 ' Export',
@@ -171,7 +190,6 @@ $(document).ready(function() {
     });
   });
 </script>
-
     <div id="test">
         <div id="box">
         <h3>Leegloop Medewerkers 4-Rest</h3>
