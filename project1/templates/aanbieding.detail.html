@@ -163,24 +163,25 @@
     <div id="container">
         <label>Medewerker</label><p>{{ aanbieding.medewerker }}</p>
         <label>Tarief</label><p>{{ aanbieding.tarief }}</p>
-
         <label>Betaalkorting</label><p>{{ aanbieding.betaalkorting }}</p>
         <label>Aangemaakt door</label><p>{{ aanbieding.get_aangemaakt_door_display }}</p>
         <label>Functie</label><p>{{ aanbieding.functie }}</p>
         <label>Functie aanbieding</label><p>{{ aanbieding.functie_aanbieding }}</p>
-        <label>Klant</label><p>{{ aanbieding.klant }}</p>
+        <label>Eindklant</label><p>{{ aanbieding.klant }}</p>
         <label>Tussenpartij</label><p>{{ aanbieding.broker }}</p>
-        <label>4-Rest contactpersoon</label><p>{{ aanbieding.accountmanager }}</p>
-        <label>Status</label><p>{{ aanbieding.get_status_display }}</p>
+        <label>4-Rest contactpersoon</label><p>{{ aanbieding.get_accountmanager_display }}</p>
+        <label>Registratie datum</label><p>{{ aanbieding.registratie }}</p>
+        <label>Status aanbieding</label><p>{{ aanbieding.get_status_display }}</p>
+        <label>Laatste update datum</label><p>{{ aanbieding.laatste_update }}</p>
+
         <label>Opmerking</label><p id="opmerking">{{ aanbieding.opmerking }}</p>
 
 
     </div>
-        <div id="buttonArea">
-            <a href="{% url 'aanbiedingen' %}" class="btn" role="button">Terug</a>
-            <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn" id="" role="button">Update</a>
-        </div>
-    </tr>
+    <div id="buttonArea">
+        <a href="{% url 'aanbiedingen' %}" class="btn" role="button">Terug</a>
+        <a href="{% url 'aanbieding_update' aanbieding.id %}" class="btn" id="" role="button">Update</a>
+    </div>
 </div>
 
 </html>

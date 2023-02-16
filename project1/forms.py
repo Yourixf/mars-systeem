@@ -9,6 +9,8 @@ from django.forms.fields import DateField
 from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten, Aanbiedingen, \
     Opmerkingen
 from django.forms.widgets import *
+from django.contrib.admin import widgets
+
 from .models import *
 
 # Dit is de forms.py template van Django hier kan je persoonlijke forms maken door middel van de in de class forms.Form te gebruiken kan je gepersonaliseerde forms maken.
@@ -40,6 +42,35 @@ OPLEIDINGNIVEAU_CHOICES = (
     ("3", "Wetenschappelijk onderwijs (WO)"),
 
 )
+
+SOORT_RAPPORTAGE_CHOICES = (
+    ('1', 'Gemiddeld tarief bij elke functie'),
+    ('2', 'Totaal aantal aanbiedingen, intakes en plaatsingen per functie')
+)
+
+SOORT_DATUM_CHOICES = (
+    ('1', forms.DateField(widget=SelectDateWidget)),
+    ('2', forms.DateField(widget=SelectDateWidget)),
+    ('3', forms.DateField(widget=SelectDateWidget)),
+    ('4', forms.DateField(widget=SelectDateWidget)),
+    ('5', forms.DateField(widget=SelectDateWidget)),
+)
+
+SOORT_WEERGAVE_CHOICES = (
+    ('1', 'Pie chart'),
+    ('2', 'Bar chart'),
+    ('3', 'Tabel')
+)
+
+class RapportageForm(forms.Form):
+    soort_rapportage = forms.ChoiceField(widget=forms.RadioSelect, choices=SOORT_RAPPORTAGE_CHOICES)
+
+    van_datum = forms.DateField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+    tot_datum = forms.DateField(widget=forms.widgets.DateTimeInput(attrs={"type": "date"}))
+
+    soort_weergave = forms.ChoiceField(widget=forms.RadioSelect, choices=SOORT_WEERGAVE_CHOICES)
+
+    #van_datum = forms.DateField(widget=forms.SelectDateWidget(attrs={'type':'date'}).year_field)
 
 
 
@@ -291,7 +322,8 @@ class AanbiedingUpdatenForm(forms.ModelForm):
     betaalkorting = forms.DecimalField(initial=00.00, required=False)
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING)
     opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False, label='Aanbieding opmerking')
-
+    registratie = forms.DateField(required=False, label='Registratiedatum', disabled=True)
+    laatste_update = forms.DateField(required=False, label='Laatste update datum', disabled=True)
 
     class Meta:
         model = Aanbiedingen
@@ -302,6 +334,7 @@ class AanbiedingUpdatenForm(forms.ModelForm):
             "broker":"Tussenpartij",
             "accountmanager":"4-Rest contactpersoon",
             "klant":"Eindklant",
+
         }
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)
@@ -310,6 +343,8 @@ class OpdrachtenForm(forms.ModelForm):
     opdracht_betaalkorting = forms.FloatField(min_value=0, required=False)
     aantal_uren = forms.IntegerField(required=False, min_value=0, max_value=40)
     opmerking = forms.CharField(widget=forms.Textarea, max_length=600, required=False, label='Opdracht opmerking')
+
+    date_created = forms.DateField(required=False, label='Registratiedatum', disabled=True)
 
     class Meta:
         model = Opdrachten

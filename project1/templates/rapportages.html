@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block title %}Rapportage{% endblock %}
+{% block body %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+<html lang="">
+    <head>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+        <style>
+            body{
+                background-color:#CBCBCB;
+            }
+
+            #basic-datatable{
+                width: 30%;
+            }
+
+            input[class=btn], a[class=btn] {
+                background-color: #3CB64A;
+                padding: 12px 20px;
+                color: white;
+                border: none;
+                border-radius: 16px;
+                cursor: pointer;
+                margin: auto;
+            }
+
+            input[class=btn]:hover, a[class=btn]:hover {
+                background-color: #45a049;
+            }
+
+            select[name=soortRap]{
+            }
+
+            #area1{
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                display: grid;
+            }
+
+            #box1 {
+                border-radius: 19px;
+                background-color: #f2f2f2;
+                position: relative;
+                margin-left: 10%;
+                padding: 15px;
+                width: 80%;
+
+
+                outline: solid;
+                outline-color: #32933d;
+                display: table;
+
+                grid-column-start: 1;
+                grid-column-end: 1;
+            }
+
+            #container1{
+                margin-top: -6%;
+                display: table-row;
+            }
+
+
+            #box2 {
+                border-radius: 19px;
+                background-color: #f2f2f2;
+                margin: auto;
+                position: relative;
+                padding: 15px;
+
+                max-width: 90%;
+                outline: solid;
+                outline-color: #32933d;
+
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+
+            #container2{
+            }
+
+            #bar_chart{
+            }
+            #pie_chart{
+            }
+
+
+
+            #RapButtons{
+            }
+
+            #RapButtons input[type='radio']{
+            }
+
+            #RapButtons label{
+            }
+
+        </style>
+    </head>
+
+
+    <script>
+    $(document).ready(function() {
+        $("#basic-datatable").DataTable({
+            pageLength: 10,
+            order: [[ 0, "asc" ]],
+            dom: 'lBfrtip',
+            buttons: [ {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4 ]
+                },
+                title: '' +
+                    '' +
+                    ' Export',
+                customize: function( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c[r^="C"]', sheet).attr( 'c', '2' );
+                }
+            } ]
+        });
+      });
+    </script>
+
+    <div id="area1">
+        <div id="box1">
+            <div id="container1">
+                <form action="" method="get">{% csrf_token %}
+                    <div id="rapportageOpties">
+                        <h3>Soort rapportage</h3>
+                        <div id="RapButtons">
+                            <label>
+                                <input type="radio" name="soortRap" value="gemTarief" checked/>
+                                Gemiddeld tarief bij elke functie
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="soortRap" value="totaalAanb"/>
+                                Totaal aantal aanbiedingen, intakes en plaatsingen per functie
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="datumFilter">
+                        <h3>Datum filter</h3>
+                        <div id="datumButtons">
+                            <label><input type="radio" name="datumFil" value="geen" checked/> Geen</label>
+                            <br>
+                            <label><input type="radio" name="datumFil" value="jaar"/> Jaar</label>
+                            <input type="number" min="1900" max="{{ year }}" value="" name="datumFilJaarfilter"/>
+                            <br>
+                            <label><input type="radio" name="datumFil" value="kwartaal"/> Kwartaal</label>
+                            <select name="kwartaal">
+                                <option value="eerste">Eerste</option>
+                                <option value="tweede">Tweede</option>
+                                <option value="derde">Derde</option>
+                                <option value="vierde">Vierde</option>
+                            </select>
+                            <input type="number" min="1900" max="{{ year }}" value="" name="datumFilKwartaalJaarfilter"/>
+                            <br>
+                            <label><input type="radio" name="datumFil" value="maand"/> Maand</label>
+                            <input type="month"  name="datumFilMonthFilter"/>
+                            <br>
+                            <label><input type="radio" name="datumFil" value="week"/> Week</label>
+                            <input type="week" min="1" max="52" value="1" name="datumFilWeekFilter"/>
+                            <br>
+                            <label><input type="radio" name="datumFil" value="periode"/> Periode</label>
+                            van <input type="date" name="periodeVan"/> tot <input type="date" name="periodeTot"/>
+                        </div>
+                    </div>
+
+                    <div id="soortRapportage">
+                        <h3>Soort weergave</h3>
+                        <div id="weergaveButtons">
+                            <label><input type="radio" name="soortWeergave" value="tabel" checked/> Tabel</label>
+                            <br>
+                            <label><input type="radio" name="soortWeergave" value="cirkel"/> Cirkel diagram</label>
+                            <br>
+                            <label><input type="radio" name="soortWeergave" value="staaf"/> Staaf diagram</label>
+                        </div>
+
+                    </div>
+                    <div>
+                        <input class="btn" type="submit" value="rapportage maken" name="rapportage-submit">
+                    </div>
+                    <br>
+
+                    <div id="newformtest">
+                        {{ rapForm }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="box2">
+            <div id="container2">
+                {% if barChartBool == True %}
+                    <div id="bar_chart" style="width:100%;height:500px;">
+                        {{ barGraph|safe }}
+                    </div>
+                {% endif %} 
+
+
+
+                {% if pieChartBool == True %}
+                    <div id="pie_chart" style="width:100%;height:500px;">
+                        {{ piegraph|safe }}
+                    </div>
+                {% endif %}
+
+                {% if tableViewBool == True %}
+
+                    <div id="tableData">
+                        <table id="basic-datatable" class="table">
+                            <thead>
+                            <tr>
+                                <th>Functie</th>
+                                <th id="tarief">Tarief</th>
+
+                            </tr>
+
+                            <tbody id="myTable">
+                                {% for aanbiedingen in gemiddeldAanbiedingen  %}
+                                    <tr>
+
+                                        <td id="tarief">{{ aanbiedingen.functie_aanbieding }}</td>
+                                        <td>{{ aanbiedingen.gemTarief }}</td>
+
+
+                                           <form action="" class="no-export" style="display: inline;">
+                                               {% csrf_token %}
+                                               <td id="detailOpdracht">
+                                                   <a href=""  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
+
+                                               </td>
+                                           </form>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div id="area2">
+
+    </div>
+
+
+    <div style="margin-top: 100px" id="area3">
+        <div id="box3">
+        <table>
+            <thead>
+                <tr>
+                    <th>Functie aanbieding</th>
+                    <th>Medewerkers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for functie_aanbieding, functie_aanbieding_medewerker in functie_aanbieding_medewerker_list %}
+                    <tr>
+                        <td>{{ functie_aanbieding }}</td>
+                        <td>
+                            {% for medewerker in functie_aanbieding_medewerker %}
+
+                                {{ medewerker }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+
+        </div>
+    </div>
+
+
+    <br><br><br>
+</html>
+{% endblock %}
+
+

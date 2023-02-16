@@ -235,28 +235,33 @@
         <h3>Details opdracht 4-Rest</h3>
         <br>
         <div id="container">
-
-            <label>Tarief</label><p>{{ opdracht.tarief_opdracht }}</p>
-            <label>Registratiedatum</label><p>{{ opdracht.date_created }}</p>
-
-            <label>Start datum</label><p>{{ opdracht.startdatum }}</p>
+            <label>Startdatum</label><p>{{ opdracht.startdatum }}</p>
             <label>Status opdracht</label><p>{{ opdracht.get_status_opdracht_display }}</p>
-            <label>Eind datum</label><p>{{ opdracht.einddatum }}</p>
+            <label>Einddatum</label><p>{{ opdracht.einddatum }}</p>
             <label>Aantal uur</label><p>{{ opdracht.aantal_uren }}</p>
+            <label>Tarief opdracht</label><p>{{ opdracht.tarief_opdracht }}</p>
             <label>Aangemaakt door</label><p>{{ opdracht.get_opdracht_aangemaakt_door_display }}</p>
+            <label>Opdracht betaalkorting</label><p>{{ opdracht.opdracht_betaalkorting }}</p>
+            <label>Registratiedatum</label><p>{{ opdracht.date_created }}</p>
             <label>Opdracht nummer</label><p>{{ opdracht.opdracht_nummer }}</p>
-
             <label>Opdracht opmerking</label><p id="opmerking">{{ opdracht.opmerking }}</p>
         </div>
         <h3>Aanbieding details</h3>
 
         <div id="container">
-            <label>Eindklant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
             <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+            <label>Tarief aanbieding</label><p>{{ opdracht.aanbieding.tarief }}</p>
+            <label>Tarief betaalkorting</label><p>{{ opdracht.aanbieding.betaalkorting }}</p>
+            <label>Aangemaakt door</label><p>{{ opdracht.aanbieding.get_aangemaakt_door_display }}</p>
             <label>Functie</label><p>{{ opdracht.aanbieding.functie }}</p>
             <label>Fuctie aanbieding</label><p>{{ opdracht.aanbieding.functie_aanbieding }}</p>
-            <label>4-Rest contactpersoon</label><p>{{ opdracht.aanbieding.get_accountmanager_display }}</p>
+            <label>Eindklant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
             <label>Tussenpartij</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
+            <label>4-Rest contactpersoon</label><p>{{ opdracht.aanbieding.get_accountmanager_display }}</p>
+            <label>Registratie datum</label><p>{{ opdracht.aanbieding.registratie }}</p>
+            <label>Status aanbieding</label><p>{{ opdracht.aanbieding.get_status_display }}</p>
+            <label>Laatste update datum</label><p>{{ opdracht.aanbieding.laatste_update }}</p>
+
             <label>Aanbieding opmerking</label><p id="opmerking">{{ opdracht.aanbieding.opmerking }}</p>
         </div>
         <div>

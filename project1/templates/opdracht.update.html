@@ -130,6 +130,8 @@
          align-self: start;
          border-color: #3CB64A;
          resize: none;
+
+         align-self: center;
     }
 
 
@@ -154,6 +156,8 @@
         display: block;
         margin: auto;
         border-color: #3CB64A;
+
+        align-self: center;
     }
     textarea[name=opmerking]{
         padding: 7px;
@@ -166,6 +170,16 @@
         display: block;
         margin:auto;
         border-color: #3CB64A;
+
+        align-self: center;
+    }
+
+    label{
+        align-self: center;
+    }
+
+    label[for=id_opmerking]{
+        align-self: start;
     }
 
     </style>
@@ -177,7 +191,7 @@
                 {{ opdracht_form|capfirst }}
 
             </div>
-            <h3>Aanbieding</h3>
+            <h3 style="margin-top: -3%">Aanbieding</h3>
             <div id="container">
                 {{ aanbieding_form|capfirst }}
             </div>

@@ -16,7 +16,10 @@ from datetime import *
 from .forms import  *
 from .models import *
 from django.db.models import *
-from itertools import chain
+from itertools import groupby
+import pandas as pd
+import plotly.express as px
+
 
 
 from django.contrib.auth.hashers import check_password
@@ -28,6 +31,135 @@ from django.contrib.auth.hashers import check_password
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'url']
 # Voor de CV's, Feedbackdocumenten en overige documenten zijn dit de formats waarin het mag geupload worden.
 
+
+@login_required(login_url='login')
+def rapportagePage(request):
+    aanbiedingen = Aanbiedingen.objects.all().order_by('functie_aanbieding')
+    year = dateformat.format(timezone.now(), 'o')
+
+    functie_aanbieding_medewerker_list = []
+    for functie_aanbieding, aanbiedingen_in_functie_aanbieding in groupby(aanbiedingen, key=lambda x: x.functie_aanbieding):
+        functie_aanbieding_medewerker_list.append((functie_aanbieding, [aanbieding.medewerker for aanbieding in aanbiedingen_in_functie_aanbieding]))
+
+
+    """" NOG REPAREREN VOOR MEDEWERKERS MET INDIVIDUELE TARIEFEN
+    opdrachten = Opdrachten.objects.all().order_by('aanbieding__functie_aanbieding')
+
+    opdr_list = []
+
+    for opdr in opdrachten:
+        aanbied = opdr.aanbieding
+        functAanbieding = aanbied.functie_aanbieding
+        if f'{functAanbieding}' not in opdr_list:
+            mede_list = Aanbiedingen.objects.filter(functie_aanbieding=functAanbieding)
+            all_mede = [m.medewerker for m in mede_list]
+            opdr_list.append((functAanbieding, all_mede))
+
+
+
+
+    aanBiedIngenList= Aanbiedingen.objects.all().order_by('functie_aanbieding')
+
+    mogelList = []
+
+    for aanB in aanBiedIngenList:
+        opdra = Opdrachten.objects.filter(aanbieding=aanB)
+        funcAanb = aanB.functie_aanbieding
+        medeList = Opdrachten.objects.filter(aanbieding__functie_aanbieding=funcAanb)
+        medewerkers = [[m.aanbieding.medewerker for m in medeList], [m.tarief_opdracht for m in medeList]]
+
+        mogelList.append((funcAanb, medewerkers))
+
+
+
+
+    m1_list = []
+    m2_query = Opdrachten.objects.all().annotate(gem_tarief=Avg('tarief_opdracht'))
+
+    test = ''
+    for i in m2_query:
+        m1_list.append((
+            [i.aanbieding.functie_aanbieding], [i.aanbieding.medewerker], [i.gem_tarief]
+        ))
+
+    """""
+
+
+    # voor graphs :
+
+    functie_list = []
+
+    testOpdracht_list = []
+
+    # VOOR TABLEDATA TABEL
+    gemiddeldAanbiedingen = Aanbiedingen.objects.values('functie_aanbieding').annotate(gemTarief=Avg('tarief'))
+
+    testOpdrachten = Opdrachten.objects.values('aanbieding').annotate(gem_tarief=Avg('tarief_opdracht'))
+
+    for i in gemiddeldAanbiedingen:
+        functie_list.append((
+            i['functie_aanbieding'], i['gemTarief']
+        ))
+
+
+
+    data = {'functie': [a[0] for a in functie_list], 'tarief': [a[1] for a in functie_list]}
+    df = pd.DataFrame(data)
+
+
+    fig2 = px.bar(df,
+        x='functie', y='tarief',
+        color='functie',
+        title='Gemiddeld tarief per functie',
+        labels={'x': 'Functie', 'y':'Gemiddeld tarief'},
+    )
+
+    fig2.update_layout(
+        showlegend=False,
+    )
+
+    fig3 = px.pie(
+        df,
+        values='tarief',
+        names='functie',
+        title='Gemiddeld tarief per functie'
+    )
+
+    fig3.update_traces(
+        textinfo='value',
+    )
+
+    fig3.update_layout(
+        showlegend=True,
+        annotations=[dict(text='', showarrow=False)]
+    )
+
+    barGraph = fig2.to_html(full_html=False, default_height=500, default_width=700, config ={'displaylogo': False})
+    piegraph = fig3.to_html(full_html=False, default_height=500, default_width=700, config ={'displaylogo': False})
+
+    barChartBool = True
+    pieChartBool = False
+    tableViewBool = False
+
+    rapForm = RapportageForm()
+
+    context = {
+        'functie_aanbieding_medewerker_list':functie_aanbieding_medewerker_list,
+        'year':year,
+        'barGraph':barGraph,
+        'piegraph':piegraph,
+        'functie_list':functie_list,
+        'gemiddeldAanbiedingen':gemiddeldAanbiedingen,
+        'barChartBool':barChartBool,
+        'pieChartBool':pieChartBool,
+        'tableViewBool':tableViewBool,
+        'rapForm':rapForm
+    }
+
+    if request.method == 'GET' or request.method == 'POST':
+        data = request.GET
+
+    return render(request, 'rapportages.html', context)
 
 @login_required(login_url='login')
 def FactuurHistoryDetailPage(request, pk):
@@ -73,6 +205,9 @@ def FactuurHistoryPage(request):
     datum_nu = date.today() - timedelta(days=30)
     eind_datum = datum_nu + timedelta(days=60)
     opdrachten_list = Opdrachten.objects.filter(Q(status_opdracht=1), begindatum__range=[datum_nu, eind_datum])
+
+
+
 
     context = {
         'opdrachten_list':opdrachten_list,
@@ -1288,6 +1423,7 @@ def AanbiedingUpdaten(request, pk):
             aanbieding = aanbieding_form.save()
 
             aanbieding.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            aanbieding.laatste_update = dateformat.format(timezone.now(), 'o-m-d')
             aanbieding.save()
 
             aanbieding_status = aanbieding.status
@@ -1530,6 +1666,7 @@ def OpdrachtenUpdaten(request, pk):
 
             aanbieding = aanbieding_form.save()
             aanbieding.begindatum = dateformat.format(timezone.now(), 'o-m-d')
+            aanbieding.laatste_update = dateformat.format(timezone.now(), 'o-m-d')
             aanbieding.save()
 
             medewerker = aanbieding.medewerker
