@@ -13,7 +13,7 @@
             }
 
             #basic-datatable{
-                width: 30%;
+                max-width: 50%;
             }
 
             input[class=btn], a[class=btn] {
@@ -34,65 +34,234 @@
             }
 
             #area1{
-                grid-template-columns: repeat(3, minmax(0, 1fr));
                 display: grid;
+                column-width: fit-content;
+                column-gap: 40px;
             }
 
             #box1 {
                 border-radius: 19px;
                 background-color: #f2f2f2;
                 position: relative;
-                margin-left: 10%;
                 padding: 15px;
-                width: 80%;
-
-
                 outline: solid;
                 outline-color: #32933d;
-                display: table;
-
-                grid-column-start: 1;
-                grid-column-end: 1;
+                overflow-x: auto;
             }
-
             #container1{
                 margin-top: -6%;
                 display: table-row;
             }
-
-
+            #newformtest{
+                white-space: nowrap;
+            }
             #box2 {
                 border-radius: 19px;
-                background-color: #f2f2f2;
+                background-color: #ffffff;
                 margin: auto;
                 position: relative;
                 padding: 15px;
-
-                max-width: 90%;
                 outline: solid;
                 outline-color: #32933d;
-
-                grid-column-start: 2;
-                grid-column-end: 4;
             }
 
             #container2{
             }
 
             #bar_chart{
+                width:100%;
+                height:500px;
             }
             #pie_chart{
+                width:fit-content;
+                height:fit-content;
             }
-
-
-
-            #RapButtons{
+            #noData{
+                align-self: center;
             }
 
             #RapButtons input[type='radio']{
             }
 
             #RapButtons label{
+            }
+
+
+            @media(min-width: 2100px){
+                #area1{
+                    grid-template-columns: repeat(2 , minmax(0,1fr)) !important;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box1{
+                    margin: auto;
+                    margin-right: 5%;
+
+                    height: fit-content;
+                    min-width: fit-content;
+                    max-width: fit-content;
+
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box2{
+                    margin-left: 5%;
+
+                    max-width: fit-content;
+                    height: fit-content;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+
+            }
+
+            @media (min-width: 1600px) and (max-width: 2100px){
+                #area1{
+                    grid-template-columns: repeat(2 , minmax(0,1fr)) !important;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box1{
+                    margin: auto;
+                    margin-right: 5%;
+
+                    height: fit-content;
+                    min-width: fit-content;
+                    max-width: fit-content;
+
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box2{
+                    max-width: fit-content;
+                    height: fit-content;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+            }
+
+            @media(min-width: 1220px) and (max-width: 1600px){
+                #area1{
+                    grid-template-columns: repeat(3 , minmax(0,1fr)) !important;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box1{
+                    margin: auto;
+                    margin-left: 10%;
+
+                    height: fit-content;
+                    min-width: fit-content;
+                    max-width: fit-content;
+
+                    grid-column-start: 1;
+                    grid-column-end: 2;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #box2{
+                    max-width: fit-content;
+                    height: fit-content;
+                    margin: auto;
+
+                    display: grid;
+                    grid-column-start: 2;
+                    grid-column-end: 4;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+            }
+
+            @media(max-width: 1220px){
+                #area1{
+                    grid-template-columns: repeat(1 , minmax(0,1fr)) !important;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+                #box1{
+                    margin: auto;
+                    margin-top: 5px;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+                #box2{
+                    margin-top: 10px;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+
+                }
+                #area1 #box2{
+                    overflow:auto;
+                }
+            }
+            @media(max-width: 530px){
+                #area1{
+                    grid-template-columns: repeat(1 , minmax(0,1fr)) !important;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+                #box1{
+                    border-radius: 0px;
+                    margin: auto;
+                    margin-top: 5px;
+                    max-width: 90%;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
+
+                #container1{
+
+                }
+
+                div[id='newformtest']{
+                white-space: break-spaces;
+                }
+                #box2 {
+                    border-radius: 0px;
+                    overflow-x: auto;
+                    margin: auto;
+                    margin-top: 20px;
+                    max-width: 90%;
+                    -webkit-transition: width 2s ease-in-out;
+                    -moz-transition: width 2s ease-in-out;
+                    -o-transition: width 2s ease-in-out;
+                    transition: width 2s ease-in-out;
+                }
             }
 
         </style>
@@ -108,11 +277,24 @@
             buttons: [ {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4 ]
+                {% if soortRap == '1' %}
+                    columns: [0, 1]
+                {% endif %}
+                {% if soortRap == '2' %}
+                    columns: [0, 1, 2, 3]
+                {% endif %}
                 },
-                title: '' +
-                    '' +
-                    ' Export',
+                {% if soortRap == '1' %}
+                    title: 'Gemiddelde tariefen per functie' +
+                        ' ({{ vanDatum }} - {{ totDatum }}) ' +
+                        ' Export',
+                {% endif %}
+                {% if soortRap == '2' %}
+                    title: 'Aantal aanbiedingen, intakes en plaatsingen per functie' +
+                        ' ({{ vanDatum }} - {{ totDatum }}) ' +
+                        ' Export',
+                {% endif %}
+
                 customize: function( xlsx ) {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
                     $('row c[r^="C"]', sheet).attr( 'c', '2' );
@@ -125,162 +307,92 @@
     <div id="area1">
         <div id="box1">
             <div id="container1">
-                <form action="" method="get">{% csrf_token %}
-                    <div id="rapportageOpties">
-                        <h3>Soort rapportage</h3>
-                        <div id="RapButtons">
-                            <label>
-                                <input type="radio" name="soortRap" value="gemTarief" checked/>
-                                Gemiddeld tarief bij elke functie
-                            </label>
-                            <br>
-                            <label>
-                                <input type="radio" name="soortRap" value="totaalAanb"/>
-                                Totaal aantal aanbiedingen, intakes en plaatsingen per functie
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="datumFilter">
-                        <h3>Datum filter</h3>
-                        <div id="datumButtons">
-                            <label><input type="radio" name="datumFil" value="geen" checked/> Geen</label>
-                            <br>
-                            <label><input type="radio" name="datumFil" value="jaar"/> Jaar</label>
-                            <input type="number" min="1900" max="{{ year }}" value="" name="datumFilJaarfilter"/>
-                            <br>
-                            <label><input type="radio" name="datumFil" value="kwartaal"/> Kwartaal</label>
-                            <select name="kwartaal">
-                                <option value="eerste">Eerste</option>
-                                <option value="tweede">Tweede</option>
-                                <option value="derde">Derde</option>
-                                <option value="vierde">Vierde</option>
-                            </select>
-                            <input type="number" min="1900" max="{{ year }}" value="" name="datumFilKwartaalJaarfilter"/>
-                            <br>
-                            <label><input type="radio" name="datumFil" value="maand"/> Maand</label>
-                            <input type="month"  name="datumFilMonthFilter"/>
-                            <br>
-                            <label><input type="radio" name="datumFil" value="week"/> Week</label>
-                            <input type="week" min="1" max="52" value="1" name="datumFilWeekFilter"/>
-                            <br>
-                            <label><input type="radio" name="datumFil" value="periode"/> Periode</label>
-                            van <input type="date" name="periodeVan"/> tot <input type="date" name="periodeTot"/>
-                        </div>
-                    </div>
-
-                    <div id="soortRapportage">
-                        <h3>Soort weergave</h3>
-                        <div id="weergaveButtons">
-                            <label><input type="radio" name="soortWeergave" value="tabel" checked/> Tabel</label>
-                            <br>
-                            <label><input type="radio" name="soortWeergave" value="cirkel"/> Cirkel diagram</label>
-                            <br>
-                            <label><input type="radio" name="soortWeergave" value="staaf"/> Staaf diagram</label>
-                        </div>
-
-                    </div>
-                    <div>
-                        <input class="btn" type="submit" value="rapportage maken" name="rapportage-submit">
-                    </div>
-                    <br>
-
+                <form action="" method="POST">{% csrf_token %}
                     <div id="newformtest">
-                        {{ rapForm }}
+                        {{ rapForm|crispy }}
+                    </div>
+                    <div >
+                        <input class="btn" type="submit" value="Rapportage maken" name="rapportage-submit">
+                        {% if queryAttempt == False %}
+                            <h2 id="noData">Geen data in die periode</h2>
+                        {% endif %}
                     </div>
                 </form>
             </div>
         </div>
-        <div id="box2">
-            <div id="container2">
-                {% if barChartBool == True %}
-                    <div id="bar_chart" style="width:100%;height:500px;">
-                        {{ barGraph|safe }}
-                    </div>
-                {% endif %} 
+
+        {% if barChartBool or pieChartBool or tableViewBool == True %}
+            <div id="box2">
+                <div id="container2">
+                    {% if barChartBool == True %}
+                        <div id="bar_chart">
+                            {{ barGraph|safe }}
+                        </div>
+                    {% endif %}
 
 
 
-                {% if pieChartBool == True %}
-                    <div id="pie_chart" style="width:100%;height:500px;">
-                        {{ piegraph|safe }}
-                    </div>
-                {% endif %}
+                    {% if pieChartBool == True %}
+                        <div id="pie_chart">
+                            {{ piegraph|safe }}
+                            {{ piegraph1|safe }}
+                            {{ piegraph2|safe }}
+                            {{ piegraph3|safe }}
+                        </div>
+                    {% endif %}
 
-                {% if tableViewBool == True %}
-
-                    <div id="tableData">
-                        <table id="basic-datatable" class="table">
-                            <thead>
-                            <tr>
-                                <th>Functie</th>
-                                <th id="tarief">Tarief</th>
-
-                            </tr>
-
-                            <tbody id="myTable">
-                                {% for aanbiedingen in gemiddeldAanbiedingen  %}
+                    {% if tableViewBool == True %}
+                        {% if soortRap == '1' %}
+                            <div id="tableData">
+                                <table id="basic-datatable" class="table">
+                                    <thead>
                                     <tr>
-
-                                        <td id="tarief">{{ aanbiedingen.functie_aanbieding }}</td>
-                                        <td>{{ aanbiedingen.gemTarief }}</td>
-
-
-                                           <form action="" class="no-export" style="display: inline;">
-                                               {% csrf_token %}
-                                               <td id="detailOpdracht">
-                                                   <a href=""  class="btn btn-sm" id="detailKnop" role="button">View Details</a>
-
-                                               </td>
-                                           </form>
+                                        <th>Functie</th>
+                                        <th id="tarief">Tarief</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    <tbody id="myTable">
+                                        {% for data in dataLijst  %}
+                                            <tr>
+                                                <td id="tarief">{{ data.aanbieding__functie_aanbieding }}</td>
+                                                <td>{{ data.gemTarief|floatformat:2 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
 
-                    </div>
-                {% endif %}
+                        {% if soortRap == '2' %}
+                            <div id="tableData">
+                                <table id="basic-datatable" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Functie</th>
+                                        <th>Aanbiedingen</th>
+                                        <th>Intakes</th>
+                                        <th>Plaatsingen</th>
+                                    </tr>
+                                    <tbody id="myTable">
+                                        {% for data in totAantalAanTabel  %}
+                                            <tr>
+                                                <td>{{ data.functie_aanbieding }}</td>
+                                                <td>{{ data.aantal_aanbiedingen }}</td>
+                                                <td>{{ data.aant_intakes }}</td>
+                                                <td>{{ data.aantal_opdrachten }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
     <br>
-
-    <div id="area2">
-
-    </div>
-
-
-    <div style="margin-top: 100px" id="area3">
-        <div id="box3">
-        <table>
-            <thead>
-                <tr>
-                    <th>Functie aanbieding</th>
-                    <th>Medewerkers</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for functie_aanbieding, functie_aanbieding_medewerker in functie_aanbieding_medewerker_list %}
-                    <tr>
-                        <td>{{ functie_aanbieding }}</td>
-                        <td>
-                            {% for medewerker in functie_aanbieding_medewerker %}
-
-                                {{ medewerker }}<br>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-
-
-
-        </div>
-    </div>
-
 
     <br><br><br>
 </html>

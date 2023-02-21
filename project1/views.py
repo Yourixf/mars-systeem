@@ -19,8 +19,8 @@ from django.db.models import *
 from itertools import groupby
 import pandas as pd
 import plotly.express as px
-
-
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 from django.contrib.auth.hashers import check_password
 
@@ -40,6 +40,13 @@ def rapportagePage(request):
     functie_aanbieding_medewerker_list = []
     for functie_aanbieding, aanbiedingen_in_functie_aanbieding in groupby(aanbiedingen, key=lambda x: x.functie_aanbieding):
         functie_aanbieding_medewerker_list.append((functie_aanbieding, [aanbieding.medewerker for aanbieding in aanbiedingen_in_functie_aanbieding]))
+
+    barChartBool = False
+    pieChartBool = False
+    tableViewBool = False
+
+    rapForm = RapportageForm()
+
 
 
     """" NOG REPAREREN VOOR MEDEWERKERS MET INDIVIDUELE TARIEFEN
@@ -86,78 +93,314 @@ def rapportagePage(request):
 
 
     # voor graphs :
-
-    functie_list = []
-
     testOpdracht_list = []
-
-    # VOOR TABLEDATA TABEL
-    gemiddeldAanbiedingen = Aanbiedingen.objects.values('functie_aanbieding').annotate(gemTarief=Avg('tarief'))
 
     testOpdrachten = Opdrachten.objects.values('aanbieding').annotate(gem_tarief=Avg('tarief_opdracht'))
 
-    for i in gemiddeldAanbiedingen:
-        functie_list.append((
-            i['functie_aanbieding'], i['gemTarief']
-        ))
+    if request.method == 'POST':
+        rapForm = RapportageForm(request.POST, request.FILES)
+        if rapForm.is_valid():
+
+            soortRap = rapForm.cleaned_data['soort_rapportage']
+
+            if soortRap == '1':
+                soortWeergave = rapForm.cleaned_data['soort_weergave']
+                vanDatum = rapForm.cleaned_data['van_datum']
+                totDatum = rapForm.cleaned_data['tot_datum']
+
+                dataLijst = Opdrachten.objects.all().filter(date_created__range=[vanDatum,totDatum])
+
+                if dataLijst:
+
+                    dataLijst = dataLijst.values('aanbieding__functie_aanbieding').annotate(gemTarief=Avg('tarief_opdracht'))
+
+                    functie_list = []
+
+                    for i in dataLijst:
+                        functie_list.append((
+                            i['aanbieding__functie_aanbieding'], round(i['gemTarief'],2)
+                        ))
+
+                    data = {'functie': [a[0] for a in functie_list], 'tarief': [round(a[1],2) for a in functie_list]}
+                    df = pd.DataFrame(data)
 
 
-
-    data = {'functie': [a[0] for a in functie_list], 'tarief': [a[1] for a in functie_list]}
-    df = pd.DataFrame(data)
+                    if soortWeergave == '1':
 
 
-    fig2 = px.bar(df,
-        x='functie', y='tarief',
-        color='functie',
-        title='Gemiddeld tarief per functie',
-        labels={'x': 'Functie', 'y':'Gemiddeld tarief'},
-    )
+                        fig3 = px.pie(
+                            df,
+                            values='tarief',
+                            names='functie',
+                            title=f'Gemiddeld tarief per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} / {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                        )
 
-    fig2.update_layout(
-        showlegend=False,
-    )
+                        fig3.update_traces(
+                            textinfo='value',
+                            #texttemplate=’%{value:.1%f}’
+                        )
 
-    fig3 = px.pie(
-        df,
-        values='tarief',
-        names='functie',
-        title='Gemiddeld tarief per functie'
-    )
+                        piegraph = fig3.to_html(full_html=False, default_height=500, default_width=700,
+                                                config={'displaylogo': False})
 
-    fig3.update_traces(
-        textinfo='value',
-    )
+                        pieChartBool = True
 
-    fig3.update_layout(
-        showlegend=True,
-        annotations=[dict(text='', showarrow=False)]
-    )
+                        context = {
+                            'piegraph':piegraph,
+                            'pieChartBool':pieChartBool,
+                            'rapForm':rapForm,
+                            'vanDatum':vanDatum,
+                            'totDatum':totDatum
+                        }
 
-    barGraph = fig2.to_html(full_html=False, default_height=500, default_width=700, config ={'displaylogo': False})
-    piegraph = fig3.to_html(full_html=False, default_height=500, default_width=700, config ={'displaylogo': False})
+                        return render(request, 'rapportages.html', context)
+                    elif soortWeergave == '2':
+                        fig2 = px.bar(df,
+                                      x='functie', y='tarief',
+                                      color='functie',
+                                      title=f'Gemiddeld tarief per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} / {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                                      labels={'x': 'Functie', 'y': 'Gemiddeld tarief'},
+                                      )
 
-    barChartBool = True
-    pieChartBool = False
-    tableViewBool = False
+                        fig2.update_layout(
+                            showlegend=True,
+                        )
+                        barGraph = fig2.to_html(full_html=False, default_height=500, default_width=700,
+                                                config={'displaylogo': False})
 
-    rapForm = RapportageForm()
+                        barChartBool = True
+
+                        context = {
+                            'barGraph':barGraph,
+                            'barChartBool':barChartBool,
+                            'rapForm': rapForm,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request,'rapportages.html', context)
+                    elif soortWeergave == '3':
+                        tableViewBool = True
+
+                        context = {
+                            'dataLijst':dataLijst,
+                            'tableViewBool':tableViewBool,
+                            'rapForm': rapForm,
+                            'soortRap':soortRap,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request,'rapportages.html', context)
+                elif not dataLijst:
+                    queryAttempt = False
+
+                    context = {
+                        'rapForm': rapForm,
+                        'queryAttempt': queryAttempt
+                    }
+
+                    return render(request, 'rapportages.html', context)
+            elif soortRap == '2':
+                soortWeergave = rapForm.cleaned_data['soort_weergave']
+                vanDatum = rapForm.cleaned_data['van_datum']
+                totDatum = rapForm.cleaned_data['tot_datum']
+                totaalAanbiedingen = Aanbiedingen.objects.all().filter(registratie__range=[vanDatum, totDatum])
+
+                totaalAanbiedingen2 = totaalAanbiedingen.values('functie_aanbieding').annotate(aantalAanbied=Count('functie_aanbieding'))
+
+                totaalAanbiedingen_list = []
+
+                for i in totaalAanbiedingen2:
+                    totaalAanbiedingen_list.append((
+                        i['functie_aanbieding'], i['aantalAanbied']
+                    ))
+
+                data = {'functie_aanbieding': [a[0] for a in totaalAanbiedingen_list], 'aantalAanbied': [a[1] for a in totaalAanbiedingen_list]}
+                df = pd.DataFrame(data)
+
+                if soortWeergave == '1':
+
+                    totaalAanbiedingenPie = Aanbiedingen.objects.all().filter(registratie__range=[vanDatum, totDatum])
+
+                    if totaalAanbiedingenPie:
+                        totAantalAanPie = totaalAanbiedingenPie.values('functie_aanbieding', 'aangemaakt_door') \
+                            .annotate(aantal_aanbiedingen=Count('id'),
+                                      aantal_opdrachten=Count('opdrachten')) \
+                            .order_by('-aantal_aanbiedingen')
+
+                        dataLijst = []
+                        for i in totAantalAanPie:
+                            dataLijst.append((
+                                i['functie_aanbieding'], i['aantal_aanbiedingen'], i['aangemaakt_door'],
+                                i['aantal_opdrachten']
+                            ))
+
+
+                        fig1 = px.pie(
+                            totAantalAanPie,
+                            values='aantal_aanbiedingen',
+                            names='functie_aanbieding',
+                            title=f'Totaal aantal aanbiedingen per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} / {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                        )
+
+                        fig1.update_traces(
+                            textinfo='value',
+                        )
+
+                        fig2 = px.pie(
+                            totAantalAanPie,
+                            values='aangemaakt_door',
+                            names='functie_aanbieding',
+                            title=f'Totaal aantal intakes per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} / {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                        )
+
+                        fig2.update_traces(
+                            textinfo='value',
+                        )
+
+                        fig3 = px.pie(
+                            totAantalAanPie,
+                            values='aantal_opdrachten',
+                            names='functie_aanbieding',
+                            title=f'Totaal aantal opdrachten per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} / {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                        )
+
+                        fig3.update_traces(
+                            textinfo='value',
+                        )
+
+                        piegraph1 = fig1.to_html(full_html=False, default_height=400, default_width=600,
+                                                config={'displaylogo': False})
+                        piegraph2 = fig2.to_html(full_html=False, default_height=400, default_width=600,
+                                                config={'displaylogo': False})
+                        piegraph3 = fig3.to_html(full_html=False, default_height=400, default_width=600,
+                                                config={'displaylogo': False})
+
+                        pieChartBool = True
+
+                        context = {
+                            'piegraph1': piegraph1,
+                            'piegraph2':piegraph2,
+                            'piegraph3':piegraph3,
+                            'pieChartBool': pieChartBool,
+                            'rapForm': rapForm,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request, 'rapportages.html', context)
+                    elif not totaalAanbiedingenPie:
+
+                        queryAttempt = False
+
+                        context = {
+                            'rapForm':rapForm,
+                            'queryAttempt':queryAttempt
+                        }
+
+                        return render(request, 'rapportages.html', context)
+
+
+                elif soortWeergave == '2':
+                    totaalAanbiedingenBar = Aanbiedingen.objects.all().filter(registratie__range=[vanDatum, totDatum])
+
+                    if totaalAanbiedingenBar:
+                        totAantalAanbBarV2 = totaalAanbiedingenBar.values('functie_aanbieding') \
+                            .annotate(Aanbiedingen=Count('id'),
+                            Opdrachten=Count('opdrachten'), Intakes=Sum('aantal_intakes')) \
+                            .order_by('-Aanbiedingen')
+
+
+                        totaalAanbiedingenBar_list = []
+                        for i in totAantalAanbBarV2:
+                            totaalAanbiedingenBar_list.append((
+                                i['functie_aanbieding'], i['Aanbiedingen'], i['Opdrachten'], i['Intakes']
+                            ))
+
+                        fig = px.bar(totAantalAanbBarV2,
+                                     x='functie_aanbieding', y=['Aanbiedingen', 'Intakes', 'Opdrachten'],
+                                     title=f'Aantal aanbiedingen, intakes en plaatsingen per functie ({vanDatum.day}-{vanDatum.month}-{vanDatum.year} - {totDatum.day}-{totDatum.month}-{totDatum.year})',
+                                     labels={'value': 'Aantal', 'variable': 'Item',
+                                             'functie_aanbieding': 'Functie Aanbieding'},
+                                     barmode='stack'
+                                     )
+
+                        fig.update_layout(
+                            showlegend=True,
+                            font={'size':10},
+                        )
+                        barGraph = fig.to_html(full_html=False, default_height=500, default_width=700,
+                                                config={'displaylogo': False})
+
+                        barChartBool = True
+
+                        context = {
+                            'barGraph': barGraph,
+                            'barChartBool': barChartBool,
+                            'rapForm': rapForm,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request, 'rapportages.html', context)
+
+                    elif not totaalAanbiedingenBar:
+                        queryAttempt = False
+
+                        context = {
+                            'rapForm':rapForm,
+                            'queryAttempt':queryAttempt
+                        }
+
+                        return render(request, 'rapportages.html', context)
+
+                elif soortWeergave == '3':
+                    totaalAanbiedingenTabel = Aanbiedingen.objects.all().filter(registratie__range=[vanDatum, totDatum])
+
+                    if totaalAanbiedingenTabel:
+                        totAantalAanTabel = totaalAanbiedingenTabel.values('functie_aanbieding') \
+                            .annotate(aantal_aanbiedingen=Count('id'),
+                                      aantal_opdrachten=Count('opdrachten'), aant_intakes=Sum('aantal_intakes')) \
+                            .order_by('-aantal_aanbiedingen')
+
+                        dataLijst = []
+                        for i in totAantalAanTabel:
+                            dataLijst.append((
+                                i['functie_aanbieding'], i['aantal_aanbiedingen'], i['aant_intakes'],
+                                i['aantal_opdrachten']
+                            ))
+
+                        tableViewBool = True
+
+                        context = {
+                            'tableViewBool': tableViewBool,
+                            'rapForm': rapForm,
+                            'dataLijst':dataLijst,
+                            'soortRap':soortRap,
+                            'totAantalAanTabel':totAantalAanTabel,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request, 'rapportages.html', context)
+                    elif not totaalAanbiedingenTabel:
+                        queryAttempt = False
+
+                        context = {
+                            'rapForm': rapForm,
+                            'queryAttempt': queryAttempt,
+                            'vanDatum': vanDatum,
+                            'totDatum': totDatum
+                        }
+
+                        return render(request, 'rapportages.html', context)
 
     context = {
         'functie_aanbieding_medewerker_list':functie_aanbieding_medewerker_list,
         'year':year,
-        'barGraph':barGraph,
-        'piegraph':piegraph,
-        'functie_list':functie_list,
-        'gemiddeldAanbiedingen':gemiddeldAanbiedingen,
-        'barChartBool':barChartBool,
-        'pieChartBool':pieChartBool,
-        'tableViewBool':tableViewBool,
         'rapForm':rapForm
     }
-
-    if request.method == 'GET' or request.method == 'POST':
-        data = request.GET
 
     return render(request, 'rapportages.html', context)
 
@@ -1098,8 +1341,6 @@ def EindklantenUpdaten(request, pk):
                 update_nmr = 1
 
 
-            initi = eindklant_form.initial
-
             History_Record = Klanten_History(
                 klant=eindklant,
                 update_id=update_nmr,
@@ -1416,6 +1657,7 @@ def AanbiedingUpdaten(request, pk):
                 betaalkorting=aanbieding_form.initial.get('betaalkorting'),
                 opmerking=aanbieding_form.initial.get('opmerking'),
                 medewerker=aanbiedingMedewerker,
+                aantal_intakes=aanbieding_form.initial.get('aantal_intakes')
             )
 
             history_record.save()

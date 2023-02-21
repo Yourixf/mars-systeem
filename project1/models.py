@@ -363,7 +363,7 @@ class Aanbiedingen(models.Model):
     laatste_update = models.DateField(null=True, blank=True)
     opmerking = models.CharField(max_length=600, blank=True)
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
-
+    aantal_intakes = models.IntegerField(null=True, blank=True)
 
     def get_status_count(self):
         return Aanbiedingen.objects.all().filter(status='1').count()
@@ -386,6 +386,7 @@ class Aanbiedingen_History(models.Model):
     medewerker = models.ForeignKey(Medewerkers, on_delete=models.DO_NOTHING, blank=False)
     opmerking = models.CharField(max_length=600, blank=True)
     updatedatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
+    aantal_intakes = models.IntegerField(null=True, blank=True)
 
 
 class Opdrachten(models.Model):
