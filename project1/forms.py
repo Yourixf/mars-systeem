@@ -10,6 +10,7 @@ from .models import Medewerkers, Contracten, Eindklanten, Brokers, Certificaten,
     Opmerkingen
 from django.forms.widgets import *
 from django.contrib.admin import widgets
+from datetime import *
 
 from .models import *
 
@@ -61,6 +62,9 @@ SOORT_WEERGAVE_CHOICES = (
     ('2', 'Bar chart'),
     ('3', 'Tabel')
 )
+
+class WijzigingenDatumForm(forms.Form):
+    aantalDagen = forms.IntegerField(initial=60, label='Wijzigingen van afgelopen aantal dagen')
 
 class RapportageForm(forms.Form):
     soort_rapportage = forms.ChoiceField(widget=forms.RadioSelect, choices=SOORT_RAPPORTAGE_CHOICES)
@@ -206,15 +210,12 @@ class KlantenUpdatenForm(forms.ModelForm):
 # Met de fields = '__all__' pakt Django alle variabele uit de model.
 # Met de  exclude = [] zorg je ervoor dat Django deze niet mee pakt in de Form.
 class EindklantenForm(forms.ModelForm):
-
     klantnaam = forms.CharField(max_length=50, required=False)
     telefoonnummer_klant = forms.CharField(max_length=17, required=False)
     portaal_klant = forms.URLField(max_length=300, required=False)
-    #vestigingSoort = forms.ModelChoiceField(queryset=Vestigingplaats.objects.get(Vestigingplaats.soort))
     class Meta:
         model = Eindklanten
         fields = ['accountmanager', 'klantnaam', 'telefoonnummer_klant', 'portaal_klant',]
-        #exclude = ('straat_klant', 'plaats_klant', 'postcode_klant', 'huisnummer_klant', 'opmerking_title', 'opmerking_intro', 'opmerking_body', 'opmerking_date_added',)
 
 
 
@@ -291,8 +292,8 @@ class AanbiedingenForm(forms.ModelForm):
     #laatste_update = forms.DateField(required=False)
     functie = forms.CharField(required=False)
     functie_aanbieding = forms.CharField(required=False)
-    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
-    broker = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING)
+    klant = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, null=True, blank=True)
+    broker = models.ForeignKey(Klanten, on_delete=models.DO_NOTHING, null=True, blank=True)
     #accountmanager = forms.ChoiceField(choices=ACCOUNTMANAGER_CHOICES, required=False)
     status = forms.ChoiceField(required=False, choices=STATUS_AANBIEDING_CHOICES)
     tarief = forms.DecimalField(initial=00.00, required=False, max_value=200)
@@ -334,7 +335,6 @@ class AanbiedingUpdatenForm(forms.ModelForm):
             "broker":"Tussenpartij",
             "accountmanager":"4-Rest contactpersoon",
             "klant":"Eindklant",
-
         }
 class OpdrachtenForm(forms.ModelForm):
     aanbieding = models.ForeignKey(Aanbiedingen, on_delete=models.DO_NOTHING, blank=True)

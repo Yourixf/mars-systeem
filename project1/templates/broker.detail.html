@@ -132,13 +132,15 @@ input[class=btn], a[class=btn] {
     }
 
   .box1 {
-        border-radius: 19px;
-        background-color: #f2f2f2;
-        margin: auto;
-        position: relative;
-        overflow: auto;
-        padding: 20px;
-        margin: auto;
+      border-radius: 19px;
+      background-color: #f2f2f2;
+      margin: auto;
+      position: relative;
+      overflow: auto;
+      padding: 20px;
+      margin: auto;
+      outline: solid;
+      outline-color: #32933d;
     }
     .box3 {
         border-radius: 19px;
@@ -147,6 +149,8 @@ input[class=btn], a[class=btn] {
         position: relative;
         padding: 20px;
         overflow: auto;
+        outline: solid;
+        outline-color: #32933d;
     }
 
     #box2 {
@@ -156,6 +160,8 @@ input[class=btn], a[class=btn] {
         position: relative;
         padding: 20px;
         overflow: auto;
+        outline: solid;
+        outline-color: #32933d;
     }
 
     .box1 #container {
@@ -499,6 +505,7 @@ $(document).ready(function() {
     </table>
 </div>
 
+<br>
 {% for posts in posts %}
 	<h1 class="title">{{ posts.title }}</h1>
 

@@ -29,16 +29,7 @@
     }
 
 
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
 
-    td{
-        white-space: nowrap;
-        overflow: auto;
-    }
 
 #startDatum {
     max-width: 90px;
@@ -74,6 +65,27 @@
     background-color: #ff0000;
     color: white;
 }
+#deleteUpdate{
+    min-width: 115px;
+    max-width: 120px;
+}
+
+#detail{
+    min-width: 60px;
+    max-width: 65px;
+}
+
+td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        width: fit-content;
+    }
+
+    td{
+        white-space: nowrap;
+        overflow: auto;
+    }
 div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wrapper div.dataTables_paginate, div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_info {
     margin-right: 10px;
 }
@@ -123,13 +135,7 @@ div.dataTables_wrapper div.dataTables_filter, div.dt-buttons, div.dataTables_wra
             margin-right: 10px;
             overflow: auto;
         }
-        #deleteUpdate{
-            max-width: 140px;
-        }
 
-        #detail{
-            max-width: 100px;
-        }
     }
 </style>
 {% endblock %}

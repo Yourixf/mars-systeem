@@ -351,9 +351,9 @@ class Aanbiedingen(models.Model):
     aangemaakt_door = models.CharField(max_length=50, choices=ACCOUNTMANAGER_CHOICES, blank=True)
     functie = models.CharField(max_length=50, blank=True)
     functie_aanbieding = models.CharField(max_length=50, blank=True)
-    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, blank=True,
+    klant = models.ForeignKey(Klanten, related_name='klant', on_delete=models.DO_NOTHING, null=True, blank=True,
                               limit_choices_to={'soort': '1'})
-    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, blank=True,
+    broker = models.ForeignKey(Klanten, related_name='broker', on_delete=models.DO_NOTHING, null=True, blank=True,
                                limit_choices_to={'soort': '2'})
     accountmanager = models.CharField(max_length=4, choices=ACCOUNTMANAGER_CHOICES, blank=True)
 

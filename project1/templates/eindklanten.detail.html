@@ -430,6 +430,7 @@ $(document).ready(function() {
         <label>Telefoonnummer eindklant:</label><p>{{ eindklant_pk.telefoonnummer }}</p>
         <label>Portaal eindklant:</label><p><a href="{{ eindklant_pk.portaal }}" target="_blank">{{eindklant_pk.portaal}}</a></p>
         <label>Email adres factuur</label><p>{{ eindklant_pk.factuuremail }}</p>
+        <label>4-Rest contactpersoon</label><p>{{ eindklant_pk.get_accountmanager_display }}</p>
     </div>
     <div style="margin-top: 1%">
         <a href="{% url 'eindklanten' %}" class="btn" role="button">Terug</a>

@@ -15,6 +15,8 @@ td, th {
 
 #medeName{
     text-align: center;
+    margin-top: -0.5%;
+    margin-bottom: 5%;
 }
 
 #annuleerKnop{
@@ -25,7 +27,7 @@ td, th {
 body{
         background-color:#CBCBCB;
     }
-input[class=btn], a[class=btn] {
+input[class=btn], a[class=btn]{
         display: inline-block;
         align: center;
         background-color: #3CB64A;
@@ -36,7 +38,13 @@ input[class=btn], a[class=btn] {
         cursor: pointer;
         margin: auto;
     }
-  #box {
+
+    button[id=detailKnop]{
+        background-color: #32933d;
+        color: white;
+    }
+
+  #box, #box2 {
         border-radius: 19px;
         background-color: #f2f2f2;
         margin: auto;
@@ -46,7 +54,7 @@ input[class=btn], a[class=btn] {
         margin: auto;
     }
 
-#box #container {
+#box #container, #box2 #container2 {
         display: grid;
         row-gap: 0px;
         column-gap: 15px;
@@ -54,127 +62,270 @@ input[class=btn], a[class=btn] {
         overflow: auto;
     }
 
+    #box3{
+        border-radius: 19px;
+        background-color: #f2f2f2;
+        margin: auto;
+        position: relative;
+        overflow: auto;
+        padding: 20px;
+        margin: auto;
+        width: 20%;
+    }
+{% if variable == True %}
+    #area1{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+{% endif %}
     @media(min-width: 1600px){
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 45%;
+            {% if variable == True %}
+                width: 65%;
+            {% endif %}
         }
-        #box #container {
+        #box #container, #box2 #container2  {
             grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 
     @media(min-width: 1200px) and (max-width: 1600px) {
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 50%;
+            {% if variable == True %}
+                width: 90%;
+            {% endif %}
         }
-        #box #container {
+        #box #container, #box2 #container2  {
             grid-template-columns: repeat(4, minmax(0, 1fr));
-
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 
     @media(min-width: 1100px) and (max-width: 1200px) {
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 65%;
+            {% if variable == True %}
+                width: 95%;
+            {% endif %}
         }
-        #box #container {
+
+        #box, #box2 p{
+            {% if variable == True %}
+                overflow-x: auto;
+            {% endif %}
+        }
+
+        #box #container, #box2 #container2  {
             grid-template-columns: repeat(4, minmax(0, 1fr));
 
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 
     @media(min-width:700px) and (max-width: 1100px) {
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 80%;
+            {% if variable == True %}
+                width: 85%;
+            {% endif %}
         }
-        #box #container {
+        #box #container, #box2 #container2  {
             grid-template-columns: repeat(4, minmax(0, 1fr));
-
+            {% if variable == True %}
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            {% endif %}
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 
     @media(max-width: 700px) and (min-width: 530px){
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 85%;
+            {% if variable == True %}
+                width: 90%;
+            {% endif %}
         }
-        #box #container {
+        #box #container, #box2 #container2 {
             grid-template-columns: repeat(4, minmax(0, 1fr));
-
+            {% if variable == True %}
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            {% endif %}
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 
     @media(max-width:530px) {
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 92%;
         }
-        #box #container {
+        #box #container, #box2 #container2  {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+        {% if variable == True %}
+            #area1{
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            #box2{
+                margin-top: 10px;
+            }
+        {% endif %}
+        #box3{
+            width: fit-content;
+            height: fit-content;
+            }
     }
 
     @media(max-width:300px) {
-        #box {
+        #box, #box2 {
             -webkit-transition: width 2s ease-in-out;
             -moz-transition: width 2s ease-in-out;
             -o-transition: width 2s ease-in-out;
             transition: width 2s ease-in-out;
             width: 92%;
         }
-        #box #container {
+        #box #container, #box2 #container2 {
             grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        #box3{
+            width: fit-content;
+            height: fit-content;
         }
     }
 </style>
 </head>
+<script>
+$(document).ready(function() {
+    $("#basic-datatable1").DataTable({
+      pageLength: 10,
+      lengthChange: false,
+      bInfo : false,
+      order: [[ 0, "asc" ]],
+      dom: 'lrtip',
+    });
+  });
+</script>
 
+<div id="area1">
+    <div id="box" ALIGN="center">
+        <h3 id="medeName">Detail weergave meest recente versie</h3>
 
-<div id="box" ALIGN="center">
-    <h3 id="medeName">Detail weergave meest recente versie</h3>
+        <div id="container">
+            <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+            <label>Klant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
+            <label>Tussenpartij</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
+            <label>Startdatum</label><p>{{ opdracht.startdatum }}</p>
+            <label>Tarief</label><p>{{ opdracht.tarief_opdracht }}</p>
+            <label>Einddatum</label><p>{{ opdracht.einddatum }}</p>
+            <label>Betaalkorting</label><p>{{ opdracht.opdracht_betaalkorting }}</p>
+            <label>Aantal uren</label><p>{{ opdracht.aantal_uren }}</p>
+            <label>Werknemer aantal uren</label><p>{{ opdracht.aanbieding.medewerker.aantal_uur }}</p>
+            <label>Klant adres</label><p>{{ hoofdvestiging }}</p>
+            <label>Email adres factuur</label><p>{{ factuuremail }}</p>
+            <label>Medewerker BV</label><p>{{ opdracht.aanbieding.medewerker.get_bv_display }}</p>
 
-    <div id="container">
-        <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
-        <label>Klant</label><p>{{ opdracht.aanbieding.klant.naam }}</p>
-        <label>Tussenpartij</label><p>{{ opdracht.aanbieding.broker.naam }}</p>
-        <label>Starpatum</label><p>{{ opdracht.starpatum }}</p>
-        <label>Tarief</label><p>{{ opdracht.tarief_opdracht }}</p>
-        <label>Einddatum</label><p>{{ opdracht.einddatum }}</p>
-        <label>Betaalkorting</label><p>{{ opdracht.opdracht_betaalkorting }}</p>
-        <label>Aantal uren</label><p>{{ opdracht.aantal_uren }}</p>
-        <label>Werknemer aantal uren</label><p>{{ opdracht.aanbieding.medewerker.aantal_uur }}</p>
-        <label>Klant adres</label><p>{{ hoofdvestiging }}</p>
-        <label>Email adres factuur</label><p>{{ factuuremail }}</p>
-        <label>Medewerker bv</label><p>{{ opdracht.aanbieding.medewerker.get_bv_display }}</p>
+        </div>
+        <div style="margin-top: 1%">
+            <a href="{% url 'factuur_history_page' %}" class="btn" role="button">Terug</a>
+        </div>
     </div>
-    <div style="margin-top: 1%">
-        <a href="{% url 'factuur_history_page' %}" class="btn" role="button">Terug</a>
-    </div>
+    {% if variable == True %}
+        <div id="box2" ALIGN="center">
+            <h3 id="medeName">Versie {{ selected_history.update_id }}</h3>
+
+            <div id="container2">
+                <label>Medewerker</label><p>{{ selected_history.aanbieding.medewerker }}</p>
+                <label>Klant</label><p>{{ selected_history.aanbieding.klant.naam }}</p>
+                <label>Tussenpartij</label><p>{{ selected_history.aanbieding.broker.naam }}</p>
+                <label>Startdatum</label><p>{{ history_startDatum }}</p>
+                <label>Tarief</label><p>{{ history_tarief }}</p>
+                <label>Einddatum</label><p>{{ history_einddatum }}</p>
+                <label>Betaalkorting</label><p>{{ history_betaalkorting }}</p>
+                <label>Aantal uren</label><p>{{ history_aantal_uur }}</p>
+                <label>Werknemer aantal uren</label><p>{{ selected_history.aanbieding.medewerker.aantal_uur }}</p>
+                <label>Klant adres</label><p>{{ hoofdvestiging }}</p>
+                <label>Email adres factuur</label><p>{{ factuuremail }}</p>
+                <label>Medewerker BV</label><p>{{ selected_history.aanbieding.medewerker.get_bv_display }}</p>
+            </div>
+
+        </div>
+    {% endif %}
+
 </div>
     <br>
 
+
+<div id="versieTabel" align="center">
+    <div id="box3">
+        <h3>Versie geschiedenis</h3>
+        <table id="basic-datatable1" class="table1">
+            <thead>
+                <tr>
+                    <th id="" style="width: fit-content">Versie datum & nmr</th>
+                    <th id="">Detail</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                {% for item in allHistory %}
+                    <tr>
+                        <td>{{ item.updatedatum }} - {{ item.update_id }}</td>
+
+                        <form action="{% url 'factuur_history_detail' opdracht.pk  %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                                <td id="deleteUpdate">
+                                    <input type="hidden" name="history_id" value="{{ item.pk }}">
+                                    <button type="submit" class="btn btn-sm" id="detailKnop">Selecteer</button>
+
+                                </td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
 </body>
 
 </html>

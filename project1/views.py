@@ -407,10 +407,10 @@ def rapportagePage(request):
 @login_required(login_url='login')
 def FactuurHistoryDetailPage(request, pk):
     opdracht = Opdrachten.objects.get(id=pk)
+    variable = False
 
     if opdracht.aanbieding.broker_id:
         factuuremail = opdracht.aanbieding.broker.factuuremail
-        broker_id = opdracht.aanbieding.broker_id
         broker_id = opdracht.aanbieding.broker_id
         try:
             hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
@@ -424,11 +424,68 @@ def FactuurHistoryDetailPage(request, pk):
         except:
             hoofdvestiging = ''
 
+    allHistory = Opdrachten_History.objects.all().filter(opdracht_id=opdracht.id)
+
+    if request.method == 'POST':
+        history_id = request.POST.get('history_id')
+        selected_history = Opdrachten_History.objects.get(pk=history_id)
+        variable = True
+
+
+        if selected_history.startdatum == None:
+            history_startDatum = opdracht.startdatum
+        elif selected_history.startdatum != None:
+            history_startDatum = selected_history.startdatum
+
+        if selected_history.tarief_opdracht == None:
+            history_tarief = opdracht.tarief_opdracht
+        elif selected_history.tarief_opdracht != None:
+            history_tarief = selected_history.tarief_opdracht
+
+        if selected_history.einddatum == None:
+            history_einddatum = opdracht.einddatum
+        elif selected_history.einddatum != None:
+            history_eindDatum = selected_history.einddatum
+
+        if selected_history.opdracht_betaalkorting == None:
+            history_betaalkorting = opdracht.opdracht_betaalkorting
+        elif selected_history.opdracht_betaalkorting != None:
+            history_betaalkorting = selected_history.opdracht_betaalkorting
+
+        if selected_history.aantal_uren == None:
+            history_aantal_uur = opdracht.aantal_uren
+        elif selected_history.aantal_uren != None:
+            history_aantal_uur = selected_history.aantal_uren
+
+        context = {
+            'opdracht': opdracht,
+            'factuuremail': factuuremail,
+            'hoofdvestiging': hoofdvestiging,
+            'allHistory': allHistory,
+            'variable': variable,
+            'selected_history': selected_history,
+            'history_startDatum': history_startDatum,
+            'history_tarief': history_tarief,
+            'history_einddatum':history_einddatum,
+            'history_betaalkorting':history_betaalkorting,
+            'history_aantal_uur':history_aantal_uur
+
+
+        }
+
+        return render(request, 'factuur.history.detail.html', context)
+
+    else:
+        selected_history = opdracht
+        variable = False
 
     context = {
         'opdracht':opdracht,
         'factuuremail':factuuremail,
         'hoofdvestiging':hoofdvestiging,
+        'allHistory':allHistory,
+        'variable':variable,
+        'selected_history':selected_history,
     }
 
     return render(request, 'factuur.history.detail.html', context)
@@ -445,15 +502,31 @@ def ContractHistoryPage(request):
 
 @login_required(login_url='login')
 def FactuurHistoryPage(request):
-    datum_nu = date.today() - timedelta(days=30)
-    eind_datum = datum_nu + timedelta(days=60)
-    opdrachten_list = Opdrachten.objects.filter(Q(status_opdracht=1), begindatum__range=[datum_nu, eind_datum])
+    wijzigingen_form = WijzigingenDatumForm()
+    aantalDagen = 60
 
+    datum_nu = date.today()
+    afgelopen_dagen = datum_nu - timedelta(days=aantalDagen)
+    opdrachten_list = Opdrachten.objects.filter(Q(status_opdracht=1), begindatum__range=[afgelopen_dagen, datum_nu])
 
+    if request.method == 'POST':
+        wijzigingen_form = WijzigingenDatumForm(request.POST, request.FILES)
+        if wijzigingen_form.is_valid():
+            aantal_dagen = wijzigingen_form.cleaned_data['aantalDagen']
 
+            datum_nu = date.today()
+            afgelopen_dagen = datum_nu - timedelta(days=aantal_dagen)
+            opdrachten_list = Opdrachten.objects.filter(Q(status_opdracht=1), begindatum__range=[afgelopen_dagen, datum_nu])
+
+            context = {
+                'opdrachten_list':opdrachten_list,
+                'wijzigingen_form':wijzigingen_form,
+            }
+            return render(request, 'factuur.history.html', context)
 
     context = {
         'opdrachten_list':opdrachten_list,
+        'wijzigingen_form':wijzigingen_form,
     }
 
     return render(request, 'factuur.history.html', context)
@@ -1165,34 +1238,136 @@ def MedewerkersUpdaten(request, pk):
             elif not Medewerkers_History.objects.filter(medewerker_id=medewerker.pk):
                 update_nmr = 1
 
+
+            if medewerker_form.initial.get('voornaam') != medewerker_form.instance.voornaam:
+                voornaam = medewerker_form.initial.get('voornaam')
+            else:
+                voornaam = None
+            if medewerker_form.initial.get('tussenvoegsel') != medewerker_form.instance.tussenvoegsel:
+                tussenvoegsel = medewerker_form.initial.get('tussenvoegesl')
+            else:
+                tussenvoegsel = None
+            if medewerker_form.initial.get('achternaam') != medewerker_form.instance.achternaam:
+                achternaam = medewerker_form.initial.get('achternaam')
+            else:
+                achternaam = None
+            if medewerker_form.initial.get('roepnaam') != medewerker_form.instance.roepnaam:
+                roepnaam = medewerker_form.initial.get('roepnaam')
+            else:
+                roepnaam = None
+            if medewerker_form.initial.get('functie') != medewerker_form.instance.functie:
+                functie = medewerker_form.initial.get('functie')
+            else:
+                functie = None
+            if medewerker_form.initial.get('geboortedatum') != medewerker_form.instance.geboortedatum:
+                geboortedatum = medewerker_form.initial.get('geboortedatum')
+            else:
+                geboortedatum = None
+            if medewerker_form.initial.get('geboorteplaats') != medewerker_form.instance.geboorteplaats:
+                geboorteplaats = medewerker_form.initial.get('geboorteplaats')
+            else:
+                geboorteplaats = None
+            if medewerker_form.initial.get('nationaliteit') != medewerker_form.instance.nationaliteit:
+                nationaliteit = medewerker_form.initial.get('nationaliteit')
+            else:
+                nationaliteit = None
+            if medewerker_form.initial.get('straat') != medewerker_form.instance.straat:
+                straat = medewerker_form.initial.get('straat')
+            else:
+                straat = None
+            if medewerker_form.initial.get('huisnummer') != medewerker_form.instance.huisnummer:
+                huisnummer = medewerker_form.initial.get('huisnummer')
+            else:
+                huisnummer = None
+            if medewerker_form.initial.get('postcode') != medewerker_form.instance.postcode:
+                postcode = medewerker_form.initial.get('postcode')
+            else:
+                postcode = None
+            if medewerker_form.initial.get('woonplaats') != medewerker_form.instance.woonplaats:
+                woonplaats = medewerker_form.initial.get('woonplaats')
+            else:
+                woonplaats = None
+            if medewerker_form.initial.get('telefoonnummer') != medewerker_form.instance.telefoonnummer:
+                telefoonnummer = medewerker_form.initial.get('telefoonnummer')
+            else:
+                telefoonnummer = None
+            if medewerker_form.initial.get('bsnnummer') != medewerker_form.instance.bsnnummer:
+                bsnnummer = medewerker_form.initial.get('bsnnummer')
+            else:
+                bsnnummer = None
+            if medewerker_form.initial.get('banknummer') != medewerker_form.instance.banknummer:
+                banknummer = medewerker_form.initial.get('banknummer')
+            else:
+                banknummer = None
+            if medewerker_form.initial.get('bv') != medewerker_form.instance.bv:
+                bv = medewerker_form.initial.get('bv')
+            else:
+                bv = None
+            if medewerker_form.initial.get('burgerlijkse_staat') != medewerker_form.instance.burgerlijkse_staat:
+                burgerlijkse_staat = medewerker_form.initial.get('burgerlijkse_staat')
+            else:
+                burgerlijkse_staat = None
+            if medewerker_form.initial.get('opleidingsniveau') != medewerker_form.instance.opleidingsniveau:
+                opleidingsniveau = medewerker_form.initial.get('opleidingsniveau')
+            else:
+                opleidingsniveau = None
+            if medewerker_form.initial.get('ice_persoon_naam') != medewerker_form.instance.ice_persoon_naam:
+                ice_persoon_naam = medewerker_form.initial.get('ice_persoon_naam')
+            else:
+                ice_persoon_naam = None
+            if medewerker_form.initial.get('ice_telefoonnummer') != medewerker_form.instance.ice_telefoonnummer:
+                ice_telefoonnummer = medewerker_form.initial.get('ice_telefoonnummer')
+            else:
+                ice_telefoonnummer = None
+            if medewerker_form.initial.get('datum_in_dienst') != medewerker_form.instance.datum_in_dienst:
+                datum_in_dienst = medewerker_form.initial.get('datum_in_dienst')
+            else:
+                datum_in_dienst = None
+            if medewerker_form.initial.get('lease_auto') != medewerker_form.instance.lease_auto:
+                lease_auto = medewerker_form.initial.get('lease_auto')
+            else:
+                lease_auto = None
+            if medewerker_form.initial.get('aantal_uur') != medewerker_form.instance.aantal_uur:
+                aantal_uur = medewerker_form.initial.get('aantal_uur')
+            else:
+                aantal_uur = None
+            if medewerker_form.initial.get('status') != medewerker_form.instance.status:
+                status = medewerker_form.initial.get('status')
+            else:
+                status = None
+            if medewerker_form.initial.get('tariefindicatie') != medewerker_form.instance.tariefindicatie:
+                tariefindicatie = medewerker_form.initial.get('tariefindicatie')
+            else:
+                tariefindicatie = None
+                
             History_record = Medewerkers_History(
                 medewerker=medewerker,
                 update_id=update_nmr,
-                voornaam=medewerker_form.initial.get('voornaam'),
-                tussenvoegsel=medewerker_form.initial.get('tussenvoegsel'),
-                achternaam=medewerker_form.initial.get('achternaam'),
-                roepnaam=medewerker_form.initial.get('roepnaam'),
-                functie=medewerker_form.initial.get('functie'),
-                geboortedatum=medewerker_form.initial.get('geboortedatum'),
-                geboorteplaats=medewerker_form.initial.get('geboorteplaats'),
-                nationaliteit=medewerker_form.initial.get('nationaliteit'),
-                straat=medewerker_form.initial.get('straat'),
-                huisnummer=medewerker_form.initial.get('huisnummer'),
-                postcode=medewerker_form.initial.get('postcode'),
-                woonplaats=medewerker_form.initial.get('woonplaats'),
-                telefoonnummer=medewerker_form.initial.get('telefoonnummer'),
-                bsnnummer=medewerker_form.initial.get('bsnnummer'),
-                banknummer=medewerker_form.initial.get('banknummer'),
-                bv=medewerker_form.initial.get('bv'),
-                burgerlijkse_staat=medewerker_form.initial.get('burgelijkse_staat'),
-                opleidingsniveau=medewerker_form.initial.get('opleidingsniveau'),
-                ice_persoon_naam=medewerker_form.initial.get('ice_persoon_naam'),
-                ice_telefoonnummer=medewerker_form.initial.get('ice_telefoonnummer'),
-                datum_in_dienst=medewerker_form.initial.get('datum_in_dienst'),
-                lease_auto=medewerker_form.initial.get('lease_auto'),
-                aantal_uur=medewerker_form.initial.get('aantal_uur'),
-                status=medewerker_form.initial.get('status'),
-                tariefindicatie=medewerker_form.initial.get('tariefindicatie'),
+                voornaam=voornaam,
+                tussenvoegsel=tussenvoegsel,
+                achternaam=achternaam,
+                roepnaam=roepnaam,
+                functie=functie,
+                geboortedatum=geboortedatum,
+                geboorteplaats=geboorteplaats,
+                nationaliteit=nationaliteit,
+                straat=straat,
+                huisnummer=huisnummer,
+                postcode=postcode,
+                woonplaats=woonplaats,
+                telefoonnummer=telefoonnummer,
+                bsnnummer=bsnnummer,
+                banknummer=banknummer,
+                bv=bv,
+                burgerlijkse_staat=burgerlijkse_staat,
+                opleidingsniveau=opleidingsniveau,
+                ice_persoon_naam=ice_persoon_naam,
+                ice_telefoonnummer=ice_telefoonnummer,
+                datum_in_dienst=datum_in_dienst,
+                lease_auto=lease_auto,
+                aantal_uur=aantal_uur,
+                status=status,
+                tariefindicatie=tariefindicatie,
             )
 
             orginele_medewerker_form = medewerker_form.save()
@@ -1341,14 +1516,46 @@ def EindklantenUpdaten(request, pk):
                 update_nmr = 1
 
 
+            if eindklant_form.initial.get('accountmanager') != eindklant_form.instance.accountmanager:
+                accountmgr = eindklant_form.initial.get('accountmanager')
+            else:
+                accountmgr = None
+
+            if eindklant_form.initial.get('naam') != eindklant_form.instance.naam:
+                naam = eindklant_form.initial.get('naam')
+            else:
+                naam = None
+
+            if eindklant_form.initial.get('telefoonnummer') != eindklant_form.instance.telefoonnummer:
+                telefoonnmr = eindklant_form.initial.get('telefoonnummer')
+            else:
+                telefoonnmr = None
+
+            if eindklant_form.initial.get('portaal') != eindklant_form.instance.portaal:
+                portaal = eindklant_form.initial.get('portaal')
+            else:
+                portaal = None
+
+            if eindklant_form.initial.get('soort') != eindklant_form.instance.soort:
+                soort = eindklant_form.initial.get('soort')
+            else:
+                soort = None
+
+            if eindklant_form.initial.get('factuuremail') != eindklant_form.instance.factuuremail:
+                factuuremail = eindklant_form.initial.get('factuuremail')
+            else:
+                factuuremail = None
+
+
             History_Record = Klanten_History(
                 klant=eindklant,
                 update_id=update_nmr,
-                accountmanager=eindklant_form.initial.get('accountmanager'),
-                naam=eindklant_form.initial.get('naam'),
-                telefoonnummer=eindklant_form.initial.get('telefoonnummer'),
-                portaal=eindklant_form.initial.get('portaal'),
-                soort=eindklant_form.initial.get('soort')
+                accountmanager=accountmgr,
+                naam=naam,
+                telefoonnummer=telefoonnmr,
+                portaal=portaal,
+                soort=soort,
+                factuuremail=factuuremail
             )
 
             originele_eindklant = eindklant_form.save()
@@ -1472,14 +1679,46 @@ def BrokerUpdaten(request, pk):
             elif not Klanten_History.objects.filter(Q(klant_id=broker.pk)):
                 update_nmr = 1
 
+            if broker_form.initial.get('accountmanager') != broker_form.instance.accountmanager:
+                accountmgr = broker_form.initial.get('accountmanager')
+            else:
+                accountmgr = None
+
+            if broker_form.initial.get('naam') != broker_form.instance.naam:
+                naam = broker_form.initial.get('naam')
+            else:
+                naam = None
+
+            if broker_form.initial.get('telefoonnummer') != broker_form.instance.telefoonnummer:
+                telefoonnmr = broker_form.initial.get('telefoonnummer')
+            else:
+                telefoonnmr = None
+
+            if broker_form.initial.get('portaal') != broker_form.instance.portaal:
+                portaal = broker_form.initial.get('portaal')
+            else:
+                portaal = None
+
+            if broker_form.initial.get('soort') != broker_form.instance.soort:
+                soort = broker_form.initial.get('soort')
+            else:
+                soort = None
+
+            if broker_form.initial.get('factuuremail') != broker_form.instance.factuuremail:
+                factuuremail = broker_form.initial.get('factuuremail')
+            else:
+                factuuremail = None
+                
+                
             History_Record = Klanten_History(
                 klant=broker,
                 update_id=update_nmr,
-                accountmanager=broker_form.initial.get('accountmanager'),
-                naam=broker_form.initial.get('naam'),
-                telefoonnummer=broker_form.initial.get('telefoonnummer'),
-                portaal=broker_form.initial.get('portaal'),
-                soort=broker_form.initial.get('soort')
+                accountmanager=accountmgr,
+                naam=naam,
+                telefoonnummer=telefoonnmr,
+                portaal=portaal,
+                soort=soort,
+                factuuremail=factuuremail
             )
 
             History_Record.save()
@@ -1625,39 +1864,95 @@ def AanbiedingUpdaten(request, pk):
 
             if aanbieding.klant_id:
                 aanbiedingKlant_id = aanbieding.klant_id
-                aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
+                if aanbieding_form.instance.klant_id != aanbieding_form.initial.get('klant'):
+                    aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
+                else:
+                    aanbiedingKlant = None
             elif not aanbieding.klant_id:
                 aanbiedingKlant = None
 
             if aanbieding.broker_id:
                 aanbiedingBroker_id = aanbieding.broker_id
-                aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
+                if aanbieding_form.instance.broker_id != aanbieding_form.initial.get('broker'):
+                    aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
+                else:
+                    aanbiedingBroker = None
             elif not aanbieding.broker_id:
                 aanbiedingBroker = None
 
             if aanbieding.medewerker_id:
                 aanbiedingMedewerker_id = aanbieding.medewerker_id
-                aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
+                if aanbieding_form.instance.medewerker_id != aanbieding_form.initial.get('medewerker'):
+                    aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
+                else:
+                    aanbiedingMedewerker = None
             elif not aanbieding.medewerker_id:
                 aanbiedingMedewerker = None
 
+
+            if aanbieding_form.initial.get('aangemaakt_door') != aanbieding_form.instance.aangemaakt_door:
+                aangemaakt_door = aanbieding_form.initial.get('aangemaakt_door')
+            else:
+                aangemaakt_door = None
+            if aanbieding_form.initial.get('registratie') != aanbieding_form.instance.registratie:
+                registratie = aanbieding_form.initial.get('registratie')
+            else:
+                registratie = None
+            if aanbieding_form.initial.get('laatste_update') != aanbieding_form.instance.laatste_update:
+                laatste_update = aanbieding_form.initial.get('laatste_update')
+            else:
+                laatste_update = None
+            if aanbieding_form.initial.get('functie') != aanbieding_form.instance.functie:
+                functie = aanbieding_form.initial.get('functie')
+            else:
+                functie = None
+            if aanbieding_form.initial.get('functie_aanbieding') != aanbieding_form.instance.functie_aanbieding:
+                functie_aanbieding = aanbieding_form.initial.get('functie_aanbieding')
+            else:
+                functie_aanbieding = None
+            if aanbieding_form.initial.get('accountmanager') != aanbieding_form.instance.accountmanager:
+                accountmanager = aanbieding_form.initial.get('accountmanager')
+            else:
+                accountmanager = None
+            if aanbieding_form.initial.get('status') != aanbieding_form.instance.status:
+                status = aanbieding_form.initial.get('status')
+            else:
+                status = None
+            if aanbieding_form.initial.get('tarief') != aanbieding_form.instance.tarief:
+                tarief = aanbieding_form.initial.get('tarief')
+            else:
+                tarief = None
+            if aanbieding_form.initial.get('betaalkorting') != aanbieding_form.instance.betaalkorting:
+                betaalkorting = aanbieding_form.initial.get('betaalkorting')
+            else:
+                betaalkorting = None
+            if aanbieding_form.initial.get('opmerking') != aanbieding_form.instance.opmerking:
+                opmerking = aanbieding_form.initial.get('opmerking')
+            else:
+                opmerking = None
+            if aanbieding_form.initial.get('aantal_intakes') != aanbieding_form.instance.aantal_intakes:
+                aantal_intakes = aanbieding_form.initial.get('aantal_intakes')
+            else:
+                aantal_intakes = None
+            
+                
             history_record = Aanbiedingen_History(
                 aanbieding=aanbieding,
                 update_id=update_nmr,
-                aangemaakt_door=aanbieding_form.initial.get('aangemaakt_door'),
-                registratie=aanbieding_form.initial.get('registratie'),
-                laatste_update=aanbieding_form.initial.get('laatste_update'),
-                functie=aanbieding_form.initial.get('functie'),
-                functie_aanbieding=aanbieding_form.initial.get('functie_aanbieding'),
+                aangemaakt_door=aangemaakt_door,
+                registratie=registratie,
+                laatste_update=laatste_update,
+                functie=functie,
+                functie_aanbieding=functie_aanbieding,
                 klant=aanbiedingKlant,
                 broker=aanbiedingBroker,
-                accountmanager=aanbieding_form.initial.get('accountmanager'),
-                status=aanbieding_form.initial.get('status'),
-                tarief=aanbieding_form.initial.get('tarief'),
-                betaalkorting=aanbieding_form.initial.get('betaalkorting'),
-                opmerking=aanbieding_form.initial.get('opmerking'),
+                accountmanager=accountmanager,
+                status=status,
+                tarief=tarief,
+                betaalkorting=betaalkorting,
+                opmerking=opmerking,
                 medewerker=aanbiedingMedewerker,
-                aantal_intakes=aanbieding_form.initial.get('aantal_intakes')
+                aantal_intakes=aantal_intakes,
             )
 
             history_record.save()
@@ -1834,25 +2129,66 @@ def OpdrachtenUpdaten(request, pk):
 
             if opdracht.aanbieding:
                 opdrachtAanbieding_id = opdracht.aanbieding_id
-                opdrachtAanbieding = Aanbiedingen.objects.get(id=opdrachtAanbieding_id)
+
+                if opdracht_form.instance.aanbieding_id != opdracht_form.initial.get('aanbieding'):
+                    opdrachtAanbieding = Aanbiedingen.objects.get(id=opdrachtAanbieding_id)
+                else:
+                    opdrachtAanbieding = None
             elif not opdracht.aanbieding:
                 opdrachtAanbieding = None
 
+            if opdracht_form.initial.get('status_opdracht') != opdracht_form.instance.status_opdracht:
+                status_opdracht = opdracht_form.initial.get('status_opdracht')
+            else:
+                status_opdracht = None
+            if opdracht_form.initial.get('startdatum') != opdracht_form.instance.startdatum:
+                startdatum = opdracht_form.initial.get('startdatum')
+            else:
+                startdatum = None
+            if opdracht_form.initial.get('einddatum') != opdracht_form.instance.einddatum:
+                einddatum = opdracht_form.initial.get('einddatum')
+            else:
+                einddatum = None
+            if opdracht_form.initial.get('tarief_opdracht') != opdracht_form.instance.tarief_opdracht:
+                tarief_opdracht = opdracht_form.initial.get('tarief_opdracht')
+            else:
+                tarief_opdracht = None
+            if opdracht_form.initial.get('opdracht_betaalkorting') != opdracht_form.instance.opdracht_betaalkorting:
+                opdracht_betaalkorting = opdracht_form.initial.get('opdracht_betaalkorting')
+            else:
+                opdracht_betaalkorting = None
+            if opdracht_form.initial.get('aantal_uren') != opdracht_form.instance.aantal_uren:
+                aantal_uren = opdracht_form.initial.get('aantal_uren')
+            else:
+                aantal_uren = None
+            if opdracht_form.initial.get('opdracht_aangemaakt_door') != opdracht_form.instance.opdracht_aangemaakt_door:
+                opdracht_aangemaakt_door = opdracht_form.initial.get('opdracht_aangemaakt_door')
+            else:
+                opdracht_aangemaakt_door = None
+            if opdracht_form.initial.get('opdracht_nummer') != opdracht_form.instance.opdracht_nummer:
+                opdracht_nummer = opdracht_form.initial.get('opdracht_nummer')
+            else:
+                opdracht_nummer = None
+            if opdracht_form.initial.get('opmerking') != opdracht_form.instance.opmerking:
+                opmerking = opdracht_form.initial.get('opmerking')
+            else:
+                opmerking = None
+
+            
 
             Opdracht_history_record = Opdrachten_History(
                 opdracht=opdracht,
                 update_id=update_nmr,
                 aanbieding=opdrachtAanbieding,
-                status_opdracht=opdracht_form.initial.get('status_opdracht'),
-                startdatum=opdracht_form.initial.get('startdatum'),
-                einddatum=opdracht_form.initial.get('einddatum'),
-                tarief_opdracht=opdracht_form.initial.get('tarief_opdracht'),
-                opdracht_betaalkorting=opdracht_form.initial.get('opdracht_betaalkorting'),
-                aantal_uren=opdracht_form.initial.get('aantal_uren'),
-                opdracht_aangemaakt_door=opdracht_form.initial.get('opdracht_aangemaakt_door'),
-                opdracht_nummer=opdracht_form.initial.get('opdracht_nummer'),
-                opmerking=opdracht_form.initial.get('opmerking'),
-                date_created=opdracht_form.initial.get('date_created')
+                status_opdracht=status_opdracht,
+                startdatum=startdatum,
+                einddatum=einddatum,
+                tarief_opdracht=tarief_opdracht,
+                opdracht_betaalkorting=opdracht_betaalkorting,
+                aantal_uren=aantal_uren,
+                opdracht_aangemaakt_door=opdracht_aangemaakt_door,
+                opdracht_nummer=opdracht_nummer,
+                opmerking=opmerking,
             )
 
             Opdracht_history_record.save()
@@ -1871,37 +2207,96 @@ def OpdrachtenUpdaten(request, pk):
 
             if aanbieding.klant_id:
                 aanbiedingKlant_id = aanbieding.klant_id
-                aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
+
+                if aanbieding_form.instance.klant_id != aanbieding_form.initial.get('klant'):
+                    aanbiedingKlant = Klanten.objects.get(id=aanbiedingKlant_id)
+                else:
+                    aanbiedingKlant = None
+
             elif not aanbieding.klant_id:
                 aanbiedingKlant = None
 
             if aanbieding.broker_id:
                 aanbiedingBroker_id = aanbieding.broker_id
-                aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
+                if aanbieding_form.instance.broker_id != aanbieding_form.initial.get('broker'):
+                    aanbiedingBroker = Klanten.objects.get(id=aanbiedingBroker_id)
+                else:
+                    aanbiedingBroker = None
             elif not aanbieding.broker_id:
                 aanbiedingBroker = None
 
             if aanbieding.medewerker_id:
                 aanbiedingMedewerker_id = aanbieding.medewerker_id
-                aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
+                if aanbieding_form.instance.medewerker_id != aanbieding_form.initial.get('medewerker'):
+                    aanbiedingMedewerker = Medewerkers.objects.get(id=aanbiedingMedewerker_id)
+                else:
+                    aanbiedingMedewerker = None
             elif not aanbieding.medewerker_id:
                 aanbiedingMedewerker = None
+
+
+            if aanbieding_form.initial.get('aangemaakt_door') != aanbieding_form.instance.aangemaakt_door:
+                aangemaakt_door = aanbieding_form.initial.get('aangemaakt_door')
+            else:
+                aangemaakt_door = None
+            if aanbieding_form.initial.get('registratie') != aanbieding_form.instance.registratie:
+                registratie = aanbieding_form.initial.get('registratie')
+            else:
+                registratie = None
+            if aanbieding_form.initial.get('laatste_update') != aanbieding_form.instance.laatste_update:
+                laatste_update = aanbieding_form.initial.get('laatste_update')
+            else:
+                laatste_update = None
+            if aanbieding_form.initial.get('functie') != aanbieding_form.instance.functie:
+                functie = aanbieding_form.initial.get('functie')
+            else:
+                functie = None
+            if aanbieding_form.initial.get('functie_aanbieding') != aanbieding_form.instance.functie_aanbieding:
+                functie_aanbieding = aanbieding_form.initial.get('functie_aanbieding')
+            else:
+                functie_aanbieding = None
+            if aanbieding_form.initial.get('accountmanager') != aanbieding_form.instance.accountmanager:
+                accountmanager = aanbieding_form.initial.get('accountmanager')
+            else:
+                accountmanager = None
+            if aanbieding_form.initial.get('status') != aanbieding_form.instance.status:
+                status = aanbieding_form.initial.get('status')
+            else:
+                status = None
+            if aanbieding_form.initial.get('tarief') != aanbieding_form.instance.tarief:
+                tarief = aanbieding_form.initial.get('tarief')
+            else:
+                tarief = None
+            if aanbieding_form.initial.get('betaalkorting') != aanbieding_form.instance.betaalkorting:
+                betaalkorting = aanbieding_form.initial.get('betaalkorting')
+            else:
+                betaalkorting = None
+            if aanbieding_form.initial.get('opmerking') != aanbieding_form.instance.opmerking:
+                opmerking = aanbieding_form.initial.get('opmerking')
+            else:
+                opmerking = None
+            if aanbieding_form.initial.get('aantal_intakes') != aanbieding_form.instance.aantal_intakes:
+                aantal_intakes = aanbieding_form.initial.get('aantal_intakes')
+            else:
+                aantal_intakes = None
 
             history_record = Aanbiedingen_History(
                 aanbieding=aanbieding,
                 update_id=update_nmr,
-                aangemaakt_door=aanbieding_form.initial.get('aangemaakt_door'),
-                registratie=aanbieding_form.initial.get('registratie'),
-                laatste_update=aanbieding_form.initial.get('laatste_update'),
-                functie=aanbieding_form.initial.get('functie'),
-                functie_aanbieding=aanbieding_form.initial.get('functie_aanbieding'),
+                aangemaakt_door=aangemaakt_door,
+                registratie=registratie,
+                laatste_update=laatste_update,
+                functie=functie,
+                functie_aanbieding=functie_aanbieding,
                 klant=aanbiedingKlant,
                 broker=aanbiedingBroker,
-                accountmanager=aanbieding_form.initial.get('accountmanager'),
-                status=aanbieding_form.initial.get('status'),
-                tarief=aanbieding_form.initial.get('tarief'),
-                betaalkorting=aanbieding_form.initial.get('betaalkorting'),
-                medewerker=aanbiedingMedewerker
+                accountmanager=accountmanager,
+                status=status,
+                tarief=tarief,
+                betaalkorting=betaalkorting,
+                opmerking=opmerking,
+                medewerker=aanbiedingMedewerker,
+                aantal_intakes=aantal_intakes,
             )
 
             history_record.save()
