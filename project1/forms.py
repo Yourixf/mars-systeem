@@ -203,6 +203,7 @@ class KlantenUpdatenForm(forms.ModelForm):
         labels = {
             "accountmanager": "4-Rest contactpersoon",
             "soort": "Soort klant",
+
         }
 
 # Dit is de Form om Eindklanten toe te voegen. In dit geval heb ik de input van de variable soms wat veranderd.
