@@ -210,7 +210,7 @@
                         {% for aanbiedingen in aanbieding_list %}
                             <tr>
                                 <td>{{ aanbiedingen.klant.naam }}</td>
-                                <td>{{ aanbiedingen.medewerker }}</td>
+                                <td>{{ aanbiedingen.medewerker.get_name }}</td>
                                 <td id="tarief">{{ aanbiedingen.tarief }}</td>
                                 <td>{{ aanbiedingen.broker.naam }}</td>
                                 <td>{{ aanbiedingen.functie_aanbieding }}</td>

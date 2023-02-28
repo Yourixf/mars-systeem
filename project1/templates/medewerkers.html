@@ -220,7 +220,7 @@
                     <tbody id="myTable">
                         {% for medewerker in medewerkers %}
                             <tr>
-                                <td>{{ medewerker }} </td>
+                                <td>{{ medewerker.get_name }} </td>
                                 <td id="telnummer">{{ medewerker.telefoonnummer }}</td>
                                 <td id="status">{{ medewerker.get_status_display }}</td>
                                 <td id="woonplaats">{{ medewerker.woonplaats }}</td>

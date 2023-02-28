@@ -328,7 +328,7 @@
                     <tbody id="myTable">
                         {% for item in arrayMedeAanbieding %}
                             <tr>
-                                <td>{{ item.medeNaam }}</td>
+                                <td>{{ item.medeNaam.get_name }}</td>
                                 <td>{{ item.aanb }}</td>
                                 <td id="deleteUpdate"><a href="{% url 'aanbieding_detail' item.medePK %}"  class="btn btn-sm" id="detailKnop" role="button">Details</a></td>
                             </tr>
@@ -353,7 +353,7 @@
                     <tbody id="myTable">
                         {% for opdracht in all_aflopendeOpdr %}
                             <tr>
-                                <td>{{ opdracht.aanbieding.medewerker }} </td>
+                                <td>{{ opdracht.aanbieding.medewerker.get_name }} </td>
                                 <td id="telnummer">{{ opdracht.aanbieding.klant}}</td>
                                 <td id="status">{{ opdracht.einddatum }}</td>
 

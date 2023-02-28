@@ -204,7 +204,7 @@
                     <tbody id="myTable">
                         {% for opdracht in opdrachten_list %}
                             <tr>
-                                <td>{{ opdracht.aanbieding.medewerker }}</td>
+                                <td>{{ opdracht.aanbieding.medewerker.get_name }}</td>
                                 <td>{{ opdracht.aanbieding.klant.naam }}</td>
                                 <td>{{ opdracht.startdatum }}</td>
                                 <td>{{ opdracht.einddatum }}</td>

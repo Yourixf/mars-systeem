@@ -210,7 +210,7 @@ $(document).ready(function() {
                         <tbody id="myTable">
                             {% for medewerker in medewerkers %}
                                 <tr>
-                                    <td>{{ medewerker }} </td>
+                                    <td>{{ medewerker.get_name }} </td>
                                     <td>{{ medewerker.telefoonnummer }}</td>
                                     <td>{{ medewerker.get_status_display }}</td>
                                     <td>{{ medewerker.woonplaats }}</td>

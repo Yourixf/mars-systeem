@@ -275,7 +275,7 @@ $(document).ready(function() {
             <h3 id="medeName">Versie {{ selected_history.update_id }}</h3>
 
             <div id="container2">
-                <label>Medewerker</label><p>{{ selected_history.aanbieding.medewerker }}</p>
+                <label>Medewerker</label><p>{{ selected_history.aanbieding.medewerker.get_name }}</p>
                 <label>Klant</label><p>{{ selected_history.aanbieding.klant.naam }}</p>
                 <label>Tussenpartij</label><p>{{ selected_history.aanbieding.broker.naam }}</p>
                 <label>Startdatum</label><p>{{ history_startDatum }}</p>

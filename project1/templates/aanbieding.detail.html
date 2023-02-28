@@ -162,7 +162,7 @@
 <div id="box1" ALIGN="center">
     <h3 id="aanbieName">Details aanbiedingen 4-Rest</h3>
     <div id="container">
-        <label>Medewerker</label><p>{{ aanbieding.medewerker }}</p>
+        <label>Medewerker</label><p>{{ aanbieding.medewerker.get_name }}</p>
         <label>Tarief</label><p>{{ aanbieding.tarief }}</p>
         <label>Betaalkorting</label><p>{{ aanbieding.betaalkorting }}</p>
         <label>Aangemaakt door</label><p>{{ aanbieding.get_aangemaakt_door_display }}</p>
