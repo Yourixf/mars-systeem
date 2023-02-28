@@ -145,7 +145,13 @@ class Medewerkers(models.Model):
 
 
 
-    def __str__(self):
+    def __unicode__(self):
+        try:
+            return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam  # de Self voegt deze 3 variabele bij elkaar die je samen kan ophalen.
+        except:
+            pizza = ''
+
+    def get_name(self):
         try:
             return self.voornaam + " " + self.tussenvoegsel + " " + self.achternaam  # de Self voegt deze 3 variabele bij elkaar die je samen kan ophalen.
         except:
@@ -209,7 +215,7 @@ class Opmerkingen(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORIES,
                                 default=DEFAULT)  # haalt de keuze van de CATEGORIES op.
 
-    def __str__(self):
+    def __unicode__(self):
         return f'{self.title}'
 
 
@@ -242,7 +248,7 @@ class Klanten(models.Model):
     begindatum = models.DateField(null=True, blank=True, default=dateformat.format(timezone.now(), 'o-m-d'))
     factuuremail = models.EmailField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
+    def __unicode__(self):
         try:
             return self.naam
         except:

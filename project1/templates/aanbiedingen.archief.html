@@ -201,7 +201,7 @@ $(document).ready(function() {
                         {% for aanbiedingen in aanbieding_list %}
                         <tr>
                             <td>{{ aanbiedingen.klant.naam }}</td>
-                            <td>{{ aanbiedingen.medewerker }}</td>
+                            <td>{{ aanbiedingen.medewerker.get_name }}</td>
                             <td id="tarief">{{ aanbiedingen.tarief }}</td>
                             <td id="updateDatum">{{ aanbiedingen.laatste_update }}</td>
                             <td>{{ aanbiedingen.broker.naam }}</td>

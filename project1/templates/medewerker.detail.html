@@ -245,7 +245,7 @@
     <br>
     <div id="container">
         {#hier haalt die de gegevens op uit de models van de Medewerkers en laat het zien in de tabel#}
-        <label>Naam</label><p>{{ medewerkers }}</p>
+        <label>Naam</label><p>{{ medewerkers.get_name }}</p>
         <label>Werkmail</label><p>{{ medewerkers.werkmail }}</p>
         <label>Roepnaam</label><p>{{ medewerkers.roepnaam }}</p>
         <label>Functie</label><p>{{ medewerkers.functie }}</p>

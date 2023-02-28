@@ -410,15 +410,21 @@ def FactuurHistoryDetailPage(request, pk):
     variable = False
 
     if opdracht.aanbieding.broker_id:
-        factuuremail = opdracht.aanbieding.broker.factuuremail
         broker_id = opdracht.aanbieding.broker_id
+        try:
+            factuuremail = opdracht.aanbieding.broker.factuuremail
+        except:
+            factuuremail = ''
         try:
             hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=broker_id, vestiging='1'))
         except:
             hoofdvestiging = ''
     elif not opdracht.aanbieding.broker_id:
-        factuuremail = opdracht.aanbieding.klant.factuuremail
         klant_id = opdracht.aanbieding.klant_id
+        try:
+            factuuremail = opdracht.aanbieding.klant.factuuremail
+        except:
+            factuuremail = ''
         try:
             hoofdvestiging = Vestigingplaats.objects.get(Q(klant_id=klant_id, vestiging='1'))
         except:

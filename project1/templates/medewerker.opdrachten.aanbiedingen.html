@@ -221,7 +221,7 @@ td, th {
             {% for aanbiedingen in aanbieding_list %}
                 <tr>
                     <td>{{ aanbiedingen.klant }}</td>
-                    <td>{{ aanbiedingen.medewerker }}</td>
+                    <td>{{ aanbiedingen.medewerker.get_name }}</td>
                     <td id="tarief">{{ aanbiedingen.tarief }}</td>
                     <td id="updateDatum">{{ aanbiedingen.laatste_update }}</td>
                     <td>{{ aanbiedingen.functie_aanbieding }}</td>

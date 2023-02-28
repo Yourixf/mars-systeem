@@ -203,7 +203,7 @@ $(document).ready(function() {
                         {% for opdracht in lopendeOpdrachtenList %}
                             <tr>
                                 <td>{{ opdracht.aanbieding.klant.naam }}</td>
-                                <td>{{ opdracht.aanbieding.medewerker }}</td>
+                                <td>{{ opdracht.aanbieding.medewerker.get_name }}</td>
                                 <td>{{ opdracht.aanbieding.functie_aanbieding }}</td>
                                 <td id="startDatum">{{ opdracht.startdatum }}</td>
                                 <td id="eindDatum">{{ opdracht.einddatum }}</td>

@@ -249,7 +249,7 @@
         <h3>Aanbieding details</h3>
 
         <div id="container">
-            <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker }}</p>
+            <label>Medewerker</label><p>{{ opdracht.aanbieding.medewerker.get_name }}</p>
             <label>Tarief aanbieding</label><p>{{ opdracht.aanbieding.tarief }}</p>
             <label>Tarief betaalkorting</label><p>{{ opdracht.aanbieding.betaalkorting }}</p>
             <label>Aangemaakt door</label><p>{{ opdracht.aanbieding.get_aangemaakt_door_display }}</p>

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'phonenumber_field',
     'django_filters',
-    'admin_adv_search_builder'
+    'admin_adv_search_builder',
+    'crispy_bootstrap4'
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
