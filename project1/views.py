@@ -442,26 +442,36 @@ def FactuurHistoryDetailPage(request, pk):
             history_startDatum = opdracht.startdatum
         elif selected_history.startdatum != None:
             history_startDatum = selected_history.startdatum
+        else:
+            history_startDatum = ''
 
         if selected_history.tarief_opdracht == None:
             history_tarief = opdracht.tarief_opdracht
         elif selected_history.tarief_opdracht != None:
             history_tarief = selected_history.tarief_opdracht
+        else:
+            history_tarief = ''
 
         if selected_history.einddatum == None:
-            history_einddatum = opdracht.einddatum
+            history_eindDatum = opdracht.einddatum
         elif selected_history.einddatum != None:
             history_eindDatum = selected_history.einddatum
+        else:
+            history_eindDatum = ''
 
         if selected_history.opdracht_betaalkorting == None:
             history_betaalkorting = opdracht.opdracht_betaalkorting
         elif selected_history.opdracht_betaalkorting != None:
             history_betaalkorting = selected_history.opdracht_betaalkorting
+        else:
+            history_betaalkorting = ''
 
         if selected_history.aantal_uren == None:
             history_aantal_uur = opdracht.aantal_uren
         elif selected_history.aantal_uren != None:
             history_aantal_uur = selected_history.aantal_uren
+        else:
+            history_aantal_uur = ''
 
         context = {
             'opdracht': opdracht,
@@ -472,11 +482,9 @@ def FactuurHistoryDetailPage(request, pk):
             'selected_history': selected_history,
             'history_startDatum': history_startDatum,
             'history_tarief': history_tarief,
-            'history_einddatum':history_einddatum,
+            'history_eindDatum':history_eindDatum,
             'history_betaalkorting':history_betaalkorting,
             'history_aantal_uur':history_aantal_uur
-
-
         }
 
         return render(request, 'factuur.history.detail.html', context)
@@ -1826,14 +1834,20 @@ def AanbiedingToevoegen(request):
 def AanbiedingDelete(request, pk):
     aanbieding = Aanbiedingen.objects.get(id=pk)
 
-    try:
-        opdracht = Opdrachten.objects.get(aanbieding_id=aanbieding)
-        #opdracht.aanbieding_id = ''
-        opdracht.delete()
+    # try:
+    #     opdracht = Opdrachten.objects.get(aanbieding_id=aanbieding)
+    #     #opdracht.aanbieding_id = ''
+    #     opdracht.delete()
+    # except:
+    #     opdracht = ''
+    #aanbieding.delete()
 
-    except:
-        opdracht = ''
-    aanbieding.delete()
+    if aanbieding.status !='4' and aanbieding.status != '6':
+        aanbieding.status = '6'
+        aanbieding.save()
+    elif aanbieding.status == '4' or aanbieding.status == '6':
+        pizza = ''
+
     return redirect('aanbiedingen')
 
 
